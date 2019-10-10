@@ -69,6 +69,7 @@ var move = false;
 
 $('#new-keyboard').click(function() {
   newBoardModal.style.display = "block";
+  newBoardModelInput.value = ""
 });
 
 $('#newBoard-save').click(function() {
@@ -80,7 +81,7 @@ $('#newBoard-save').click(function() {
   if(newBoardModalInput.value === "") {
     return
   }
-
+  newBoardModalInput.value = ""
   var boardIds = $('#customSelect').children()
   console.log(boardIds)
   for(var i = 0; i < boardIds.length; i++){

@@ -5,3 +5,5 @@ dist/
 Omega_binaries/
 .DS_Store
 npm-debug.log
+public/.DS_Store
+public/faq/.DS_Store

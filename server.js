@@ -189,6 +189,8 @@ io.on('connection', function(socket) {
   socket.on('saveKey', function(key) {
     if (key.pw || config.passcode) {
       if (config.passcode !== key.pw) { //Password Checker
+        console.log(config.passcode)
+        console.log(key.pw)
         return;
       }
     }
