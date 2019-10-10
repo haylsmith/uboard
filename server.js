@@ -22,8 +22,8 @@ var newX = null;
 var newY = null;
 
 var screenSize = robot.getScreenSize()
-//screenWidth = screenSize.width
-//screenHeight = screenSize.height
+screenWidth = screenSize.width
+screenHeight = screenSize.height
 
 
 //-------WEB SERVER FUNCTIONALITY -------// 
