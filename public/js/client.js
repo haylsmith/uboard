@@ -20,7 +20,10 @@ var singleTap = new Hammer.Tap({event: 'click', pointers: 1});
 var doubleTap = new Hammer.Tap({event: 'doubleclick', pointers: 1, taps: 2});
 var tripleTap = new Hammer.Tap({event: 'tripleclick', pointers: 1, taps: 3});
 
-//Need to declare these separately because we are assigning different behaviors to single tap for url and app buttons
+
+//Need to declare these separately because we are assigning different behaviors to single tap for the keys
+var singleTap_key = new Hammer.Tap({event: 'click', pointers: 1});
+var doubleTap_key = new Hammer.Tap({event: 'doubleclick', pointers: 1, taps: 2});
 var singleTap_url = new Hammer.Tap({event: 'click', pointers: 1});
 var singleTap_app = new Hammer.Tap({event: 'click', pointers: 1});
 
@@ -338,7 +341,7 @@ socket.on('updateKeys', function(newVals) {
       ele.text(newVals.k[i])
       var touchElem = document.getElementById('button' + (i+1).toString());
       var key_tapper = new Hammer.Manager(touchElem);
-      key_tapper.add([singleTap]);
+      key_tapper.add([singleTap_key]);
       key_tapper.on('click', sendKeyPress);
       ele.css({position:'absolute', left:newVals.x[i] + '%', top:(newVals.y[i]) + '%', minHeight: (keyboardWidth*.02).toString() + "px"});
     }
@@ -370,7 +373,7 @@ socket.on('updateNumPad', function(newVals) {
       ele.text(newVals.k[i])
       var touchElem = document.getElementById('pad' + (i+1).toString());
       var key_tapper = new Hammer.Manager(touchElem);
-      key_tapper.add([singleTap]);
+      key_tapper.add([singleTap_key]);
       key_tapper.on('click', sendKeyPress);
       ele.css({position:'absolute', left:newVals.x[i] + '%', top:(newVals.y[i]) + '%', minHeight: (keyboardWidth*.02).toString() + "px"});
 
@@ -391,7 +394,7 @@ socket.on('updateCustom', function(newVals) {
 
     var touchElem = document.getElementById('custom-' + newVals.fname);
     var key_tapper = new Hammer.Manager(touchElem);
-    key_tapper.add([singleTap, doubleTap]);
+    key_tapper.add([singleTap_key, doubleTap_key]);
     key_tapper.on('click', sendKeyPress);
     key_tapper.on('doubleclick', customDoubleTap)
     ele.css({width:'auto', left:newVals.x[i] + '%', top:(newVals.y[i]) + '%', minHeight: (keyboardWidth*.02).toString() + "px"});
