@@ -1,0 +1,20 @@
+{
+    "app1": [
+        "open /Applications/Messages.app",
+        "50",
+        "30",
+        "iMessage"
+    ],
+    "app2": [
+        "open /Applications/Mail.app",
+        "0",
+        "60",
+        "Mail"
+    ],
+    "url3": [
+        "open /Applications/Calendar.app",
+        "25",
+        "60",
+        "Calendar"
+    ]
+}

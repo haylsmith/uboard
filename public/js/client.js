@@ -15,6 +15,20 @@ var newBoardModal = document.getElementById('newBoard-modal');// New Board Namin
 var newBoardModalInput = document.getElementById('inputBoardName');// New Board Naming Modal
 var keyboardWidth = document.getElementById('keyboard').offsetWidth;// Width pixel of display
 var keyboardHeight = document.getElementById('keyboard').offsetHeight;// Height pixel of
+
+var singleTap = new Hammer.Tap({event: 'click', pointers: 1});
+var doubleTap = new Hammer.Tap({event: 'doubleclick', pointers: 1, taps: 2});
+var tripleTap = new Hammer.Tap({event: 'tripleclick', pointers: 1, taps: 3});
+
+//Need to declare these separately because we are assigning different behaviors to single tap for url and app buttons
+var singleTap_url = new Hammer.Tap({event: 'click', pointers: 1});
+var singleTap_app = new Hammer.Tap({event: 'click', pointers: 1});
+
+tripleTap.recognizeWith([doubleTap, singleTap]);
+doubleTap.recognizeWith(singleTap);
+doubleTap.requireFailure(tripleTap);
+singleTap.requireFailure([tripleTap, doubleTap]);
+
 //$("#touchpad").hide();
 
 function onendListener (event) { 
@@ -33,7 +47,7 @@ function onendListener (event) {
           altText: altText, 
           x: newX,
           y: newY });
-  }
+}
 
 var draggableSettings = {
     snap: {
@@ -56,6 +70,10 @@ var draggableSettings = {
 function isUrl(s) {
    var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
    return regexp.test(s);
+}
+
+function isApp(s) {
+  return s.substring(0, 4) === "open"
 }
 
 /*
@@ -252,6 +270,10 @@ $('#customSelect').change(function() {
   swiperInner.slideTo($('#customSelect option:selected').index())
 })
 
+
+
+
+
 //-----LOADING KEYBOARDS-----//
 
 function hotkeyStylize(ele, page, id, url){
@@ -281,9 +303,30 @@ function addHotkey(xpos, ypos, url, page, id){
   $('#'+page).append('<button class = "draggable activestyle url-button" id='+ id +'>' + url + '</button>');
   var ele = $('#' + id)
   ele.text(url)
+  var touchElem = document.getElementById(id);
+  var url_tapper = new Hammer.Manager(touchElem);
+  url_tapper.add([singleTap_url]);
+  url_tapper.on('click', openURL);
   ele.css({position:'absolute', left:xpos + '%', top:ypos + '%', minHeight: (keyboardWidth*.02).toString() + "px", width: '20%'});
   hotkeyStylize(ele, page, id, url)
 }
+
+// Adds an application shortcut to the keyboard
+function addApp(xpos, ypos, path, name, page, id){
+  $('#'+page).append('<button class = "draggable activestyle app-button" id='+ id +'>' + name + '</button>');
+  var ele = $('#' + id)
+  ele.text(path)
+  var touchElem = document.getElementById(id);
+  var app_tapper = new Hammer.Manager(touchElem);
+  app_tapper.add([singleTap_app]);
+  app_tapper.on('click', openApp);
+  ele.css({position:'absolute', left:xpos + '%', top:ypos + '%', minHeight: (keyboardWidth*.02).toString() + "px", width: '20%'});
+}
+
+
+
+
+
 
 //Purpose: Receives information from the server to update the presentation of the keys on the client
 socket.on('updateKeys', function(newVals) {
@@ -293,18 +336,30 @@ socket.on('updateKeys', function(newVals) {
       $('#keyboard').append('<button class = "draggable activestyle key-button" id="button' + (i+1).toString() + '">' + newVals.k[i] + '</button>');
       var ele = $('#button' + (i+1).toString())
       ele.text(newVals.k[i])
+      var touchElem = document.getElementById('button' + (i+1).toString());
+      var key_tapper = new Hammer.Manager(touchElem);
+      key_tapper.add([singleTap]);
+      key_tapper.on('click', sendKeyPress);
       ele.css({position:'absolute', left:newVals.x[i] + '%', top:(newVals.y[i]) + '%', minHeight: (keyboardWidth*.02).toString() + "px"});
     }
     $('#loading').hide();
-  });
+});
 
 //Purpose: Receives information from the server to update the presentation of the keys on the client
 socket.on('updateUrls', function(newVals) {
   console.log(newVals);
     for (var i = 0; i < newVals.x.length; i++){
-      addHotkey(newVals.x[i], newVals.y[i], newVals.k[i], 'hotkeys', 'hotkeys-button' + (i+1).toString())
+      addHotkey(newVals.x[i], newVals.y[i], newVals.k[i], 'hotkeys', 'url-button' + (i+1).toString())
     }
-  });
+});
+
+//Updates app shortcuts page
+socket.on('updateApps', function(newVals) {
+  console.log(newVals);
+    for (var i = 0; i < newVals.x.length; i++){
+      addApp(newVals.x[i], newVals.y[i], newVals.k[i], newVals.n[i], 'hotkeys', 'app-button' + (i+1).toString())
+    }
+});
 
 //Purpose: Receives information from the server to update the presentation of the keys on the client
 socket.on('updateNumPad', function(newVals) {
@@ -313,10 +368,14 @@ socket.on('updateNumPad', function(newVals) {
       $('#numpad').append('<button class = "draggable activestyle key-button" id="pad' + (i+1).toString() + '">' + newVals.k[i] + '</button>');
       var ele = $('#pad' + (i+1).toString())
       ele.text(newVals.k[i])
+      var touchElem = document.getElementById('pad' + (i+1).toString());
+      var key_tapper = new Hammer.Manager(touchElem);
+      key_tapper.add([singleTap]);
+      key_tapper.on('click', sendKeyPress);
       ele.css({position:'absolute', left:newVals.x[i] + '%', top:(newVals.y[i]) + '%', minHeight: (keyboardWidth*.02).toString() + "px"});
 
     }
-  });
+});
 
 //Purpose: Receives information from the server to update the presentation of the keys on the client
 socket.on('updateCustom', function(newVals) {
@@ -329,6 +388,12 @@ socket.on('updateCustom', function(newVals) {
     $('#custom-' + newVals.fname).append('<button class = "custom-key draggable activestyle" id="custom-key-' + newVals.fname + "-" + (i).toString() + '"></button>');
     var ele = $('#custom-key-' + newVals.fname + "-" + (i).toString())
     ele.text(newVals.k[i])
+
+    var touchElem = document.getElementById('custom-' + newVals.fname);
+    var key_tapper = new Hammer.Manager(touchElem);
+    key_tapper.add([singleTap, doubleTap]);
+    key_tapper.on('click', sendKeyPress);
+    key_tapper.on('doubleclick', customDoubleTap)
     ele.css({width:'auto', left:newVals.x[i] + '%', top:(newVals.y[i]) + '%', minHeight: (keyboardWidth*.02).toString() + "px"});
     
     if(!isUrl(newVals.k[i])){
@@ -356,7 +421,7 @@ socket.on('updateCustom', function(newVals) {
 The Following Functions Control the KEYBOARD FUNCTIONALITY
 */
 
-var moddifier = "None"
+var modifier = "None"
 
 //Purpose: Emits the key of keyboard upon click
 var emitKey = function(str) {
@@ -375,6 +440,16 @@ var emitUrl = function(str) {
       socket.emit('url', pos);
     }
 };
+
+var emitApp = function(str) {
+  pos = {'str':str,'pw':passcode}
+  if (move === false){
+    console.log(str);
+    socket.emit('app', pos)
+  }
+}
+
+
 
 interact('.custom-key').draggable(draggableSettings);
 
@@ -444,7 +519,7 @@ function dragMoveListener (event) {
 }
 
 //Purpose: Event listener on tapping the keys
-interact('.static-key').on('tap', function (event) {
+$('.static-key').click(function (event) {
   if (event.target.id === 'go-toggle') { // enter
     socket.emit('functionality', {'pw':passcode, type: 'enter'});
   }
@@ -455,13 +530,13 @@ interact('.static-key').on('tap', function (event) {
     socket.emit('functionality', {'pw':passcode, type: 'space'});
   }
   else if(event.target.id === 'shift-toggle'){
-    if(moddifier == 'shift'){
-      moddifier = 'None'
+    if(modifier == 'shift'){
+      modifier = 'None'
       $('#shift-toggle').removeClass('static-key-selected')
       $('#shift-toggle').addClass('static-key-default')
     }
     else{
-      moddifier = 'shift'
+      modifier = 'shift'
       $('#shift-toggle').removeClass('static-key-default')
       $('#shift-toggle').addClass('static-key-selected')
       $('#ctrl-toggle').removeClass('static-key-selected')
@@ -470,13 +545,13 @@ interact('.static-key').on('tap', function (event) {
   }
   
   else if(event.target.id === 'ctrl-toggle'){
-    if(moddifier == 'command'){
-      moddifier = 'None'
+    if(modifier == 'command'){
+      modifier = 'None'
       $('#ctrl-toggle').removeClass('static-key-selected')
       $('#ctrl-toggle').addClass('static-key-default')
     }
     else{
-      moddifier = 'command'
+      modifier = 'command'
       $('#ctrl-toggle').removeClass('static-key-default')
       $('#ctrl-toggle').addClass('static-key-selected')
       $('#shift-toggle').removeClass('static-key-selected')
@@ -486,7 +561,7 @@ interact('.static-key').on('tap', function (event) {
 
   })
 
-interact('.custom-key').on('doubletap', function (event) { 
+function customDoubleTap (event) { 
     if (move == true){
       editModal.style.display = "block"; //Allows the modal to be displayed to User
       updateKey = event.target
@@ -505,31 +580,41 @@ interact('.custom-key').on('doubletap', function (event) {
       }
 
     }
-});
+}
 
-interact('.key-button').on('tap', function (event) {
-
+function sendKeyPress (event) {
     if (event.target.id.indexOf("url-icon") != -1){
-        emitKey({text: $("#" + event.target.id).parent().clone().children().remove().end().text().trim(), moddifier: moddifier})
+        emitKey({text: $("#" + event.target.id).parent().clone().children().remove().end().text().trim(), modifier: modifier})
     }
     else if(event.target.hasChildNodes()){
-        emitKey({text: $("#" + event.target.id).clone().children().remove().end().text().trim(), moddifier: moddifier})
+        emitKey({text: $("#" + event.target.id).clone().children().remove().end().text().trim(), modifier: modifier})
     }
     else{
-      emitKey({text: event.target.innerText, moddifier: moddifier});
+      emitKey({text: event.target.innerText, modifier: modifier});
     }
-  });
+}
 
-interact('.url-button').on('tap', function (event) {
+function openURL (event) {
     if(event.target.id.indexOf("url-icon") != -1){
-      console.log("Parent")
+      console.log("URL Parent")
       emitUrl($("#" + event.target.id).parent().clone().children().remove().end().text().trim())
     }
     else{
-      console.log("Error")
+      console.log("URL Error")
       emitUrl($("#" + event.target.id).clone().children().remove().end().text().trim());
     }
-  });
+}
+
+function openApp (event) {
+    if(event.target.id.indexOf("url-icon") != -1){
+      console.log("App Parent")
+      emitApp($("#" + event.target.id).parent().clone().children().remove().end().text().trim())
+    }
+    else{
+      console.log("App Error")
+      emitApp($("#" + event.target.id).clone().children().remove().end().text().trim());
+    }
+}
 
 //Purpose: Updates button with textbox value
 $('#modal-save').click(function() {
@@ -546,15 +631,7 @@ $('#modal-save').click(function() {
   console.log(updateKey.innerText)
   console.log(inputModal.value)
   console.log($("#"+updateKey.id).clone().children().remove().end().text())
-  if(!isUrl(inputModal.value)) {
-    ele.addClass('key-button')
-    ele.removeClass('url-button')
-    hotkeyDestylize(ele, 'custom-' + $('#customSelect option:selected').attr('id').slice(7), updateKey.id, inputModal.value)
-    if (altText.value){
-      console.log("Alt text dectected");
-      altTextStylize(ele,altText.value,updateKey.id);
-    }
-  } else{
+  if(isUrl(inputModal.value)) {
     ele.addClass('url-button')
     ele.removeClass('key-button')
     hotkeyDestylize(ele, 'custom-' + $('#customSelect option:selected').attr('id').slice(7), updateKey.id, updateKey.innerText)
@@ -564,6 +641,23 @@ $('#modal-save').click(function() {
     }
     else{
       hotkeyStylize(ele, 'custom-' + swiperInner.activeIndex.toString(), updateKey.id, updateKey.innerText)
+    }
+  } 
+  else if(isApp(inputModal.value)) {
+    ele.addClass('app-button')
+    ele.removeClass('url-button')
+    //hotkeyDestylize(ele, 'custom-' + $('#customSelect option:selected').attr('id').slice(7), updateKey.id, inputModal.value)
+    if (altText.value){
+      console.log("Alt text dectected");
+      altTextStylize(ele,altText.value,updateKey.id);
+    }
+  } else{
+    ele.addClass('key-button')
+    ele.removeClass('url-button')
+    hotkeyDestylize(ele, 'custom-' + $('#customSelect option:selected').attr('id').slice(7), updateKey.id, inputModal.value)
+    if (altText.value){
+      console.log("Alt text dectected");
+      altTextStylize(ele,altText.value,updateKey.id);
     }
   }
   var inner_text = $("#"+updateKey.id).clone().children().remove().end().text();
@@ -644,15 +738,8 @@ mc.add(new Hammer.Pan({event: 'drag', threshold: 0, pointers: 3, direction: Hamm
 mcLc.add(new Hammer.Pan({event: 'drag', threshold: 0, pointers: 1,direction: Hammer.DIRECTION_ALL}));
 
 //Purpose: Tapping functionality
-var singleTap = new Hammer.Tap({event: 'click', pointers: 1});
-var doubleTap = new Hammer.Tap({event: 'doubleclick', pointers: 1, taps: 2});
-var tripleTap = new Hammer.Tap({event: 'tripleclick', pointers: 1, taps: 3});
 mc.add([tripleTap, doubleTap, singleTap]);
 mcLc.add([tripleTap, doubleTap, singleTap]);
-tripleTap.recognizeWith([doubleTap, singleTap]);
-doubleTap.recognizeWith(singleTap);
-doubleTap.requireFailure(tripleTap);
-singleTap.requireFailure([tripleTap, doubleTap]);
 mc.add(new Hammer.Tap({event: 'rightclick', pointers: 2}));
 mcRc.add(new Hammer.Tap({event: 'rightclick', pointers: 1}));
 

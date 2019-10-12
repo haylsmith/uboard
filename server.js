@@ -11,6 +11,7 @@ var config = require('./public/js/config.js');
 var url = require("opn");
 var fs = require("fs");
 var readline = require("readline");
+var exec = require('child_process').exec, child;
 config.passcode = ''
 
 //---------GLOBAL STATE VARIABLES ----// 
@@ -53,22 +54,12 @@ io.on('connection', function(socket) {
     console.log('user disconnected');
   });
 
-  var keys = []
-  var xpos = []
-  var ypos = []
-
   //Load default keyboard
-  var file = fs.readFileSync("configuration.json")  
+  var file = fs.readFileSync("default_configuration.json")  
   var content = JSON.parse(file)
+  socket.emit('updateKeys', content);
 
-  for (var key in content) {
-    keys.push(content[key][0]);
-    xpos.push(content[key][1]);
-    ypos.push(content[key][2]);
-  }
-  socket.emit('updateKeys', {k: keys, x: xpos, y: ypos});
-
-   content = []
+  content = []
   //Load default numpad
   var file = fs.readFileSync("numpad.json")  
   var content = JSON.parse(file)
@@ -99,6 +90,24 @@ io.on('connection', function(socket) {
     ypos.push(content[key][2]);
   }
   socket.emit('updateUrls', {k: keys, x: xpos, y: ypos});
+
+
+  //Load default apps
+  var file = fs.readFileSync("apps.json")  
+  content = JSON.parse(file)
+  
+  var keys = []
+  var xpos = []
+  var ypos = []
+  var names = []
+  
+  for (var key in content) {
+    keys.push(content[key][0]);
+    names.push(content[key][3]);
+    xpos.push(content[key][1]);
+    ypos.push(content[key][2]);
+  }
+  socket.emit('updateApps', {k: keys, x: xpos, y: ypos, n: names});
 
   //Load custom keyboards
   var lineReader = require('readline').createInterface({
@@ -134,8 +143,8 @@ io.on('connection', function(socket) {
 
     console.log("Trying to type")
     console.log(pos.str.text);
-    if(pos.str.text.length === 1 && pos.str.moddifier != "None"){
-      robot.keyTap(pos.str.text, pos.str.moddifier)
+    if(pos.str.text.length === 1 && pos.str.modifier != "None"){
+      robot.keyTap(pos.str.text, pos.str.modifier)
     }
     else{
       robot.typeString(pos.str.text);
@@ -238,6 +247,23 @@ io.on('connection', function(socket) {
   });
 
 
+
+  socket.on('app', function(pos) {
+    if (pos.pw || config.passcode) {
+      if (config.passcode !== pos.pw) { //Password Checker
+        return;
+      }
+    }
+
+    console.log("Trying to open app")
+    console.log(pos.str)
+    var my_cmd = sh(pos.str)
+    my_cmd.catch(function(error) {
+      console.log(error)
+    })
+  });
+
+
   //Mouse Functionality
   socket.on('mouse', function(pos) {
     if (pos.pw || config.passcode) {
@@ -285,6 +311,21 @@ io.on('connection', function(socket) {
     }
   });
 });
+
+
+  
+async function sh(cmd) {
+  return new Promise(function (resolve, reject) {
+    exec(cmd, (err, stdout, stderr) => {
+      if (err) {
+        console.log(err)
+        reject(err);
+      } else {
+        resolve({ stdout, stderr });
+      }
+    });
+  });
+}
 
 
 
