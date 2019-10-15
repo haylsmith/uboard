@@ -76,7 +76,7 @@ function isUrl(s) {
 }
 
 function isApp(s) {
-  return s.substring(0, 4) === "open"
+  return s.slice(-4) === ".app"
 }
 
 /*
@@ -316,14 +316,15 @@ function addHotkey(xpos, ypos, url, page, id){
 
 // Adds an application shortcut to the keyboard
 function addApp(xpos, ypos, path, name, page, id){
-  $('#'+page).append('<button class = "draggable activestyle app-button" id='+ id +'>' + name + '</button>');
+  console.log(name)
+  $('#'+page).append('<button class = "draggable activestyle app-button" id='+ id +' value=' + path + '>' + name + '</button>');
   var ele = $('#' + id)
-  ele.text(path)
   var touchElem = document.getElementById(id);
   var app_tapper = new Hammer.Manager(touchElem);
   app_tapper.add([singleTap_app]);
   app_tapper.on('click', openApp);
   ele.css({position:'absolute', left:xpos + '%', top:ypos + '%', minHeight: (keyboardWidth*.02).toString() + "px", width: '20%'});
+  //ele.css({'max-width': '20%', 'min-width': '20%', 'text-indent': '-9999px', 'text-align': 'left', 'overflow': 'hidden'});
 }
 
 
@@ -439,15 +440,13 @@ var emitKey = function(str) {
 var emitUrl = function(str) {
   pos = {'str':str,'pw':passcode}
     if (move === false){
-      console.log(str);
       socket.emit('url', pos);
     }
 };
 
 var emitApp = function(str) {
-  pos = {'str':str,'pw':passcode}
+  pos = {'str': "open " + str,'pw':passcode}
   if (move === false){
-    console.log(str);
     socket.emit('app', pos)
   }
 }
@@ -609,14 +608,7 @@ function openURL (event) {
 }
 
 function openApp (event) {
-    if(event.target.id.indexOf("url-icon") != -1){
-      console.log("App Parent")
-      emitApp($("#" + event.target.id).parent().clone().children().remove().end().text().trim())
-    }
-    else{
-      console.log("App Error")
-      emitApp($("#" + event.target.id).clone().children().remove().end().text().trim());
-    }
+    emitApp($("#" + event.target.id)[0].value);
 }
 
 //Purpose: Updates button with textbox value

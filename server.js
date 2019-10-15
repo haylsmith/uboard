@@ -107,6 +107,8 @@ io.on('connection', function(socket) {
     xpos.push(content[key][1]);
     ypos.push(content[key][2]);
   }
+  console.log(keys)
+  console.log(names)
   socket.emit('updateApps', {k: keys, x: xpos, y: ypos, n: names});
 
   //Load custom keyboards
