@@ -226,8 +226,19 @@ $('#s0').css("background-color", "green")
 
 var mousePos = true;
 
-$('.icon-selection').click(function() {
-  if (this.id == 'swap') {
+$('.icon-selection').click(function(e) {switchDisplay(e.currentTarget)});
+
+$('#customSelect').change(function() {
+  console.log($('#customSelect option:selected').index())
+  swiperInner.slideTo($('#customSelect option:selected').index())
+})
+
+
+
+
+function switchDisplay(item) {
+  var id = item.id
+  if (id == 'swap') {
     if (mousePos){
       $('#touchpad').insertBefore('.swiper-container');
       mousePos = false;
@@ -239,7 +250,7 @@ $('.icon-selection').click(function() {
     return;
   }
 
-  if (this.id == 'settings-select') {
+  if (id == 'settings-select') {
     // Bring up setting menu
     settingsModal.style.display = "block";
     if (swiper.activeIndex != 4){
@@ -255,23 +266,20 @@ $('.icon-selection').click(function() {
   }
   if(!move){
 
-    var newId = parseInt(this.id[1])
+    var newId = parseInt(id[1])
     if (newId == swipeIndex) {
       return;
     }
     console.log(newId)
     console.log(swipeIndex)
     $('#s'+swipeIndex.toString()).css("background-color", "turquoise")
-    $(this).css("background-color", "green")
+    $(item).css("background-color", "green")
     swipeIndex = newId;
     swiper.slideTo(newId, 200, false);
   }
-});
+}
 
-$('#customSelect').change(function() {
-  console.log($('#customSelect option:selected').index())
-  swiperInner.slideTo($('#customSelect option:selected').index())
-})
+
 
 
 
@@ -849,4 +857,77 @@ $('#about').click(function() {
     open('https://github.com/jjlustig/EECS498_uBoard');
   }
 });
+
+
+
+function swipeLeft(event) {
+  var page = event.target.id
+  console.log("left" + page)
+  if (page == 'keyboard'){
+    switchDisplay(document.getElementById("s1"))
+  }
+  else if (page == 'numpad'){
+    switchDisplay(document.getElementById("s2"))
+  }
+  else if (page == 'textfieldcontainer'){
+    switchDisplay(document.getElementById("s3"))
+  }
+  else if (page == 'hotkeys'){
+    switchDisplay(document.getElementById("s4"))
+  }
+}
+
+function swipeRight(event) {
+  var page = event.target.id
+  console.log("right" + page)
+  if (page == 'numpad'){
+    switchDisplay(document.getElementById("s0"))
+  }
+  else if (page == 'textfieldcontainer'){
+    switchDisplay(document.getElementById("s1"))
+  }
+  else if (page == 'hotkeys'){
+    switchDisplay(document.getElementById("s2"))
+  }
+  else if (page == 'custom'){
+    switchDisplay(document.getElementById("s3"))
+  }
+}
+
+
+//EXPERIMENTAL SWIPING
+var keyboardWrapper = document.getElementById('keyboard')
+var keyswipe = new Hammer.Manager(keyboardWrapper);
+var myswiper = new Hammer.Swipe({event: 'swipe', pointers: 1, threshold: 10, direction: Hammer.DIRECTION_HORIZONTAL});
+keyswipe.add(myswiper)
+keyswipe.on('swipeleft', swipeLeft);
+
+
+var numpadWrapper = document.getElementById('numpad')
+var numswipe = new Hammer.Manager(numpadWrapper);
+numswipe.add(myswiper)
+numswipe.on('swipeleft', swipeLeft);
+numswipe.on('swiperight', swipeRight);
+
+var textWrapper = document.getElementById('textfield')
+var textswipe = new Hammer.Manager(textWrapper);
+textwipe.add(myswiper)
+textswipe.on('swipeleft', swipeLeft);
+textwipe.on('swiperight', swipeRight);
+
+var hotkeysWrapper = document.getElementById('hotkeys')
+var hotswipe = new Hammer.Manager(hotkeysWrapper);
+hotswipe.add(myswiper)
+hotswipe.on('swipeleft', swipeLeft);
+hotswipe.on('swiperight', swipeRight);
+
+var customWrapper = document.getElementById('custom')
+var customswipe = new Hammer.Manager(customWrapper);
+customswipe.add(myswiper)
+customswipe.on('swiperight', swipeRight);
+
+
+
+
+
 

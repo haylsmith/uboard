@@ -170,7 +170,7 @@ icon {
 
 .swiper-slide{
   touch-action: none;
-  -webkit-user-select: none;
+  -webkit-user-select: auto;
 }
 
 .swiper-slide-outer{
