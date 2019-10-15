@@ -860,6 +860,9 @@ $('#about').click(function() {
 
 
 
+
+
+//EXPERIMENTAL SWIPING - Still in progress
 function swipeLeft(event) {
   var page = event.target.id
   console.log("left" + page)
@@ -894,8 +897,6 @@ function swipeRight(event) {
   }
 }
 
-
-//EXPERIMENTAL SWIPING
 var keyboardWrapper = document.getElementById('keyboard')
 var keyswipe = new Hammer.Manager(keyboardWrapper);
 var myswiper = new Hammer.Swipe({event: 'swipe', pointers: 1, threshold: 10, direction: Hammer.DIRECTION_HORIZONTAL});
