@@ -67,13 +67,18 @@ io.on('connection', function(socket) {
   var keys = []
   var xpos = []
   var ypos = []
+  var alt = []
 
   for (var key in content) {
     keys.push(content[key][0]);
     xpos.push(content[key][1]);
     ypos.push(content[key][2]);
+    if (content[key].length > 3) {
+      alt.push(content[key][3])
+    }
+
   }
-  socket.emit('updateNumPad', {k: keys, x: xpos, y: ypos});
+  socket.emit('updateNumPad', {k: keys, x: xpos, y: ypos, a: alt});
    
   content = []
   //Load default urls
@@ -107,8 +112,6 @@ io.on('connection', function(socket) {
     xpos.push(content[key][1]);
     ypos.push(content[key][2]);
   }
-  console.log(keys)
-  console.log(names)
   socket.emit('updateApps', {k: keys, x: xpos, y: ypos, n: names});
 
   //Load custom keyboards

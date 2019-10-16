@@ -324,7 +324,6 @@ function addHotkey(xpos, ypos, url, page, id){
 
 // Adds an application shortcut to the keyboard
 function addApp(xpos, ypos, path, name, page, id){
-  console.log(name)
   $('#'+page).append('<button class = "draggable activestyle app-button" id='+ id +' value=' + path + '>' + name + '</button>');
   var ele = $('#' + id)
   var touchElem = document.getElementById(id);
@@ -377,9 +376,13 @@ socket.on('updateApps', function(newVals) {
 socket.on('updateNumPad', function(newVals) {
   console.log(newVals);
     for (var i = 0; i < newVals.x.length; i++){
-      $('#numpad').append('<button class = "draggable activestyle key-button" id="pad' + (i+1).toString() + '">' + newVals.k[i] + '</button>');
+      if (i <= 10) {
+        $('#numpad').append('<button class = "draggable activestyle key-button" value="' + newVals.a[i] + '", id="pad' + (i+1).toString() + '">' + newVals.k[i] + '</button>');
+      } else {
+        $('#numpad').append('<button class = "draggable activestyle key-button", id="pad' + (i+1).toString() + '">' + newVals.k[i] + '</button>');
+      }
+
       var ele = $('#pad' + (i+1).toString())
-      ele.text(newVals.k[i])
       var touchElem = document.getElementById('pad' + (i+1).toString());
       var key_tapper = new Hammer.Manager(touchElem);
       key_tapper.add([singleTap_key]);
@@ -528,6 +531,21 @@ function dragMoveListener (event) {
   }
 }
 
+
+//
+
+function replaceNumkeysDisplay(modifier){
+  var myButton = document.getElementById('pad1')
+  for (var i = 2; i <= 11; i++) {
+    var text = myButton.innerText;
+    var alt = myButton.value;
+    myButton.innerText = alt;
+    myButton.value = text;
+    myButton = document.getElementById('pad' + (i).toString());
+  }
+
+}
+
 //Purpose: Event listener on tapping the keys
 $('.static-key').click(function (event) {
   if (event.target.id === 'go-toggle') { // enter
@@ -552,6 +570,7 @@ $('.static-key').click(function (event) {
       $('#ctrl-toggle').removeClass('static-key-selected')
       $('#ctrl-toggle').addClass('static-key-default')
     }
+    replaceNumkeysDisplay(modifier)
   }
   
   else if(event.target.id === 'ctrl-toggle'){
@@ -593,14 +612,18 @@ function customDoubleTap (event) {
 }
 
 function sendKeyPress (event) {
+    var mymodifier = modifier
+    if (event.target.id.substring(0, 3) === "pad") {
+      mymodifier = "None"
+    }
     if (event.target.id.indexOf("url-icon") != -1){
-        emitKey({text: $("#" + event.target.id).parent().clone().children().remove().end().text().trim(), modifier: modifier})
+        emitKey({text: $("#" + event.target.id).parent().clone().children().remove().end().text().trim(), modifier: mymodifier})
     }
     else if(event.target.hasChildNodes()){
-        emitKey({text: $("#" + event.target.id).clone().children().remove().end().text().trim(), modifier: modifier})
+        emitKey({text: $("#" + event.target.id).clone().children().remove().end().text().trim(), modifier: mymodifier})
     }
     else{
-      emitKey({text: event.target.innerText, modifier: modifier});
+      emitKey({text: event.target.innerText, modifier: mymodifier});
     }
 }
 
@@ -863,9 +886,12 @@ $('#about').click(function() {
 
 
 //EXPERIMENTAL SWIPING - Still in progress
+
+
+
 function swipeLeft(event) {
   var page = event.target.id
-  console.log("left" + page)
+  alert("left" + page)
   if (page == 'keyboard'){
     switchDisplay(document.getElementById("s1"))
   }
@@ -882,7 +908,7 @@ function swipeLeft(event) {
 
 function swipeRight(event) {
   var page = event.target.id
-  console.log("right" + page)
+  alert("right" + page)
   if (page == 'numpad'){
     switchDisplay(document.getElementById("s0"))
   }
@@ -899,32 +925,40 @@ function swipeRight(event) {
 
 var keyboardWrapper = document.getElementById('keyboard')
 var keyswipe = new Hammer.Manager(keyboardWrapper);
-var myswiper = new Hammer.Swipe({event: 'swipe', pointers: 1, threshold: 10, direction: Hammer.DIRECTION_HORIZONTAL});
-keyswipe.add(myswiper)
-keyswipe.on('swipeleft', swipeLeft);
+var leftswiper = new Hammer.Swipe({event: 'leftswipe', pointers: 1, threshold: 10, velocity: 0.3, direction: Hammer.DIRECTION_RIGHT});
+var rightswiper = new Hammer.Swipe({event: 'rightswipe', pointers: 1, threshold: 5, velocity: 0.1, direction: Hammer.DIRECTION_LEFT});
+
+//keyswipe.add(leftswiper)
+keyswipe.add(rightswiper)
+keyswipe.on('swiperight', swipeRight);
+//keyswipe.on('swipeleft', swipeLeft);
 
 
 var numpadWrapper = document.getElementById('numpad')
 var numswipe = new Hammer.Manager(numpadWrapper);
-numswipe.add(myswiper)
+numswipe.add(leftswiper)
+numswipe.add(rightswiper)
 numswipe.on('swipeleft', swipeLeft);
 numswipe.on('swiperight', swipeRight);
 
 var textWrapper = document.getElementById('textfield')
 var textswipe = new Hammer.Manager(textWrapper);
-textwipe.add(myswiper)
+textswipe.add(leftswiper)
+textswipe.add(rightswiper)
 textswipe.on('swipeleft', swipeLeft);
-textwipe.on('swiperight', swipeRight);
+textswipe.on('swiperight', swipeRight);
 
 var hotkeysWrapper = document.getElementById('hotkeys')
 var hotswipe = new Hammer.Manager(hotkeysWrapper);
-hotswipe.add(myswiper)
+hotswipe.add(leftswiper)
+hotswipe.add(leftswiper)
 hotswipe.on('swipeleft', swipeLeft);
 hotswipe.on('swiperight', swipeRight);
 
 var customWrapper = document.getElementById('custom')
 var customswipe = new Hammer.Manager(customWrapper);
-customswipe.add(myswiper)
+customswipe.add(leftswiper)
+customswipe.add(rightswiper)
 customswipe.on('swiperight', swipeRight);
 
 
