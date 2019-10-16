@@ -924,31 +924,31 @@ function swipeRight(event) {
 
 var keyboardWrapper = document.getElementById('keyboard')
 var keyswipe = new Hammer.Manager(keyboardWrapper);
-keyswipe.add(new Hammer.Swipe({event: 'swipe', pointers: 1, threshold: 10, direction: Hammer.DIRECTION_HORIZONTAL}));
+keyswipe.add(new Hammer.Swipe({event: 'swipe', pointers: 1, threshold: 5, direction: Hammer.DIRECTION_HORIZONTAL}));
 keyswipe.on('swipeleft', swipeLeft);
 
 
 var numpadWrapper = document.getElementById('numpad')
 var numswipe = new Hammer.Manager(numpadWrapper);
-numswipe.add(new Hammer.Swipe({event: 'swipe', pointers: 1, threshold: 10, direction: Hammer.DIRECTION_HORIZONTAL}));
+numswipe.add(new Hammer.Swipe({event: 'swipe', pointers: 1, threshold: 5, direction: Hammer.DIRECTION_HORIZONTAL}));
 numswipe.on('swipeleft', swipeLeft);
 numswipe.on('swiperight', swipeRight);
 
 var textWrapper = document.getElementById('textfield')
 var textswipe = new Hammer.Manager(textWrapper);
-textswipe.add(new Hammer.Swipe({event: 'swipe', pointers: 1, threshold: 10, direction: Hammer.DIRECTION_HORIZONTAL}));
+textswipe.add(new Hammer.Swipe({event: 'swipe', pointers: 1, threshold: 5, direction: Hammer.DIRECTION_HORIZONTAL}));
 textswipe.on('swipeleft', swipeLeft);
 textswipe.on('swiperight', swipeRight);
 
 var hotkeysWrapper = document.getElementById('hotkeys')
 var hotswipe = new Hammer.Manager(hotkeysWrapper);
-hotswipe.add(new Hammer.Swipe({event: 'swipe', pointers: 1, threshold: 10, direction: Hammer.DIRECTION_HORIZONTAL}));
+hotswipe.add(new Hammer.Swipe({event: 'swipe', pointers: 1, threshold: 5, direction: Hammer.DIRECTION_HORIZONTAL}));
 hotswipe.on('swipeleft', swipeLeft);
 hotswipe.on('swiperight', swipeRight);
 
 var customWrapper = document.getElementById('custom')
 var customswipe = new Hammer.Manager(customWrapper);
-customswipe.add(new Hammer.Swipe({event: 'swipe', pointers: 1, threshold: 10, direction: Hammer.DIRECTION_HORIZONTAL}));
+customswipe.add(new Hammer.Swipe({event: 'swipe', pointers: 1, threshold: 5, direction: Hammer.DIRECTION_HORIZONTAL}));
 customswipe.on('swiperight', swipeRight);
 
 
