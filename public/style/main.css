@@ -215,8 +215,8 @@ icon {
 }
 
 #leftClick{
-  width: 40%;
-  height: 30%;
+  width: 35%;
+  height: 40%;
   background-color: rgb(255, 255, 255);
   float: left;
   border: black solid;
@@ -224,16 +224,16 @@ icon {
 }
 
 #scrollWheel{
-  width: 20%;
-  height: 30%;
+  width: 30%;
+  height: 40%;
   background-color: rgb(255, 255, 255);
   float: left;
   border: black solid;
 }
 
 #rightClick{
-  width: 40%;
-  height: 30%;
+  width: 35%;
+  height: 40%;
   background-color: rgb(255, 255, 255);
   float: left;
   border: black solid;
@@ -242,7 +242,7 @@ icon {
 
 #mousepad{
   width: 100%;
-  height: 70%;
+  height: 60%;
   float: left;
 }
 #textfield{
