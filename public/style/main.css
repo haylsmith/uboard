@@ -215,7 +215,7 @@ icon {
 }
 
 #leftClick{
-  width: 35%;
+  width: 40%;
   height: 40%;
   background-color: rgb(255, 255, 255);
   float: left;
@@ -224,7 +224,7 @@ icon {
 }
 
 #scrollWheel{
-  width: 30%;
+  width: 20%;
   height: 40%;
   background-color: rgb(255, 255, 255);
   float: left;
@@ -232,7 +232,7 @@ icon {
 }
 
 #rightClick{
-  width: 35%;
+  width: 40%;
   height: 40%;
   background-color: rgb(255, 255, 255);
   float: left;
