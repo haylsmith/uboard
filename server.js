@@ -13,6 +13,7 @@ var fs = require("fs");
 var readline = require("readline");
 var exec = require('child_process').exec, child;
 config.passcode = ''
+import { floor, random } from 'mathjs'
 
 //---------GLOBAL STATE VARIABLES ----// 
 var screenWidth = 1440;
@@ -49,7 +50,20 @@ http.listen(PORT, function() {
 //General Connection Configuration
 io.on('connection', function(socket) {
   socket.broadcast.emit('hi');
-  console.log('a user connected');
+  socket.emit("CheckSessionID", {})
+
+  socket.on("SessionID", function(pos) {
+    if (pos.id === -1) {
+      var clientSession = floor(random() * 100);
+    }
+  });
+
+  //setTimeout(function(){
+  //  alert("Hello"); }, 5000);
+  //console.log('a user connected');
+
+
+
   socket.on('disconnect', function() {
     console.log('user disconnected');
   });
@@ -137,6 +151,12 @@ io.on('connection', function(socket) {
       socket.emit('updateCustom', {fname: line.slice(6,-5), k: keys, x: xpos, y: ypos, altText:altText});
     });
 
+
+//RELOADING KEYBOARDS ENDS HERE
+
+
+
+
   //Keyboard Functionality
   socket.on('string', function(pos) {
     console.log(config.passcode)
@@ -156,6 +176,7 @@ io.on('connection', function(socket) {
     }
   });
  
+
   socket.on('functionality', function(pos) {
     if (pos.pw || config.passcode) {
       if (config.passcode !== pos.pw) { //Password Checker

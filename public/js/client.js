@@ -32,6 +32,14 @@ doubleTap.recognizeWith(singleTap);
 doubleTap.requireFailure(tripleTap);
 singleTap.requireFailure([tripleTap, doubleTap]);
 
+
+var SessionID = 0;
+
+socket.on('CheckSessionID', function(pos) {
+  socket.emit("SessionID", {"id": SessionID})
+});
+
+
 //$("#touchpad").hide();
 
 function onendListener (event) { 
