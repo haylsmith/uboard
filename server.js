@@ -12,8 +12,8 @@ var url = require("opn");
 var fs = require("fs");
 var readline = require("readline");
 var exec = require('child_process').exec, child;
+var math = require('mathjs');
 config.passcode = ''
-import { floor, random } from 'mathjs'
 
 //---------GLOBAL STATE VARIABLES ----// 
 var screenWidth = 1440;
@@ -54,107 +54,20 @@ io.on('connection', function(socket) {
 
   socket.on("SessionID", function(pos) {
     if (pos.id === -1) {
-      var clientSession = floor(random() * 100);
+      var clientSessionID = math.floor(math.random() * 100);
+      socket.emit("UpdateSessionID", {"id": clientSessionID});
+      console.log("New Connection");
+      sendKeyboards(socket);
+
+    }
+    else {
+      console.log("Old Connection");
     }
   });
-
-  //setTimeout(function(){
-  //  alert("Hello"); }, 5000);
-  //console.log('a user connected');
-
-
 
   socket.on('disconnect', function() {
     console.log('user disconnected');
   });
-
-  //Load default keyboard
-  var file = fs.readFileSync("default_configuration.json")  
-  var content = JSON.parse(file)
-  socket.emit('updateKeys', content);
-
-  content = []
-  //Load default numpad
-  var file = fs.readFileSync("numpad.json")  
-  var content = JSON.parse(file)
-
-  var keys = []
-  var xpos = []
-  var ypos = []
-  var alt = []
-
-  for (var key in content) {
-    keys.push(content[key][0]);
-    xpos.push(content[key][1]);
-    ypos.push(content[key][2]);
-    if (content[key].length > 3) {
-      alt.push(content[key][3])
-    }
-
-  }
-  socket.emit('updateNumPad', {k: keys, x: xpos, y: ypos, a: alt});
-   
-  content = []
-  //Load default urls
-  var file = fs.readFileSync("url.json")  
-  content = JSON.parse(file)
-  
-  var keys = []
-  var xpos = []
-  var ypos = []
-  
-  for (var key in content) {
-    keys.push(content[key][0]);
-    xpos.push(content[key][1]);
-    ypos.push(content[key][2]);
-  }
-  socket.emit('updateUrls', {k: keys, x: xpos, y: ypos});
-
-
-  //Load default apps
-  var file = fs.readFileSync("apps.json")  
-  content = JSON.parse(file)
-  
-  var keys = []
-  var xpos = []
-  var ypos = []
-  var names = []
-  
-  for (var key in content) {
-    keys.push(content[key][0]);
-    names.push(content[key][3]);
-    xpos.push(content[key][1]);
-    ypos.push(content[key][2]);
-  }
-  socket.emit('updateApps', {k: keys, x: xpos, y: ypos, n: names});
-
-  //Load custom keyboards
-  var lineReader = require('readline').createInterface({
-    input: require('fs').createReadStream('./custom_configs/order')
-  });
-
-  lineReader.on('line', function (line) {
-    var file = fs.readFileSync('./custom_configs/'+line)  
-    content = JSON.parse(file)
-      var keys = []
-      var xpos = []
-      var ypos = []
-      var altText = []
-
-      
-      for (var key in content) {
-        keys.push(content[key][0]);
-        xpos.push(content[key][1]);
-        ypos.push(content[key][2]);
-        altText.push(content[key][3]);
-      }
-      socket.emit('updateCustom', {fname: line.slice(6,-5), k: keys, x: xpos, y: ypos, altText:altText});
-    });
-
-
-//RELOADING KEYBOARDS ENDS HERE
-
-
 
 
   //Keyboard Functionality
@@ -353,5 +266,93 @@ async function sh(cmd) {
   });
 }
 
+
+
+function sendKeyboards(socket) {
+
+  //Load default keyboard
+  var file = fs.readFileSync("default_configuration.json")  
+  var content = JSON.parse(file)
+  socket.emit('updateKeys', content);
+
+  content = []
+  //Load default numpad
+  var file = fs.readFileSync("numpad.json")  
+  var content = JSON.parse(file)
+
+  var keys = []
+  var xpos = []
+  var ypos = []
+  var alt = []
+
+  for (var key in content) {
+    keys.push(content[key][0]);
+    xpos.push(content[key][1]);
+    ypos.push(content[key][2]);
+    if (content[key].length > 3) {
+      alt.push(content[key][3])
+    }
+
+  }
+  socket.emit('updateNumPad', {k: keys, x: xpos, y: ypos, a: alt});
+   
+  content = []
+  //Load default urls
+  var file = fs.readFileSync("url.json")  
+  content = JSON.parse(file)
+  
+  var keys = []
+  var xpos = []
+  var ypos = []
+  
+  for (var key in content) {
+    keys.push(content[key][0]);
+    xpos.push(content[key][1]);
+    ypos.push(content[key][2]);
+  }
+  socket.emit('updateUrls', {k: keys, x: xpos, y: ypos});
+
+
+  //Load default apps
+  var file = fs.readFileSync("apps.json")  
+  content = JSON.parse(file)
+  
+  var keys = []
+  var xpos = []
+  var ypos = []
+  var names = []
+  
+  for (var key in content) {
+    keys.push(content[key][0]);
+    names.push(content[key][3]);
+    xpos.push(content[key][1]);
+    ypos.push(content[key][2]);
+  }
+  socket.emit('updateApps', {k: keys, x: xpos, y: ypos, n: names});
+
+  //Load custom keyboards
+  var lineReader = require('readline').createInterface({
+    input: require('fs').createReadStream('./custom_configs/order')
+  });
+
+  lineReader.on('line', function (line) {
+    var file = fs.readFileSync('./custom_configs/'+line)  
+    content = JSON.parse(file)
+      var keys = []
+      var xpos = []
+      var ypos = []
+      var altText = []
+
+      
+      for (var key in content) {
+        keys.push(content[key][0]);
+        xpos.push(content[key][1]);
+        ypos.push(content[key][2]);
+        altText.push(content[key][3]);
+      }
+      socket.emit('updateCustom', {fname: line.slice(6,-5), k: keys, x: xpos, y: ypos, altText:altText});
+    });
+
+}
 
 

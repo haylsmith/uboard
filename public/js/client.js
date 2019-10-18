@@ -33,12 +33,16 @@ doubleTap.requireFailure(tripleTap);
 singleTap.requireFailure([tripleTap, doubleTap]);
 
 
-var SessionID = 0;
+var SessionID = -1;
 
 socket.on('CheckSessionID', function(pos) {
   socket.emit("SessionID", {"id": SessionID})
 });
 
+socket.on("UpdateSessionID", function(dict) {
+  SessionID = dict.id;
+  console.log("New ID is" + SessionID.toString())
+});
 
 //$("#touchpad").hide();
 
