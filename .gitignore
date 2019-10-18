@@ -7,3 +7,5 @@ Omega_binaries/
 public/.DS_Store
 public/faq/.DS_Store
 npm-debug.log
+package-lock.json
+package.json
