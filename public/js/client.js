@@ -336,7 +336,7 @@ function addHotkey(xpos, ypos, url, page, id){
 
 // Adds an application shortcut to the keyboard
 function addApp(xpos, ypos, path, name, page, id){
-  $('#'+page).append('<button class = "draggable activestyle app-button" id='+ id +' value=' + path + '>' + name + '</button>');
+  $('#'+page).append('<button class = "draggable activestyle app-button" id='+ id +' value="' + path + '">' + name + '</button>');
   var ele = $('#' + id)
   var touchElem = document.getElementById(id);
   var app_tapper = new Hammer.Manager(touchElem);
@@ -345,7 +345,6 @@ function addApp(xpos, ypos, path, name, page, id){
   ele.css({position:'absolute', left:xpos + '%', top:ypos + '%', minHeight: (keyboardWidth*.02).toString() + "px", width: '20%'});
   //ele.css({'max-width': '20%', 'min-width': '20%', 'text-indent': '-9999px', 'text-align': 'left', 'overflow': 'hidden'});
 }
-
 
 
 
