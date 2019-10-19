@@ -199,7 +199,7 @@ icon {
     overflow: auto;
     height: 45%;
     width: 100%;
-    background-color: rgb(200, 250, 250);
+    background-color: rgb(205, 205, 205);
     position: relative;
 }
 
@@ -216,28 +216,30 @@ icon {
 
 #leftClick{
   width: 40%;
-  height: 40%;
-  background-color: rgb(150, 180, 200);
+  height: 30%;
+  border: solid black;
+  border-right: none;
+  background-color: rgb(255, 255, 255);
   float: left;
-  border: black solid;
-  border-right-width: 0;
 }
 
 #scrollWheel{
   width: 20%;
-  height: 40%;
-  background-color: rgb(100, 150, 150);
+  height: 30%;
+  border: solid black;
+  position: relative;
+  background-color: rgb(255, 255, 255);
   float: left;
-  border: black solid;
 }
 
 #rightClick{
   width: 40%;
-  height: 40%;
-  background-color: rgb(150, 180, 200);
+  height: 30%;
+  border: solid black;
+  border-left: none;
+  position: relative;
+  background-color: rgb(255, 255, 255);
   float: left;
-  border: black solid;
-  border-left-width: 0; 
 }
 
 #mousepad{
