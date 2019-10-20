@@ -557,8 +557,20 @@ function replaceNumkeysDisplay(modifier){
 
 }
 
+
+var staticElem = document.getElementsByClassName('static-bar')[0].children;
+var singleTap_static = new Hammer.Tap({event: 'click', pointers: 1});
+for (var i = 0; i < staticElem.length; i++) {
+  var static_tapper = new Hammer.Manager(staticElem[i]);
+  static_tapper.add([singleTap_static]);
+  static_tapper.on('click', staticKeyPress);
+
+}
+
+
+
 //Purpose: Event listener on tapping the keys
-$('.static-key').click(function (event) {
+function staticKeyPress(event) {
   if (event.target.id === 'go-toggle') { // enter
     socket.emit('functionality', {'pw':passcode, type: 'enter'});
   }
@@ -585,6 +597,9 @@ $('.static-key').click(function (event) {
   }
   
   else if(event.target.id === 'ctrl-toggle'){
+    if(modifier == 'shift') {
+      replaceNumkeysDisplay(modifier)
+    }
     if(modifier == 'command'){
       modifier = 'None'
       $('#ctrl-toggle').removeClass('static-key-selected')
@@ -599,7 +614,7 @@ $('.static-key').click(function (event) {
     }
   }
 
-  })
+}
 
 function customDoubleTap (event) { 
     if (move == true){
