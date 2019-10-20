@@ -123,8 +123,8 @@ $('#newBoard-save').click(function() {
   $('#add-key').show();
   $('#delete-keyboard').show();
   var newSlide ='<div class = "custom swiper-slide swiper-slide-inner" id="custom-' + newBoardName + '">  </div>';
-  $('#s'+swiper.activeIndex.toString()).css("background-color", "turquoise")
-  $('#s4').css("background-color", "green")
+  $('#s'+swiper.activeIndex.toString()).css("background-color", "black")
+  $('#s4').css("background-color", "purple")
   swiperInner.appendSlide(newSlide)
   swiper.slideTo(4, 200, false);
   console.log(swiperInner)
@@ -222,7 +222,7 @@ swiper.allowTouchMove = false;
 swiperInner.allowTouchMove = false;
 
 var swipeIndex = 0;
-$('#s0').css("background-color", "green")
+$('#s0').css("background-color", "purple")
 
 var mousePos = true;
 
@@ -272,8 +272,8 @@ function switchDisplay(item) {
     }
     console.log(newId)
     console.log(swipeIndex)
-    $('#s'+swipeIndex.toString()).css("background-color", "turquoise")
-    $(item).css("background-color", "green")
+    $('#s'+swipeIndex.toString()).css("background-color", "black")
+    $(item).css("background-color", "purple")
     swipeIndex = newId;
     swiper.slideTo(newId, 200, false);
   }
