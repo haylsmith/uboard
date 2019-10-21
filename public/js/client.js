@@ -32,6 +32,18 @@ doubleTap.recognizeWith(singleTap);
 doubleTap.requireFailure(tripleTap);
 singleTap.requireFailure([tripleTap, doubleTap]);
 
+
+var SessionID = -1;
+
+socket.on('CheckSessionID', function(pos) {
+  socket.emit("SessionID", {"id": SessionID})
+});
+
+socket.on("UpdateSessionID", function(dict) {
+  SessionID = dict.id;
+  console.log("New ID is" + SessionID.toString())
+});
+
 //$("#touchpad").hide();
 
 function onendListener (event) { 
@@ -324,7 +336,7 @@ function addHotkey(xpos, ypos, url, page, id){
 
 // Adds an application shortcut to the keyboard
 function addApp(xpos, ypos, path, name, page, id){
-  $('#'+page).append('<button class = "draggable activestyle app-button" id='+ id +' value=' + path + '>' + name + '</button>');
+  $('#'+page).append('<button class = "draggable activestyle app-button" id='+ id +' value="' + path + '">' + name + '</button>');
   var ele = $('#' + id)
   var touchElem = document.getElementById(id);
   var app_tapper = new Hammer.Manager(touchElem);
@@ -333,7 +345,6 @@ function addApp(xpos, ypos, path, name, page, id){
   ele.css({position:'absolute', left:xpos + '%', top:ypos + '%', minHeight: (keyboardWidth*.02).toString() + "px", width: '20%'});
   //ele.css({'max-width': '20%', 'min-width': '20%', 'text-indent': '-9999px', 'text-align': 'left', 'overflow': 'hidden'});
 }
-
 
 
 
@@ -546,8 +557,20 @@ function replaceNumkeysDisplay(modifier){
 
 }
 
+
+var staticElem = document.getElementsByClassName('static-bar')[0].children;
+var singleTap_static = new Hammer.Tap({event: 'click', pointers: 1});
+for (var i = 0; i < staticElem.length; i++) {
+  var static_tapper = new Hammer.Manager(staticElem[i]);
+  static_tapper.add([singleTap_static]);
+  static_tapper.on('click', staticKeyPress);
+
+}
+
+
+
 //Purpose: Event listener on tapping the keys
-$('.static-key').click(function (event) {
+function staticKeyPress(event) {
   if (event.target.id === 'go-toggle') { // enter
     socket.emit('functionality', {'pw':passcode, type: 'enter'});
   }
@@ -574,6 +597,9 @@ $('.static-key').click(function (event) {
   }
   
   else if(event.target.id === 'ctrl-toggle'){
+    if(modifier == 'shift') {
+      replaceNumkeysDisplay(modifier)
+    }
     if(modifier == 'command'){
       modifier = 'None'
       $('#ctrl-toggle').removeClass('static-key-selected')
@@ -588,7 +614,7 @@ $('.static-key').click(function (event) {
     }
   }
 
-  })
+}
 
 function customDoubleTap (event) { 
     if (move == true){
