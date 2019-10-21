@@ -17,13 +17,27 @@ To run the uBoard server you must have the following installed:
 2. npm (5.6.0 or above)
 3. bower (1.8.2 or above)
 
-Get required packages
+On Mac, get required packages
 
 ```
 $ npm install
 ```
 
 This will run `bower install` and install client side libraries into `public/vendor` 
+
+On Windows, the following steps must be done in Windows PowerShell for installation
+(npm install robotjs only needed if npm install . did not work)
+
+```
+$ npm install --global --production windows-build-tools
+$ npm install -g node-gyp
+$ npm install .
+$ npm install robotjs
+$ npm install -g bower
+$ node-gyp rebuild
+
+```
+
 
 After, run
 
