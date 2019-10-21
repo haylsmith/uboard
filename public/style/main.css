@@ -149,15 +149,15 @@ icon {
 }
 
 .shift-toggle{
-  min-width: 10%
+  min-width: 15%
 }
 
 .ctrl-toggle{
-  min-width: 10%
+  min-width: 15%
 }
 
 .go-toggle{
-  min-width: 10%
+  min-width: 15%
 }
 
 .spacebar{
@@ -165,7 +165,7 @@ icon {
 }
 
 .backspace{
-  min-width: 30%
+  min-width: 15%
 }
 
 .swiper-slide{
