@@ -960,7 +960,7 @@ numswipe.add(new Hammer.Swipe({event: 'swipe', pointers: 1, threshold: 5, direct
 numswipe.on('swipeleft', swipeLeft);
 numswipe.on('swiperight', swipeRight);
 
-var textWrapper = document.getElementById('textfield')
+var textWrapper = document.getElementById('textfieldcontainer')
 var textswipe = new Hammer.Manager(textWrapper);
 textswipe.add(new Hammer.Swipe({event: 'swipe', pointers: 1, threshold: 5, direction: Hammer.DIRECTION_HORIZONTAL}));
 textswipe.on('swipeleft', swipeLeft);
