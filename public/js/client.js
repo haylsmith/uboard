@@ -135,8 +135,8 @@ $('#newBoard-save').click(function() {
   $('#add-key').show();
   $('#delete-keyboard').show();
   var newSlide ='<div class = "custom swiper-slide swiper-slide-inner" id="custom-' + newBoardName + '">  </div>';
-  $('#s'+swiper.activeIndex.toString()).css("background-color", "turquoise")
-  $('#s4').css("background-color", "green")
+  $('#s'+swiper.activeIndex.toString()).css("background-color", "black")
+  $('#s4').css("background-color", "purple")
   swiperInner.appendSlide(newSlide)
   swiper.slideTo(4, 200, false);
   console.log(swiperInner)
@@ -234,7 +234,7 @@ swiper.allowTouchMove = false;
 swiperInner.allowTouchMove = false;
 
 var swipeIndex = 0;
-$('#s0').css("background-color", "green")
+$('#s0').css("background-color", "purple")
 
 var mousePos = true;
 
@@ -284,8 +284,8 @@ function switchDisplay(item) {
     }
     console.log(newId)
     console.log(swipeIndex)
-    $('#s'+swipeIndex.toString()).css("background-color", "turquoise")
-    $(item).css("background-color", "green")
+    $('#s'+swipeIndex.toString()).css("background-color", "black")
+    $(item).css("background-color", "purple")
     swipeIndex = newId;
     swiper.slideTo(newId, 200, false);
   }
@@ -336,7 +336,7 @@ function addHotkey(xpos, ypos, url, page, id){
 
 // Adds an application shortcut to the keyboard
 function addApp(xpos, ypos, path, name, page, id){
-  $('#'+page).append('<button class = "draggable activestyle app-button" id='+ id +' value=' + path + '>' + name + '</button>');
+  $('#'+page).append('<button class = "draggable activestyle app-button" id='+ id +' value="' + path + '">' + name + '</button>');
   var ele = $('#' + id)
   var touchElem = document.getElementById(id);
   var app_tapper = new Hammer.Manager(touchElem);
@@ -345,7 +345,6 @@ function addApp(xpos, ypos, path, name, page, id){
   ele.css({position:'absolute', left:xpos + '%', top:ypos + '%', minHeight: (keyboardWidth*.02).toString() + "px", width: '20%'});
   //ele.css({'max-width': '20%', 'min-width': '20%', 'text-indent': '-9999px', 'text-align': 'left', 'overflow': 'hidden'});
 }
-
 
 
 
@@ -558,8 +557,20 @@ function replaceNumkeysDisplay(modifier){
 
 }
 
+
+var staticElem = document.getElementsByClassName('static-bar')[0].children;
+var singleTap_static = new Hammer.Tap({event: 'click', pointers: 1});
+for (var i = 0; i < staticElem.length; i++) {
+  var static_tapper = new Hammer.Manager(staticElem[i]);
+  static_tapper.add([singleTap_static]);
+  static_tapper.on('click', staticKeyPress);
+
+}
+
+
+
 //Purpose: Event listener on tapping the keys
-$('.static-key').click(function (event) {
+function staticKeyPress(event) {
   if (event.target.id === 'go-toggle') { // enter
     socket.emit('functionality', {'pw':passcode, type: 'enter'});
   }
@@ -586,6 +597,9 @@ $('.static-key').click(function (event) {
   }
   
   else if(event.target.id === 'ctrl-toggle'){
+    if(modifier == 'shift') {
+      replaceNumkeysDisplay(modifier)
+    }
     if(modifier == 'command'){
       modifier = 'None'
       $('#ctrl-toggle').removeClass('static-key-selected')
@@ -600,7 +614,7 @@ $('.static-key').click(function (event) {
     }
   }
 
-  })
+}
 
 function customDoubleTap (event) { 
     if (move == true){
