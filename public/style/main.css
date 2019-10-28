@@ -266,18 +266,18 @@ icon {
 .icon-selection{
   float: left;
   min-height: 100%;
-  min-width: 14%;
+  min-width: 17%;
   position: relative;
   transition: background-color 300ms linear;
 }
 
 #settings-select{
-  min-width: 15%;
+  min-width: 16%;
   background-color: grey
 }
 
 #swap{
-  min-width: 15%;
+  min-width: 16%;
   background-color: grey
 }
 
