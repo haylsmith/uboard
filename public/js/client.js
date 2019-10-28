@@ -136,7 +136,7 @@ $('#newBoard-save').click(function() {
   $('#delete-keyboard').show();
   var newSlide ='<div class = "custom swiper-slide swiper-slide-inner" id="custom-' + newBoardName + '">  </div>';
   $('#s'+swiper.activeIndex.toString()).css("background-color", "black")
-  $('#s4').css("background-color", "purple")
+  $('#s-computer-settings').css("background-color", "purple")
   swiperInner.appendSlide(newSlide)
   swiper.slideTo(4, 200, false);
   console.log(swiperInner)
@@ -234,7 +234,7 @@ swiper.allowTouchMove = false;
 swiperInner.allowTouchMove = false;
 
 var swipeIndex = 0;
-$('#s0').css("background-color", "purple")
+$('#s-smartphone').css("background-color", "purple")
 
 var mousePos = true;
 
@@ -250,7 +250,7 @@ $('#customSelect').change(function() {
 
 function switchDisplay(item) {
   var id = item.id
-  if (id == 'swap') {
+  if (id == 's-swap') {
     if (mousePos){
       $('#touchpad').insertBefore('.swiper-container');
       mousePos = false;
@@ -262,7 +262,7 @@ function switchDisplay(item) {
     return;
   }
 
-  if (id == 'settings-select') {
+  if (id == 's-settings') {
     // Bring up setting menu
     settingsModal.style.display = "block";
     if (swiper.activeIndex != 4){
@@ -919,14 +919,14 @@ function swipeLeft(event) {
     switchDisplay(document.getElementById("s1"))
   }
   else if (page === 'numpad' || page.substring(0, 3) === 'pad'){
-    switchDisplay(document.getElementById("s2"))
+    switchDisplay(document.getElementById("s-smartphone"))
   }
   else if (page === 'textfield'){
-    switchDisplay(document.getElementById("s3"))
+    switchDisplay(document.getElementById("s-link"))
   }
   else if (page === 'hotkeys' || page.substring(0, 3) === 'app'
             || page.substring(0, 3) === 'url'){
-    switchDisplay(document.getElementById("s4"))
+    switchDisplay(document.getElementById("s-computer-settings"))
   }
 }
 
@@ -934,17 +934,17 @@ function swipeRight(event) {
   var page = event.target.id
   console.log("right" + page)
   if (page === 'numpad' || page.substring(0, 3) === 'pad'){
-    switchDisplay(document.getElementById("s0"))
+    switchDisplay(document.getElementById("s-smartphone"))
   }
   else if (page === 'textfield'){
-    switchDisplay(document.getElementById("s1"))
+    switchDisplay(document.getElementById("s-link"))
   }
   else if (page === 'hotkeys' || page.substring(0, 3) === 'app'
             || page.substring(0, 3) === 'url'){
-    switchDisplay(document.getElementById("s2"))
+    switchDisplay(document.getElementById("s-smartphone"))
   }
   else if (page.substring(0, 6) === 'custom'){
-    switchDisplay(document.getElementById("s3"))
+    switchDisplay(document.getElementById("s-link"))
   }
 }
 
