@@ -136,7 +136,7 @@ $('#newBoard-save').click(function() {
   $('#delete-keyboard').show();
   var newSlide ='<div class = "custom swiper-slide swiper-slide-inner" id="custom-' + newBoardName + '">  </div>';
   $('#s'+swiper.activeIndex.toString()).css("background-color", "black")
-  $('#s-computer-settings').css("background-color", "purple")
+  $('#s4').css("background-color", "purple")
   swiperInner.appendSlide(newSlide)
   swiper.slideTo(4, 200, false);
   console.log(swiperInner)
@@ -234,7 +234,7 @@ swiper.allowTouchMove = false;
 swiperInner.allowTouchMove = false;
 
 var swipeIndex = 0;
-$('#s-smartphone').css("background-color", "purple")
+$('#s0').css("background-color", "purple")
 
 var mousePos = true;
 
@@ -250,7 +250,7 @@ $('#customSelect').change(function() {
 
 function switchDisplay(item) {
   var id = item.id
-  if (id == 's-swap') {
+  if (id == 'swap') {
     if (mousePos){
       $('#touchpad').insertBefore('.swiper-container');
       mousePos = false;
@@ -262,7 +262,7 @@ function switchDisplay(item) {
     return;
   }
 
-  if (id == 's-settings') {
+  if (id == 'settings-select') {
     // Bring up setting menu
     settingsModal.style.display = "block";
     if (swiper.activeIndex != 4){
@@ -919,14 +919,14 @@ function swipeLeft(event) {
     switchDisplay(document.getElementById("s1"))
   }
   else if (page === 'numpad' || page.substring(0, 3) === 'pad'){
-    switchDisplay(document.getElementById("s-smartphone"))
+    switchDisplay(document.getElementById("s2"))
   }
   else if (page === 'textfield'){
-    switchDisplay(document.getElementById("s-link"))
+    switchDisplay(document.getElementById("s3"))
   }
   else if (page === 'hotkeys' || page.substring(0, 3) === 'app'
             || page.substring(0, 3) === 'url'){
-    switchDisplay(document.getElementById("s-computer-settings"))
+    switchDisplay(document.getElementById("s4"))
   }
 }
 
@@ -934,17 +934,17 @@ function swipeRight(event) {
   var page = event.target.id
   console.log("right" + page)
   if (page === 'numpad' || page.substring(0, 3) === 'pad'){
-    switchDisplay(document.getElementById("s-smartphone"))
+    switchDisplay(document.getElementById("s0"))
   }
   else if (page === 'textfield'){
-    switchDisplay(document.getElementById("s-link"))
+    switchDisplay(document.getElementById("s1"))
   }
   else if (page === 'hotkeys' || page.substring(0, 3) === 'app'
             || page.substring(0, 3) === 'url'){
-    switchDisplay(document.getElementById("s-smartphone"))
+    switchDisplay(document.getElementById("s2"))
   }
   else if (page.substring(0, 6) === 'custom'){
-    switchDisplay(document.getElementById("s-link"))
+    switchDisplay(document.getElementById("s3"))
   }
 }
 
@@ -960,7 +960,7 @@ numswipe.add(new Hammer.Swipe({event: 'swipe', pointers: 1, threshold: 5, direct
 numswipe.on('swipeleft', swipeLeft);
 numswipe.on('swiperight', swipeRight);
 
-var textWrapper = document.getElementById('textfield')
+var textWrapper = document.getElementById('textfieldcontainer')
 var textswipe = new Hammer.Manager(textWrapper);
 textswipe.add(new Hammer.Swipe({event: 'swipe', pointers: 1, threshold: 5, direction: Hammer.DIRECTION_HORIZONTAL}));
 textswipe.on('swipeleft', swipeLeft);
