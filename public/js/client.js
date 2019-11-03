@@ -915,13 +915,7 @@ $('#about').click(function() {
 function swipeLeft(event) {
   var page = event.target.id
   console.log("left" + page)
-  if (page === 'keyboard'  || page.substring(0, 6) === 'button'){
-    switchDisplay(document.getElementById("s1"))
-  }
-  else if (page === 'numpad' || page.substring(0, 3) === 'pad'){
-    switchDisplay(document.getElementById("s2"))
-  }
-  else if (page === 'textfield'){
+if (page === 'textfield'){
     switchDisplay(document.getElementById("s3"))
   }
   else if (page === 'hotkeys' || page.substring(0, 3) === 'app'
@@ -933,10 +927,7 @@ function swipeLeft(event) {
 function swipeRight(event) {
   var page = event.target.id
   console.log("right" + page)
-  if (page === 'numpad' || page.substring(0, 3) === 'pad'){
-    switchDisplay(document.getElementById("s0"))
-  }
-  else if (page === 'textfield'){
+  if (page === 'textfield'){
     switchDisplay(document.getElementById("s1"))
   }
   else if (page === 'hotkeys' || page.substring(0, 3) === 'app'
@@ -948,19 +939,8 @@ function swipeRight(event) {
   }
 }
 
-var keyboardWrapper = document.getElementById('keyboard')
-var keyswipe = new Hammer.Manager(keyboardWrapper);
-keyswipe.add(new Hammer.Swipe({event: 'swipe', pointers: 1, threshold: 5, direction: Hammer.DIRECTION_HORIZONTAL}));
-keyswipe.on('swipeleft', swipeLeft);
 
-
-var numpadWrapper = document.getElementById('numpad')
-var numswipe = new Hammer.Manager(numpadWrapper);
-numswipe.add(new Hammer.Swipe({event: 'swipe', pointers: 1, threshold: 5, direction: Hammer.DIRECTION_HORIZONTAL}));
-numswipe.on('swipeleft', swipeLeft);
-numswipe.on('swiperight', swipeRight);
-
-var textWrapper = document.getElementById('textfield')
+var textWrapper = document.getElementById('textfieldcontainer')
 var textswipe = new Hammer.Manager(textWrapper);
 textswipe.add(new Hammer.Swipe({event: 'swipe', pointers: 1, threshold: 5, direction: Hammer.DIRECTION_HORIZONTAL}));
 textswipe.on('swipeleft', swipeLeft);
