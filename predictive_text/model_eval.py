@@ -33,6 +33,8 @@ plt.xlabel('epoch')
 plt.legend(['train', 'test'], loc='upper left');
 plt.savefig("model_acc.png")
 
+plt.figure()
+
 plt.plot(history['loss'])
 plt.plot(history['val_loss'])
 plt.title('model loss')
