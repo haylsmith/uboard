@@ -1,27 +1,47 @@
 {
     "url1": [
-        "https://www.umich.edu",
+        "https://www.netflix.com/browse",
         "0",
         "0"
     ],
     "url2": [
-        "https://www.google.com",
+        "https://www.amazon.com",
         "25",
         "0"
     ],
     "url3": [
-        "https://www.facebook.com",
+        "https://www.amazon.com/Amazon-Video/b?ie=UTF8&node=2858778011",
         "50",
         "0"
     ],
     "url4": [
-        "https://www.youtube.com",
+        "https://www.hulu.com",
         "75",
         "0"
     ],
     "url5": [
-        "https://mail.google.com",
-        "0",
-        "30"
+        "https://www.youtube.com",
+        "25",
+        "0"
+    ],
+    "url6": [
+        "https://mail.google.com/mail/u/0",
+        "25",
+        "25"
+    ],
+    "url7": [
+        "https://mail.google.com/mail/u/1",
+        "25",
+        "50"
+    ]
+    "url8": [
+        "https://www.google.com/",
+        "25",
+        "75"
+    ]
+    "url9": [
+        "https://www.weebly.com/",
+        "50",
+        "25"
     ]
 }
