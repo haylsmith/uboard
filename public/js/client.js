@@ -26,6 +26,7 @@ var singleTap_key = new Hammer.Tap({event: 'click', pointers: 1});
 var doubleTap_key = new Hammer.Tap({event: 'doubleclick', pointers: 1, taps: 2});
 var singleTap_url = new Hammer.Tap({event: 'click', pointers: 1});
 var singleTap_app = new Hammer.Tap({event: 'click', pointers: 1});
+var singleTap_phrase = new Hammer.Tap({event: 'click', pointers: 1});
 
 tripleTap.recognizeWith([doubleTap, singleTap]);
 doubleTap.recognizeWith(singleTap);
@@ -44,44 +45,6 @@ socket.on("UpdateSessionID", function(dict) {
   console.log("New ID is" + SessionID.toString())
 });
 
-//$("#touchpad").hide();
-
-function onendListener (event) { 
-        var updateKey = event.target;
-        var newX = parseInt(updateKey.style.left) + updateKey.getAttribute('data-x')/keyboardWidth*100
-        var newY = parseInt(updateKey.style.top) + updateKey.getAttribute('data-y')/keyboardHeight*100
-        newX = parseInt(newX)
-        newY = parseInt(newY)
-        newX = Math.min(Math.max(0, newX),100).toString()
-        newY = Math.min(Math.max(0, newY),100).toString()
-        $("#"+updateKey.id).css({'width': 'auto'})
-        socket.emit('saveKey', {
-          index: $('#customSelect option:selected').attr('id').slice(7),
-          id: updateKey.id,
-          val: updateKey.innerText,
-          altText: altText, 
-          x: newX,
-          y: newY });
-}
-
-var draggableSettings = {
-    snap: {
-      targets: [
-          interact.createSnapGrid({ x: .05*keyboardWidth, y: .1*keyboardHeight })
-        ],
-      range: Infinity
-    },
-    inertia: true,      // enable inertial throwing
-    restrict: {
-      restriction: "parent", // keep the element within the area of it's parent
-      endOnly: true,
-      elementRect: { top: 0, left: 0, bottom: 1, right: 1 }
-    },
-      autoScroll: true, // enable autoScroll
-      onmove: dragMoveListener // call this function on every dragmove event
-      //onend: onendListener This is a bit buggy
-    };
-
 function isUrl(s) {
    var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
    return regexp.test(s);
@@ -91,130 +54,10 @@ function isApp(s) {
   return s.slice(-4) === ".app"
 }
 
-/*
------------SETTINGS MODAL---------------
-*/
-
-var customButtonCounts = {};
-var move = false;
-
-
-
-$('#new-keyboard').click(function() {
-  newBoardModal.style.display = "block";
-  newBoardModelInput.value = ""
-});
-
-$('#newBoard-save').click(function() {
-
-  var newBoardName = newBoardModalInput.value
-  if (newBoardName.indexOf(" ") != -1){
-    newBoardName = newBoardName.split(' ').join('_')
-  }
-  if(newBoardModalInput.value === "") {
-    return
-  }
-  newBoardModalInput.value = ""
-  var boardIds = $('#customSelect').children()
-  console.log(boardIds)
-  for(var i = 0; i < boardIds.length; i++){
-    console.log(boardIds[i].innerText)
-    console.log(newBoardName)
-    if (boardIds[i].innerText.trim() === newBoardName.trim()){
-      //Should give some warning of there is a match
-      console.log("found match")
-      console.log(boardIds[i].innerText)
-      console.log(newBoardName)
-      return
-    }
-  }
-
-
-  $('#customSelect').append('<option class = "select-item" id = "select-' + newBoardName + '">' + newBoardName + ' </option>')
-  $('#edit-wrapper').show();
-  $('#add-key').show();
-  $('#delete-keyboard').show();
-  var newSlide ='<div class = "custom swiper-slide swiper-slide-inner" id="custom-' + newBoardName + '">  </div>';
-  $('#s'+swiper.activeIndex.toString()).css("background-color", "black")
-  $('#s4').css("background-color", "purple")
-  swiperInner.appendSlide(newSlide)
-  swiper.slideTo(4, 200, false);
-  console.log(swiperInner)
-  console.log(swiperInner.slides.length)
-  swiperInner.slideTo(swiperInner.slides.length-1, 200, false);
-  customButtonCounts['custom-' + newBoardName] = 0
-
-  socket.emit('newBoard', {
-    id: newBoardName});
-  $('#select-' + newBoardName).prop("selected", true)
-  newBoardModal.style.display = "none";
-});
-
-
-$('#add-key').click(function() {
-  var newButtonId = 'custom-key-' + $('#customSelect option:selected').attr('id').slice(7) + "-" + (customButtonCounts['custom-' + $('#customSelect option:selected').attr('id').slice(7)]);
-  $('#custom-' + $('#customSelect option:selected').attr('id').slice(7)).append('<button class = "custom-key draggable key-button" id="' + newButtonId + '"></button>');
-  if(move == false){
-    $('#'+newButtonId).addClass('activestyle');
-  }
-  var ele = $('#'+newButtonId)
-  interact('#'+newButtonId).draggable(draggableSettings);
-  customButtonCounts['custom-' + $('#customSelect option:selected').attr('id').slice(7)] += 1;
-  ele.text('')
-  console.log((keyboardWidth*.02).toString())
-  ele.css({position:'absolute', left:'0%', top: '0%', minHeight: (keyboardWidth*.02).toString() + "px"});
-  socket.emit('saveKey', {
-    index: $('#customSelect option:selected').attr('id').slice(7),
-    id: newButtonId,
-    val: '', 
-    x: "0",
-    y: "0" });
-  updateKey = ele[0]
-  console.log(ele)
-  inputModal.value = ''
-  editModal.style.display = "block"; 
-});
-
-$('#delete-keyboard').click(function() {
-  if(swiperInner.slides.length != 0){
-    socket.emit('deleteBoard', {
-      id: $('#customSelect option:selected').attr('id').slice(7)});
-    swiperInner.removeSlide(swiperInner.activeIndex)
-    $('#' + $('#customSelect option:selected').attr('id')).remove()
-  }
-})
-
-$('#edit-toggle').change(function(event) {
-  console.log(event.target)
-  if(move){
-    $('#new-keyboard').show();
-    $('#delete-keyboard').show();
-    $('.custom').css({'background-color': 'white'});
-    $('.custom-key').addClass('activestyle');
-    move = false;
-  } else{
-    $('#new-keyboard').hide();
-    $('#delete-keyboard').hide();
-    $('.custom').css({'background-color': 'rgba(250,50,50,.5)'});
-    $('.custom-key').removeClass('activestyle');
-    move = true;
-  }
-});
-
-$('.close').click(function() {
-    settingsModal.style.display = "none";
-    newBoardModal.style.display = "none";
-});
-
-$('#modal-close').click(function() {
-    editModal.style.display = "none";
-    newBoardModal.style.display = "none";
-});
-
-
 
 /*
------------SWIPING FUNCTIONALITY---------------
+This code controls the navbar and allows users
+to swap between views
 */
 
 var swiper = new Swiper('.swiper-container', {
@@ -246,10 +89,14 @@ $('#customSelect').change(function() {
 })
 
 
-
-
 function switchDisplay(item) {
   var id = item.id
+  if (id == "s1") {
+    $('#static_bar').hide()
+  }
+  else {
+    $('#static_bar').show()
+  }
   if (id == 'swap') {
     if (mousePos){
       $('#touchpad').insertBefore('.swiper-container');
@@ -292,6 +139,70 @@ function switchDisplay(item) {
 }
 
 
+function swipeLeft(event) {
+  var page = event.target.id
+  console.log("left" + page)
+  if (page === 'keyboard'  || page.substring(0, 6) === 'button'){
+    switchDisplay(document.getElementById("s1"))
+  }
+  else if (page === 'ss_elem_list' || page.substring(0, 6) === 'phrase'){
+    switchDisplay(document.getElementById("s2"))
+  }
+  else if (page === 'textfield'){
+    switchDisplay(document.getElementById("s3"))
+  }
+  else if (page === 'hotkeys' || page.substring(0, 3) === 'app'
+            || page.substring(0, 3) === 'url'){
+    switchDisplay(document.getElementById("s4"))
+  }
+}
+
+function swipeRight(event) {
+  var page = event.target.id
+  console.log("right" + page)
+  if (page === 'ss_elem_list' || page.substring(0, 6) === 'phrase'){
+    switchDisplay(document.getElementById("s0"))
+  }
+  else if (page === 'textfield'){
+    switchDisplay(document.getElementById("s1"))
+  }
+  else if (page === 'hotkeys' || page.substring(0, 3) === 'app'
+            || page.substring(0, 3) === 'url'){
+    switchDisplay(document.getElementById("s2"))
+  }
+  else if (page.substring(0, 6) === 'custom'){
+    switchDisplay(document.getElementById("s3"))
+  }
+}
+
+var keyboardWrapper = document.getElementById('keyboard')
+var keyswipe = new Hammer.Manager(keyboardWrapper);
+keyswipe.add(new Hammer.Swipe({event: 'swipe', pointers: 1, threshold: 5, direction: Hammer.DIRECTION_HORIZONTAL}));
+keyswipe.on('swipeleft', swipeLeft);
+
+
+var numpadWrapper = document.getElementById('ss_elem_list')
+var numswipe = new Hammer.Manager(numpadWrapper);
+numswipe.add(new Hammer.Swipe({event: 'swipe', pointers: 1, threshold: 5, direction: Hammer.DIRECTION_HORIZONTAL}));
+numswipe.on('swipeleft', swipeLeft);
+numswipe.on('swiperight', swipeRight);
+
+var textWrapper = document.getElementById('textfieldcontainer')
+var textswipe = new Hammer.Manager(textWrapper);
+textswipe.add(new Hammer.Swipe({event: 'swipe', pointers: 1, threshold: 5, direction: Hammer.DIRECTION_HORIZONTAL}));
+textswipe.on('swipeleft', swipeLeft);
+textswipe.on('swiperight', swipeRight);
+
+var hotkeysWrapper = document.getElementById('hotkeys')
+var hotswipe = new Hammer.Manager(hotkeysWrapper);
+hotswipe.add(new Hammer.Swipe({event: 'swipe', pointers: 1, threshold: 5, direction: Hammer.DIRECTION_HORIZONTAL}));
+hotswipe.on('swipeleft', swipeLeft);
+hotswipe.on('swiperight', swipeRight);
+
+var customWrapper = document.getElementById('custom')
+var customswipe = new Hammer.Manager(customWrapper);
+customswipe.add(new Hammer.Swipe({event: 'swipe', pointers: 1, threshold: 5, direction: Hammer.DIRECTION_HORIZONTAL}));
+customswipe.on('swiperight', swipeRight);
 
 
 
@@ -347,9 +258,6 @@ function addApp(xpos, ypos, path, name, page, id){
 }
 
 
-
-
-
 //Purpose: Receives information from the server to update the presentation of the keys on the client
 socket.on('updateKeys', function(newVals) {
   console.log(newVals);
@@ -402,6 +310,20 @@ socket.on('updateNumPad', function(newVals) {
 
     }
 });
+
+
+//Purpose: Receives information from the server to update the presentation of the keys on the client
+socket.on('updatePhrases', function(newVals) {
+  console.log(newVals);
+    for (var i = 0; i < newVals.k.length; i++){
+      $('#ss_elem_list').append('<li class = "phrase", role="option", id="phrase' + (i+1).toString() + '">' + newVals.k[i] + '</li>');
+      var touchElem = document.getElementById('phrase' + (i+1).toString());
+      var phrase_tapper = new Hammer.Manager(touchElem);
+      phrase_tapper.add([singleTap_phrase]);
+      phrase_tapper.on('click', selectPhrase);
+    }
+});
+
 
 //Purpose: Receives information from the server to update the presentation of the keys on the client
 socket.on('updateCustom', function(newVals) {
@@ -473,17 +395,54 @@ var emitApp = function(str) {
   }
 }
 
-
-
-interact('.custom-key').draggable(draggableSettings);
-
 var emitText = function(text) {
+  console.log("HELLO")
   pos = {'text':text,'pw':passcode}
   if (move === false){
-    console.log(text);
     socket.emit('text', pos);
   }
 };
+
+function sendKeyPress (event) {
+    var mymodifier = modifier
+    if (event.target.id.substring(0, 3) === "pad") {
+      mymodifier = "None"
+    }
+    if (event.target.id.indexOf("url-icon") != -1){
+        emitKey({text: $("#" + event.target.id).parent().clone().children().remove().end().text().trim(), modifier: mymodifier})
+    }
+    else if(event.target.hasChildNodes()){
+        emitKey({text: $("#" + event.target.id).clone().children().remove().end().text().trim(), modifier: mymodifier})
+    }
+    else{
+      emitKey({text: event.target.innerText, modifier: mymodifier});
+    }
+}
+
+function openURL (event) {
+    if(event.target.id.indexOf("url-icon") != -1){
+      console.log("URL Parent")
+      emitUrl($("#" + event.target.id).parent().clone().children().remove().end().text().trim())
+    }
+    else{
+      console.log("URL Error")
+      emitUrl($("#" + event.target.id).clone().children().remove().end().text().trim());
+    }
+}
+
+function openApp (event) {
+    emitApp($("#" + event.target.id)[0].value);
+}
+
+function selectPhrase (event) {
+  var item = document.getElementById(event.target.id)
+  $(item).css("background-color", "purple")
+  var text = event.target.innerText;
+    var oldvalue = document.getElementById('textfield').value
+    document.getElementById('textfield').value = oldvalue + " " + text
+  $(item).css("background-color", "white")
+}
+
 
 $( "#textfield" ).keydown(function(event) {
   if (event.key === 'Enter') { // enter
@@ -506,41 +465,6 @@ $( "#textfield" ).keydown(function(event) {
     document.getElementById('textfield').value = '';    
   }
 });
-
-//Purpose: Uses interact.js library to enable keys to move around
-interact('.custom-key').draggable({
-    snap: {
-      targets: [
-          interact.createSnapGrid({ x: .05*keyboardWidth, y: .1*keyboardHeight })
-        ],
-      range: Infinity
-    },
-    inertia: true,      // enable inertial throwing
-    restrict: {
-      restriction: "parent", // keep the element within the area of it's parent
-      endOnly: true,
-      elementRect: { top: 0, left: 0, bottom: 1, right: 1 }
-    },
-      autoScroll: true, // enable autoScroll
-      onmove: dragMoveListener // call this function on every dragmove event
-      //onend: onendListener // THIS IS BUGGY, disabling for now
-    });
-
-function dragMoveListener (event) {
-  if (move === true){
-  var target = event.target,
-      // keep the dragged position in the data-x/data-y attributes
-      x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
-      y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
-  // translate the element
-  target.style.webkitTransform =
-  target.style.transform =
-    'translate(' + x + 'px, ' + y + 'px)';
-  // update the posiion attributes
-  target.setAttribute('data-x', x);
-  target.setAttribute('data-y', y);
-  }
-}
 
 
 //
@@ -566,8 +490,6 @@ for (var i = 0; i < staticElem.length; i++) {
   static_tapper.on('click', staticKeyPress);
 
 }
-
-
 
 //Purpose: Event listener on tapping the keys
 function staticKeyPress(event) {
@@ -615,123 +537,6 @@ function staticKeyPress(event) {
   }
 
 }
-
-function customDoubleTap (event) { 
-    if (move == true){
-      editModal.style.display = "block"; //Allows the modal to be displayed to User
-      updateKey = event.target
-      if(event.target.id.indexOf("url-icon") != -1){
-        inputModal.value = $("#" + event.target.id).parent().clone().children().remove().end().text().trim()
-        altText.value = updateKey.innerText;//updateKey.innerText
-        updateKey = updateKey.parentNode
-      }
-      else if(event.target.hasChildNodes()){
-        inputModal.value = $("#" + event.target.id).clone().children().remove().end().text().trim()
-        //console.log($("#" + event.target.id));
-        altText.value = $("#" + event.target.id).children()[0].innerText;//updateKey.innerText
-      }
-      else{
-        inputModal.value = updateKey.innerText
-      }
-
-    }
-}
-
-function sendKeyPress (event) {
-    var mymodifier = modifier
-    if (event.target.id.substring(0, 3) === "pad") {
-      mymodifier = "None"
-    }
-    if (event.target.id.indexOf("url-icon") != -1){
-        emitKey({text: $("#" + event.target.id).parent().clone().children().remove().end().text().trim(), modifier: mymodifier})
-    }
-    else if(event.target.hasChildNodes()){
-        emitKey({text: $("#" + event.target.id).clone().children().remove().end().text().trim(), modifier: mymodifier})
-    }
-    else{
-      emitKey({text: event.target.innerText, modifier: mymodifier});
-    }
-}
-
-function openURL (event) {
-    if(event.target.id.indexOf("url-icon") != -1){
-      console.log("URL Parent")
-      emitUrl($("#" + event.target.id).parent().clone().children().remove().end().text().trim())
-    }
-    else{
-      console.log("URL Error")
-      emitUrl($("#" + event.target.id).clone().children().remove().end().text().trim());
-    }
-}
-
-function openApp (event) {
-    emitApp($("#" + event.target.id)[0].value);
-}
-
-//Purpose: Updates button with textbox value
-$('#modal-save').click(function() {
-  var newX = parseInt(updateKey.style.left) + updateKey.getAttribute('data-x')/keyboardWidth*100
-  var newY = parseInt(updateKey.style.top) + updateKey.getAttribute('data-y')/keyboardHeight*100
-  newX = parseInt(newX)
-  newY = parseInt(newY)
-  newX = Math.min(Math.max(0, newX),100).toString()
-  newY = Math.min(Math.max(0, newY),100).toString()
-  console.log(newX, newY)
-  updateKey.innerText = inputModal.value;
-  var ele = $("#"+updateKey.id);
-  console.log(updateKey)
-  console.log(updateKey.innerText)
-  console.log(inputModal.value)
-  console.log($("#"+updateKey.id).clone().children().remove().end().text())
-  if(isUrl(inputModal.value)) {
-    ele.addClass('url-button')
-    ele.removeClass('key-button')
-    hotkeyDestylize(ele, 'custom-' + $('#customSelect option:selected').attr('id').slice(7), updateKey.id, updateKey.innerText)
-    if (altText.value){
-      console.log("Alt text dectected");
-      altTextStylize(ele,altText.value,updateKey.id);
-    }
-    else{
-      hotkeyStylize(ele, 'custom-' + swiperInner.activeIndex.toString(), updateKey.id, updateKey.innerText)
-    }
-  } 
-  else if(isApp(inputModal.value)) {
-    ele.addClass('app-button')
-    ele.removeClass('url-button')
-    //hotkeyDestylize(ele, 'custom-' + $('#customSelect option:selected').attr('id').slice(7), updateKey.id, inputModal.value)
-    if (altText.value){
-      console.log("Alt text dectected");
-      altTextStylize(ele,altText.value,updateKey.id);
-    }
-  } else{
-    ele.addClass('key-button')
-    ele.removeClass('url-button')
-    hotkeyDestylize(ele, 'custom-' + $('#customSelect option:selected').attr('id').slice(7), updateKey.id, inputModal.value)
-    if (altText.value){
-      console.log("Alt text dectected");
-      altTextStylize(ele,altText.value,updateKey.id);
-    }
-  }
-  var inner_text = $("#"+updateKey.id).clone().children().remove().end().text();
-  var alt_text = "";
-  if (altText.value){
-    alt_text = altText.value;
-  }
-
-  $("#"+updateKey.id).css({'width': 'auto'})
-  socket.emit('saveKey', {
-    index: $('#customSelect option:selected').attr('id').slice(7),
-    id: updateKey.id,
-    val: inner_text, 
-    altText: alt_text,
-    x: newX,
-    y: newY, 
-    pw:passcode});
-  console.log(updateKey)
-});
-
-//Purpose: Used for resizing and gestures
-window.dragMoveListener = dragMoveListener;
 
 
 /*
@@ -910,72 +715,284 @@ $('#about').click(function() {
 
 
 
+//------------------------------------------------------------
+// Controls add, delete, and touch events for custom keyboards
+//------------------------------------------------------------
+var customButtonCounts = {};
 
-//EXPERIMENTAL SWIPING - Still in progress
-function swipeLeft(event) {
-  var page = event.target.id
-  console.log("left" + page)
-  if (page === 'keyboard'  || page.substring(0, 6) === 'button'){
-    switchDisplay(document.getElementById("s1"))
+function onendListener (event) { 
+        var updateKey = event.target;
+        var newX = parseInt(updateKey.style.left) + updateKey.getAttribute('data-x')/keyboardWidth*100
+        var newY = parseInt(updateKey.style.top) + updateKey.getAttribute('data-y')/keyboardHeight*100
+        newX = parseInt(newX)
+        newY = parseInt(newY)
+        newX = Math.min(Math.max(0, newX),100).toString()
+        newY = Math.min(Math.max(0, newY),100).toString()
+        $("#"+updateKey.id).css({'width': 'auto'})
+        socket.emit('saveKey', {
+          index: $('#customSelect option:selected').attr('id').slice(7),
+          id: updateKey.id,
+          val: updateKey.innerText,
+          altText: altText, 
+          x: newX,
+          y: newY });
+}
+
+var draggableSettings = {
+    snap: {
+      targets: [
+          interact.createSnapGrid({ x: .05*keyboardWidth, y: .1*keyboardHeight })
+        ],
+      range: Infinity
+    },
+    inertia: true,      // enable inertial throwing
+    restrict: {
+      restriction: "parent", // keep the element within the area of it's parent
+      endOnly: true,
+      elementRect: { top: 0, left: 0, bottom: 1, right: 1 }
+    },
+      autoScroll: true, // enable autoScroll
+      onmove: dragMoveListener // call this function on every dragmove event
+      //onend: onendListener This is a bit buggy
+    };
+
+$('#new-keyboard').click(function() {
+  newBoardModal.style.display = "block";
+  newBoardModelInput.value = ""
+});
+
+$('#newBoard-save').click(function() {
+
+  var newBoardName = newBoardModalInput.value
+  if (newBoardName.indexOf(" ") != -1){
+    newBoardName = newBoardName.split(' ').join('_')
   }
-  else if (page === 'numpad' || page.substring(0, 3) === 'pad'){
-    switchDisplay(document.getElementById("s2"))
+  if(newBoardModalInput.value === "") {
+    return
   }
-  else if (page === 'textfield'){
-    switchDisplay(document.getElementById("s3"))
+  newBoardModalInput.value = ""
+  var boardIds = $('#customSelect').children()
+  console.log(boardIds)
+  for(var i = 0; i < boardIds.length; i++){
+    console.log(boardIds[i].innerText)
+    console.log(newBoardName)
+    if (boardIds[i].innerText.trim() === newBoardName.trim()){
+      //Should give some warning of there is a match
+      console.log("found match")
+      console.log(boardIds[i].innerText)
+      console.log(newBoardName)
+      return
+    }
   }
-  else if (page === 'hotkeys' || page.substring(0, 3) === 'app'
-            || page.substring(0, 3) === 'url'){
-    switchDisplay(document.getElementById("s4"))
+
+
+  $('#customSelect').append('<option class = "select-item" id = "select-' + newBoardName + '">' + newBoardName + ' </option>')
+  $('#edit-wrapper').show();
+  $('#add-key').show();
+  $('#delete-keyboard').show();
+  var newSlide ='<div class = "custom swiper-slide swiper-slide-inner" id="custom-' + newBoardName + '">  </div>';
+  $('#s'+swiper.activeIndex.toString()).css("background-color", "black")
+  $('#s4').css("background-color", "purple")
+  swiperInner.appendSlide(newSlide)
+  swiper.slideTo(4, 200, false);
+  console.log(swiperInner)
+  console.log(swiperInner.slides.length)
+  swiperInner.slideTo(swiperInner.slides.length-1, 200, false);
+  customButtonCounts['custom-' + newBoardName] = 0
+
+  socket.emit('newBoard', {
+    id: newBoardName});
+  $('#select-' + newBoardName).prop("selected", true)
+  newBoardModal.style.display = "none";
+});
+
+
+$('#add-key').click(function() {
+  var newButtonId = 'custom-key-' + $('#customSelect option:selected').attr('id').slice(7) + "-" + (customButtonCounts['custom-' + $('#customSelect option:selected').attr('id').slice(7)]);
+  $('#custom-' + $('#customSelect option:selected').attr('id').slice(7)).append('<button class = "custom-key draggable key-button" id="' + newButtonId + '"></button>');
+  if(move == false){
+    $('#'+newButtonId).addClass('activestyle');
+  }
+  var ele = $('#'+newButtonId)
+  interact('#'+newButtonId).draggable(draggableSettings);
+  customButtonCounts['custom-' + $('#customSelect option:selected').attr('id').slice(7)] += 1;
+  ele.text('')
+  console.log((keyboardWidth*.02).toString())
+  ele.css({position:'absolute', left:'0%', top: '0%', minHeight: (keyboardWidth*.02).toString() + "px"});
+  socket.emit('saveKey', {
+    index: $('#customSelect option:selected').attr('id').slice(7),
+    id: newButtonId,
+    val: '', 
+    x: "0",
+    y: "0" });
+  updateKey = ele[0]
+  console.log(ele)
+  inputModal.value = ''
+  editModal.style.display = "block"; 
+});
+
+$('#delete-keyboard').click(function() {
+  if(swiperInner.slides.length != 0){
+    socket.emit('deleteBoard', {
+      id: $('#customSelect option:selected').attr('id').slice(7)});
+    swiperInner.removeSlide(swiperInner.activeIndex)
+    $('#' + $('#customSelect option:selected').attr('id')).remove()
+  }
+})
+
+$('#edit-toggle').change(function(event) {
+  console.log(event.target)
+  if(move){
+    $('#new-keyboard').show();
+    $('#delete-keyboard').show();
+    $('.custom').css({'background-color': 'white'});
+    $('.custom-key').addClass('activestyle');
+    move = false;
+  } else{
+    $('#new-keyboard').hide();
+    $('#delete-keyboard').hide();
+    $('.custom').css({'background-color': 'rgba(250,50,50,.5)'});
+    $('.custom-key').removeClass('activestyle');
+    move = true;
+  }
+});
+
+$('.close').click(function() {
+    settingsModal.style.display = "none";
+    newBoardModal.style.display = "none";
+});
+
+$('#modal-close').click(function() {
+    editModal.style.display = "none";
+    newBoardModal.style.display = "none";
+});
+
+interact('.custom-key').draggable(draggableSettings);
+
+//Purpose: Uses interact.js library to enable keys to move around
+interact('.custom-key').draggable({
+    snap: {
+      targets: [
+          interact.createSnapGrid({ x: .05*keyboardWidth, y: .1*keyboardHeight })
+        ],
+      range: Infinity
+    },
+    inertia: true,      // enable inertial throwing
+    restrict: {
+      restriction: "parent", // keep the element within the area of it's parent
+      endOnly: true,
+      elementRect: { top: 0, left: 0, bottom: 1, right: 1 }
+    },
+      autoScroll: true, // enable autoScroll
+      onmove: dragMoveListener // call this function on every dragmove event
+      //onend: onendListener // THIS IS BUGGY, disabling for now
+    });
+
+function dragMoveListener (event) {
+  if (move === true){
+  var target = event.target,
+      // keep the dragged position in the data-x/data-y attributes
+      x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
+      y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+  // translate the element
+  target.style.webkitTransform =
+  target.style.transform =
+    'translate(' + x + 'px, ' + y + 'px)';
+  // update the posiion attributes
+  target.setAttribute('data-x', x);
+  target.setAttribute('data-y', y);
   }
 }
 
-function swipeRight(event) {
-  var page = event.target.id
-  console.log("right" + page)
-  if (page === 'numpad' || page.substring(0, 3) === 'pad'){
-    switchDisplay(document.getElementById("s0"))
+
+//Purpose: Updates button with textbox value
+$('#modal-save').click(function() {
+  var newX = parseInt(updateKey.style.left) + updateKey.getAttribute('data-x')/keyboardWidth*100
+  var newY = parseInt(updateKey.style.top) + updateKey.getAttribute('data-y')/keyboardHeight*100
+  newX = parseInt(newX)
+  newY = parseInt(newY)
+  newX = Math.min(Math.max(0, newX),100).toString()
+  newY = Math.min(Math.max(0, newY),100).toString()
+  console.log(newX, newY)
+  updateKey.innerText = inputModal.value;
+  var ele = $("#"+updateKey.id);
+  console.log(updateKey)
+  console.log(updateKey.innerText)
+  console.log(inputModal.value)
+  console.log($("#"+updateKey.id).clone().children().remove().end().text())
+  if(isUrl(inputModal.value)) {
+    ele.addClass('url-button')
+    ele.removeClass('key-button')
+    hotkeyDestylize(ele, 'custom-' + $('#customSelect option:selected').attr('id').slice(7), updateKey.id, updateKey.innerText)
+    if (altText.value){
+      console.log("Alt text dectected");
+      altTextStylize(ele,altText.value,updateKey.id);
+    }
+    else{
+      hotkeyStylize(ele, 'custom-' + swiperInner.activeIndex.toString(), updateKey.id, updateKey.innerText)
+    }
+  } 
+  else if(isApp(inputModal.value)) {
+    ele.addClass('app-button')
+    ele.removeClass('url-button')
+    //hotkeyDestylize(ele, 'custom-' + $('#customSelect option:selected').attr('id').slice(7), updateKey.id, inputModal.value)
+    if (altText.value){
+      console.log("Alt text dectected");
+      altTextStylize(ele,altText.value,updateKey.id);
+    }
+  } else{
+    ele.addClass('key-button')
+    ele.removeClass('url-button')
+    hotkeyDestylize(ele, 'custom-' + $('#customSelect option:selected').attr('id').slice(7), updateKey.id, inputModal.value)
+    if (altText.value){
+      console.log("Alt text dectected");
+      altTextStylize(ele,altText.value,updateKey.id);
+    }
   }
-  else if (page === 'textfield'){
-    switchDisplay(document.getElementById("s1"))
+  var inner_text = $("#"+updateKey.id).clone().children().remove().end().text();
+  var alt_text = "";
+  if (altText.value){
+    alt_text = altText.value;
   }
-  else if (page === 'hotkeys' || page.substring(0, 3) === 'app'
-            || page.substring(0, 3) === 'url'){
-    switchDisplay(document.getElementById("s2"))
-  }
-  else if (page.substring(0, 6) === 'custom'){
-    switchDisplay(document.getElementById("s3"))
-  }
+
+  $("#"+updateKey.id).css({'width': 'auto'})
+  socket.emit('saveKey', {
+    index: $('#customSelect option:selected').attr('id').slice(7),
+    id: updateKey.id,
+    val: inner_text, 
+    altText: alt_text,
+    x: newX,
+    y: newY, 
+    pw:passcode});
+  console.log(updateKey)
+});
+
+//Purpose: Used for resizing and gestures
+window.dragMoveListener = dragMoveListener;
+
+
+function customDoubleTap (event) { 
+    if (move == true){
+      editModal.style.display = "block"; //Allows the modal to be displayed to User
+      updateKey = event.target
+      if(event.target.id.indexOf("url-icon") != -1){
+        inputModal.value = $("#" + event.target.id).parent().clone().children().remove().end().text().trim()
+        altText.value = updateKey.innerText;//updateKey.innerText
+        updateKey = updateKey.parentNode
+      }
+      else if(event.target.hasChildNodes()){
+        inputModal.value = $("#" + event.target.id).clone().children().remove().end().text().trim()
+        //console.log($("#" + event.target.id));
+        altText.value = $("#" + event.target.id).children()[0].innerText;//updateKey.innerText
+      }
+      else{
+        inputModal.value = updateKey.innerText
+      }
+
+    }
 }
 
-var keyboardWrapper = document.getElementById('keyboard')
-var keyswipe = new Hammer.Manager(keyboardWrapper);
-keyswipe.add(new Hammer.Swipe({event: 'swipe', pointers: 1, threshold: 5, direction: Hammer.DIRECTION_HORIZONTAL}));
-keyswipe.on('swipeleft', swipeLeft);
 
-
-var numpadWrapper = document.getElementById('numpad')
-var numswipe = new Hammer.Manager(numpadWrapper);
-numswipe.add(new Hammer.Swipe({event: 'swipe', pointers: 1, threshold: 5, direction: Hammer.DIRECTION_HORIZONTAL}));
-numswipe.on('swipeleft', swipeLeft);
-numswipe.on('swiperight', swipeRight);
-
-var textWrapper = document.getElementById('textfieldcontainer')
-var textswipe = new Hammer.Manager(textWrapper);
-textswipe.add(new Hammer.Swipe({event: 'swipe', pointers: 1, threshold: 5, direction: Hammer.DIRECTION_HORIZONTAL}));
-textswipe.on('swipeleft', swipeLeft);
-textswipe.on('swiperight', swipeRight);
-
-var hotkeysWrapper = document.getElementById('hotkeys')
-var hotswipe = new Hammer.Manager(hotkeysWrapper);
-hotswipe.add(new Hammer.Swipe({event: 'swipe', pointers: 1, threshold: 5, direction: Hammer.DIRECTION_HORIZONTAL}));
-hotswipe.on('swipeleft', swipeLeft);
-hotswipe.on('swiperight', swipeRight);
-
-var customWrapper = document.getElementById('custom')
-var customswipe = new Hammer.Manager(customWrapper);
-customswipe.add(new Hammer.Swipe({event: 'swipe', pointers: 1, threshold: 5, direction: Hammer.DIRECTION_HORIZONTAL}));
-customswipe.on('swiperight', swipeRight);
 
 
 

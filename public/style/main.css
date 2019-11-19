@@ -378,5 +378,33 @@ icon {
     background-color: red;
 }
 
+.listbox-area {
+  background: #eee;
+  border: 1px solid #aaa;
+  font-size: 16px;
+}
+
+[role="listbox"] {
+  min-height: 19em;
+  padding: 0;
+  background: white;
+}
+
+[role="option"] {
+  font-size: 24px;
+  display: block;
+  padding: 0 1em 0 1em;
+  position: relative;
+  line-height: 1.8em;
+  border: 1px solid #aaa;
+}
+
+#ss_elem_list {
+  max-height: 2em;
+  overflow-y: scroll;
+  position: relative;
+  -webkit-overflow-scrolling: touch;
+}
+
 
 
