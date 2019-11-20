@@ -401,6 +401,8 @@ icon {
 
 #ss_elem_list {
   max-height: 4em;
+  height: 80%;
+  padding: 0 0 3em 0;
   overflow-y: scroll;
   position: relative;
   -webkit-overflow-scrolling: touch;
@@ -411,9 +413,9 @@ input[type=range] {
   height: 34px;
   -webkit-appearance: none;
   margin: 10px 0;
-  width: 80%;
+  width: 60%;
   position: absolute;
-  transform: translate(50%, 50%);
+  transform: translate(25%, 50%);
 }
 input[type=range]:focus {
   outline: none;
@@ -494,6 +496,17 @@ input[type=range]:focus::-ms-fill-lower {
 }
 input[type=range]:focus::-ms-fill-upper {
   background: #74A9D8;
+}
+.listbox-settings {
+  height: 17%;
+  border: 1px solid #aaa;
+  display: flex;
+  justify-content: space-between;
+}
+
+.listbox-button {
+  font-size: 24px;
+  width: 50%;
 }
 
 

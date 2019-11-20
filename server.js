@@ -151,6 +151,23 @@ io.on('connection', function(socket) {
     fs.writeFile("./custom_configs/custom" + key.index.toString() + ".json", JSON.stringify(configuration, null, 4), 'utf8', error=>{});
   });
 
+
+  socket.on('savePhrase', function(key) {
+    if (key.pw || config.passcode) {
+      if (config.passcode !== key.pw) { //Password Checker
+        console.log(config.passcode)
+        console.log(key.pw)
+        return;
+      }
+    }
+
+    console.log(key.text.toString())
+    var file = fs.readFileSync("phrase.json")
+    var configuration = JSON.parse(file)
+    configuration[key.id] = key.text;
+    fs.writeFile("phrase.json", JSON.stringify(configuration, null, 4), 'utf8', error=>{});
+  });
+
   socket.on('newBoard', function(key) {
     fs.appendFile('./custom_configs/order', 'custom'+key.id+'.json\n', function(err, result) {
       if(err) console.log('error', err);
@@ -201,6 +218,19 @@ io.on('connection', function(socket) {
     my_cmd.catch(function(error) {
       console.log(error)
     })
+  });
+
+  socket.on('brightness', function(pos) {
+    if (pos.pw || config.passcode) {
+      if (config.passcode !== pos.pw) { //Password Checker
+        return;
+      }
+    }
+    console.log("brightness level is " + pos.lvl);
+    var newSetLevel = parseFloat(pos.lvl);
+    brightness.set(newSetLevel).then(() => {
+      console.log('Changed brightness');
+    });
   });
 
 
@@ -277,39 +307,19 @@ function sendKeyboards(socket) {
   var content = JSON.parse(file)
   socket.emit('updateKeys', content);
 
-  /*
-  content = []
-  //Load default numpad
-  var file = fs.readFileSync("numpad.json")  
-  var content = JSON.parse(file)
-
-  var keys = []
-  var xpos = []
-  var ypos = []
-  var alt = []
-
-  for (var key in content) {
-    keys.push(content[key][0]);
-    xpos.push(content[key][1]);
-    ypos.push(content[key][2]);
-    if (content[key].length > 3) {
-      alt.push(content[key][3])
-    }
-
-  }
-  socket.emit('updateNumPad', {k: keys, x: xpos, y: ypos, a: alt});
-  */
   content = []
   //Load default numpad
   var file = fs.readFileSync("phrase.json")  
   var content = JSON.parse(file)
 
   var keys = []
+  var phrases = []
 
   for (var key in content) {
-    keys.push(content[key][0]);
+    keys.push(key)
+    phrases.push(content[key]);
   }
-  socket.emit('updatePhrases', {k: keys});
+  socket.emit('updatePhrases', {p: phrases, k: keys});
 
 
    
