@@ -268,6 +268,7 @@ async function sh(cmd) {
 
 
 
+//This function sends all the saved information to the mobile app
 function sendKeyboards(socket) {
 
   //Load default keyboard
@@ -275,6 +276,7 @@ function sendKeyboards(socket) {
   var content = JSON.parse(file)
   socket.emit('updateKeys', content);
 
+  /*
   content = []
   //Load default numpad
   var file = fs.readFileSync("numpad.json")  
@@ -295,6 +297,20 @@ function sendKeyboards(socket) {
 
   }
   socket.emit('updateNumPad', {k: keys, x: xpos, y: ypos, a: alt});
+  */
+  content = []
+  //Load default numpad
+  var file = fs.readFileSync("phrase.json")  
+  var content = JSON.parse(file)
+
+  var keys = []
+
+  for (var key in content) {
+    keys.push(content[key][0]);
+  }
+  socket.emit('updatePhrases', {k: keys});
+
+
    
   content = []
   //Load default urls

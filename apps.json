@@ -1,44 +1,14 @@
 {
     "app1": [
-        "/Applications/Messages.app",
+        "/Applications/Notes.app",
         "25",
-        "30",
-        "iMessage"
+        "60",
+        "Notes"
     ],
     "app2": [
-        "/Applications/Mail.app",
-        "50",
-        "30",
-        "Mail"
-    ],
-    "app3": [
-        "/Applications/Calendar.app",
-        "75",
-        "30",
-        "Calendar"
-    ],
-    "app4": [
-        "/Applications/Photos.app",
-        "0",
-        "60",
-        "Photos"
-    ],
-    "app5": [
-        "/Applications/Steam.app",
-        "25",
-        "60",
-        "Steam"
-    ],
-    "app6": [
-        "/Applications/Siri.app",
+        "/Applications/Messages.app",
         "50",
         "60",
-        "Siri"
-    ],
-    "app7": [
-        "/Applications/Photo\\ Booth.app",
-        "75",
-        "60",
-        "Webcam"
+        "iMessage"
     ]
 }
