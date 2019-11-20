@@ -33,6 +33,8 @@ doubleTap.recognizeWith(singleTap);
 doubleTap.requireFailure(tripleTap);
 singleTap.requireFailure([tripleTap, doubleTap]);
 
+var customButtonCounts = {};
+
 
 var SessionID = -1;
 
@@ -142,17 +144,17 @@ function switchDisplay(item) {
 function swipeLeft(event) {
   var page = event.target.id
   console.log("left" + page)
-  if (page === 'keyboard'  || page.substring(0, 6) === 'button'){
+  if (page === 'textfield'){
     switchDisplay(document.getElementById("s1"))
   }
   else if (page === 'ss_elem_list' || page.substring(0, 6) === 'phrase'){
     switchDisplay(document.getElementById("s2"))
   }
-  else if (page === 'textfield'){
-    switchDisplay(document.getElementById("s3"))
-  }
   else if (page === 'hotkeys' || page.substring(0, 3) === 'app'
             || page.substring(0, 3) === 'url'){
+    switchDisplay(document.getElementById("s3"))
+  }
+  else if (page === 'keyboard'  || page.substring(0, 6) === 'button'){
     switchDisplay(document.getElementById("s4"))
   }
 }
@@ -163,11 +165,11 @@ function swipeRight(event) {
   if (page === 'ss_elem_list' || page.substring(0, 6) === 'phrase'){
     switchDisplay(document.getElementById("s0"))
   }
-  else if (page === 'textfield'){
-    switchDisplay(document.getElementById("s1"))
-  }
   else if (page === 'hotkeys' || page.substring(0, 3) === 'app'
             || page.substring(0, 3) === 'url'){
+    switchDisplay(document.getElementById("s1"))
+  }
+  else if (page === 'keyboard'  || page.substring(0, 6) === 'button'){
     switchDisplay(document.getElementById("s2"))
   }
   else if (page.substring(0, 6) === 'custom'){
@@ -175,23 +177,23 @@ function swipeRight(event) {
   }
 }
 
-var keyboardWrapper = document.getElementById('keyboard')
-var keyswipe = new Hammer.Manager(keyboardWrapper);
-keyswipe.add(new Hammer.Swipe({event: 'swipe', pointers: 1, threshold: 5, direction: Hammer.DIRECTION_HORIZONTAL}));
-keyswipe.on('swipeleft', swipeLeft);
-
-
-var numpadWrapper = document.getElementById('ss_elem_list')
-var numswipe = new Hammer.Manager(numpadWrapper);
-numswipe.add(new Hammer.Swipe({event: 'swipe', pointers: 1, threshold: 5, direction: Hammer.DIRECTION_HORIZONTAL}));
-numswipe.on('swipeleft', swipeLeft);
-numswipe.on('swiperight', swipeRight);
 
 var textWrapper = document.getElementById('textfieldcontainer')
 var textswipe = new Hammer.Manager(textWrapper);
 textswipe.add(new Hammer.Swipe({event: 'swipe', pointers: 1, threshold: 5, direction: Hammer.DIRECTION_HORIZONTAL}));
 textswipe.on('swipeleft', swipeLeft);
-textswipe.on('swiperight', swipeRight);
+
+var phraseWrapper = document.getElementById('ss_elem_list')
+var phraseswipe = new Hammer.Manager(phraseWrapper);
+phraseswipe.add(new Hammer.Swipe({event: 'swipe', pointers: 1, threshold: 5, direction: Hammer.DIRECTION_HORIZONTAL}));
+phraseswipe.on('swipeleft', swipeLeft);
+phraseswipe.on('swiperight', swipeRight);
+
+var keyboardWrapper = document.getElementById('keyboard')
+var keyswipe = new Hammer.Manager(keyboardWrapper);
+keyswipe.add(new Hammer.Swipe({event: 'swipe', pointers: 1, threshold: 5, direction: Hammer.DIRECTION_HORIZONTAL}));
+keyswipe.on('swipeleft', swipeLeft);keyswipe.on('swiperight', swipeRight);
+
 
 var hotkeysWrapper = document.getElementById('hotkeys')
 var hotswipe = new Hammer.Manager(hotkeysWrapper);
@@ -436,11 +438,11 @@ function openApp (event) {
 
 function selectPhrase (event) {
   var item = document.getElementById(event.target.id)
-  $(item).css("background-color", "purple")
+  setTimeout(function() {$(item).css("background-color", "purple");}, 0);
   var text = event.target.innerText;
     var oldvalue = document.getElementById('textfield').value
     document.getElementById('textfield').value = oldvalue + " " + text
-  $(item).css("background-color", "white")
+  setTimeout(function() {$(item).css("background-color", "white");}, 100);
 }
 
 
@@ -718,7 +720,6 @@ $('#about').click(function() {
 //------------------------------------------------------------
 // Controls add, delete, and touch events for custom keyboards
 //------------------------------------------------------------
-var customButtonCounts = {};
 
 function onendListener (event) { 
         var updateKey = event.target;

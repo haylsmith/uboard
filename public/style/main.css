@@ -77,7 +77,7 @@ icon {
 }
 
 .swiper-container{
-   height: 45%;
+   height: 50%;
    width: 100%;
    position: relative;
    overflow: hidden;
@@ -91,7 +91,7 @@ icon {
 }
 
 .swiper-wrapper{
-   height: 80%;
+   height: 75%;
    width: 500%;
    position: relative;
 }
@@ -197,7 +197,7 @@ icon {
 #touchpad{
     resize: vertical;
     overflow: auto;
-    height: 45%;
+    height: 50%;
     width: 100%;
     background-color: rgb(205, 205, 205);
     position: relative;
@@ -259,7 +259,7 @@ icon {
 }
 
 #navbar{
-  height: 10%;
+  height: 25%;
   background-color: black;
 }
 
@@ -395,12 +395,12 @@ icon {
   display: block;
   padding: 0 1em 0 1em;
   position: relative;
-  line-height: 1.8em;
+  line-height: 2.5em;
   border: 1px solid #aaa;
 }
 
 #ss_elem_list {
-  max-height: 2em;
+  max-height: 4em;
   overflow-y: scroll;
   position: relative;
   -webkit-overflow-scrolling: touch;
