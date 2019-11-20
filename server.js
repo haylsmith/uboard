@@ -13,6 +13,7 @@ var fs = require("fs");
 var readline = require("readline");
 var exec = require('child_process').exec, child;
 var math = require('mathjs');
+var brightness = require('brightness');
 config.passcode = ''
 
 //---------GLOBAL STATE VARIABLES ----// 
