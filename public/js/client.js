@@ -279,7 +279,6 @@ socket.on('updateKeys', function(newVals) {
 
 //Purpose: Receives information from the server to update the presentation of the keys on the client
 socket.on('updateUrls', function(newVals) {
-  console.log(newVals);
     for (var i = 0; i < newVals.x.length; i++){
       addHotkey(newVals.x[i], newVals.y[i], newVals.k[i], 'hotkeys', 'url-button' + (i+1).toString())
     }
@@ -287,39 +286,16 @@ socket.on('updateUrls', function(newVals) {
 
 //Updates app shortcuts page
 socket.on('updateApps', function(newVals) {
-  console.log(newVals);
     for (var i = 0; i < newVals.x.length; i++){
       addApp(newVals.x[i], newVals.y[i], newVals.k[i], newVals.n[i], 'hotkeys', 'app-button' + (i+1).toString())
     }
 });
 
 //Purpose: Receives information from the server to update the presentation of the keys on the client
-socket.on('updateNumPad', function(newVals) {
-  console.log(newVals);
-    for (var i = 0; i < newVals.x.length; i++){
-      if (i <= 10) {
-        $('#numpad').append('<button class = "draggable activestyle key-button" value="' + newVals.a[i] + '", id="pad' + (i+1).toString() + '">' + newVals.k[i] + '</button>');
-      } else {
-        $('#numpad').append('<button class = "draggable activestyle key-button", id="pad' + (i+1).toString() + '">' + newVals.k[i] + '</button>');
-      }
-
-      var ele = $('#pad' + (i+1).toString())
-      var touchElem = document.getElementById('pad' + (i+1).toString());
-      var key_tapper = new Hammer.Manager(touchElem);
-      key_tapper.add([singleTap_key]);
-      key_tapper.on('click', sendKeyPress);
-      ele.css({position:'absolute', left:newVals.x[i] + '%', top:(newVals.y[i]) + '%', minHeight: (keyboardWidth*.02).toString() + "px"});
-
-    }
-});
-
-
-//Purpose: Receives information from the server to update the presentation of the keys on the client
 socket.on('updatePhrases', function(newVals) {
-  console.log(newVals);
     for (var i = 0; i < newVals.k.length; i++){
-      $('#ss_elem_list').append('<li class = "phrase", role="option", id="phrase' + (i+1).toString() + '">' + newVals.k[i] + '</li>');
-      var touchElem = document.getElementById('phrase' + (i+1).toString());
+      $('#ss_elem_list').append('<li class = "phrase", role="option", id="' + newVals.k[i] + '">' + newVals.p[i] + '</li>');
+      var touchElem = document.getElementById(newVals.k[i]);
       var phrase_tapper = new Hammer.Manager(touchElem);
       phrase_tapper.add([singleTap_phrase]);
       phrase_tapper.on('click', selectPhrase);
@@ -445,6 +421,30 @@ function selectPhrase (event) {
   setTimeout(function() {$(item).css("background-color", "white");}, 100);
 }
 
+function addPhrase (event) {
+  var phraseList = document.getElementById("ss_elem_list")
+  var newID = "phrase" + (phraseList.childElementCount + 1);
+  var text = prompt("Please enter a new phrase.", "");
+  $("#ss_elem_list").append('<li class = "phrase", role="option", id="' + newID + '">' + text + '</li>')
+  var touchElem = document.getElementById(newID);
+  var phrase_tapper = new Hammer.Manager(touchElem);
+  phrase_tapper.add([singleTap_phrase]);
+  phrase_tapper.on('click', selectPhrase);
+  socket.emit('savePhrase', { id: newID, text: text});
+}
+
+function deletePhrase(event) {
+
+}
+
+var addbutton = document.getElementById("listbox-add")
+var singleTap_add = new Hammer.Tap({event: 'click', pointers: 1});
+var add_tapper = new Hammer.Manager(addbutton);
+add_tapper.add([singleTap_add]);
+add_tapper.on('click', addPhrase);
+
+
+
 
 $( "#textfield" ).keydown(function(event) {
   if (event.key === 'Enter') { // enter
@@ -467,78 +467,6 @@ $( "#textfield" ).keydown(function(event) {
     document.getElementById('textfield').value = '';    
   }
 });
-
-
-//
-
-function replaceNumkeysDisplay(modifier){
-  var myButton = document.getElementById('pad1')
-  for (var i = 2; i <= 11; i++) {
-    var text = myButton.innerText;
-    var alt = myButton.value;
-    myButton.innerText = alt;
-    myButton.value = text;
-    myButton = document.getElementById('pad' + (i).toString());
-  }
-
-}
-
-
-var staticElem = document.getElementsByClassName('static-bar')[0].children;
-var singleTap_static = new Hammer.Tap({event: 'click', pointers: 1});
-for (var i = 0; i < staticElem.length; i++) {
-  var static_tapper = new Hammer.Manager(staticElem[i]);
-  static_tapper.add([singleTap_static]);
-  static_tapper.on('click', staticKeyPress);
-
-}
-
-//Purpose: Event listener on tapping the keys
-function staticKeyPress(event) {
-  if (event.target.id === 'go-toggle') { // enter
-    socket.emit('functionality', {'pw':passcode, type: 'enter'});
-  }
-  else if (event.target.id === 'backspace') { // backspace
-    socket.emit('functionality', {'pw':passcode, type: 'backspace'});
-  }
-  else if (event.target.id === 'spacebar') { // backspace
-    socket.emit('functionality', {'pw':passcode, type: 'space'});
-  }
-  else if(event.target.id === 'shift-toggle'){
-    if(modifier == 'shift'){
-      modifier = 'None'
-      $('#shift-toggle').removeClass('static-key-selected')
-      $('#shift-toggle').addClass('static-key-default')
-    }
-    else{
-      modifier = 'shift'
-      $('#shift-toggle').removeClass('static-key-default')
-      $('#shift-toggle').addClass('static-key-selected')
-      $('#ctrl-toggle').removeClass('static-key-selected')
-      $('#ctrl-toggle').addClass('static-key-default')
-    }
-    replaceNumkeysDisplay(modifier)
-  }
-  
-  else if(event.target.id === 'ctrl-toggle'){
-    if(modifier == 'shift') {
-      replaceNumkeysDisplay(modifier)
-    }
-    if(modifier == 'command'){
-      modifier = 'None'
-      $('#ctrl-toggle').removeClass('static-key-selected')
-      $('#ctrl-toggle').addClass('static-key-default')
-    }
-    else{
-      modifier = 'command'
-      $('#ctrl-toggle').removeClass('static-key-default')
-      $('#ctrl-toggle').addClass('static-key-selected')
-      $('#shift-toggle').removeClass('static-key-selected')
-      $('#shift-toggle').addClass('static-key-default')
-    }
-  }
-
-}
 
 
 /*

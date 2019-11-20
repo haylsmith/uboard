@@ -401,9 +401,23 @@ icon {
 
 #ss_elem_list {
   max-height: 4em;
+  height: 80%;
+  padding: 0 0 3em 0;
   overflow-y: scroll;
   position: relative;
   -webkit-overflow-scrolling: touch;
+}
+
+.listbox-settings {
+  height: 17%;
+  border: 1px solid #aaa;
+  display: flex;
+  justify-content: space-between;
+}
+
+.listbox-button {
+  font-size: 24px;
+  width: 50%;
 }
 
 
