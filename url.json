@@ -21,27 +21,27 @@
     ],
     "url5": [
         "https://www.youtube.com",
-        "25",
-        "0"
+        "0",
+        "30"
     ],
     "url6": [
         "https://mail.google.com/mail/u/0",
         "25",
-        "25"
+        "30"
     ],
     "url7": [
         "https://mail.google.com/mail/u/1",
-        "25",
-        "50"
+        "50",
+        "30"
     ],
     "url8": [
         "https://www.google.com/",
-        "25",
-        "75"
+        "75",
+        "30"
     ],
     "url9": [
         "https://www.weebly.com/",
-        "50",
-        "25"
+        "0",
+        "60"
     ]
 }

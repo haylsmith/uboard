@@ -1,14 +1,14 @@
 {
     "app1": [
         "/Applications/Notes.app",
-        "50",
-        "50",
+        "25",
+        "60",
         "Notes"
     ],
     "app2": [
         "/Applications/Messages.app",
         "50",
-        "75",
+        "60",
         "iMessage"
     ]
 }
