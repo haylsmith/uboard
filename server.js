@@ -14,7 +14,7 @@ var readline = require("readline");
 var exec = require('child_process').exec, child;
 var math = require('mathjs');
 var brightness = require('brightness');
-config.passcode = ''
+config.passcode = '';
 
 //---------GLOBAL STATE VARIABLES ----// 
 var screenWidth = 1440;
@@ -23,12 +23,12 @@ var adjustment = 2;
 var mouse = null;
 var newX = null;
 var newY = null;
-var currentVolume = 0.5
+var currentVolume = 0.5;
 
-var screenSize = robot.getScreenSize()
-screenWidth = screenSize.width
-screenHeight = screenSize.height
-
+var screenSize = robot.getScreenSize();
+screenWidth = screenSize.width;
+screenHeight = screenSize.height;
+var currentBrightness = 0.5;
 
 //-------WEB SERVER FUNCTIONALITY -------// 
 //Purpose: Sends client information when making http request to main entrypoint
@@ -67,9 +67,15 @@ io.on('connection', function(socket) {
     }
   });
 
-  brightness.set(0.6).then(() => {
-    console.log('Set default brightness to 60%');
+  brightness.get().then(level => {
+    currentBrightness = level;
+    console.log("current brightness is " + currentBrightness);
+    socket.emit("defaultBrightness", {brightness: currentBrightness});
   });
+
+  // brightness.set(0.6).then(() => {
+  //   console.log('Set default brightness to 60%');
+  // });
 
   socket.on('disconnect', function() {
     console.log('user disconnected');
@@ -236,6 +242,7 @@ io.on('connection', function(socket) {
     brightness.set(newSetLevel).then(() => {
       console.log('Changed brightness');
     });
+    currentBrightness = newSetLevel;
   });
 
   socket.on('volume', function(pos) {
