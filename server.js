@@ -23,6 +23,7 @@ var adjustment = 2;
 var mouse = null;
 var newX = null;
 var newY = null;
+var currentVolume = 0.5
 
 var screenSize = robot.getScreenSize()
 screenWidth = screenSize.width
@@ -64,6 +65,10 @@ io.on('connection', function(socket) {
     else {
       console.log("Old Connection");
     }
+  });
+
+  brightness.set(0.6).then(() => {
+    console.log('Set default brightness to 60%');
   });
 
   socket.on('disconnect', function() {
@@ -232,6 +237,39 @@ io.on('connection', function(socket) {
       console.log('Changed brightness');
     });
   });
+
+  socket.on('volume', function(pos) {
+    if (pos.pw || config.passcode) {
+      if (config.passcode !== pos.pw) { //Password Checker
+        return;
+      }
+    }
+    console.log("new volume is " + pos.newVol);
+    var changeInVol = parseFloat(pos.newVol) - currentVolume;
+    if (changeInVol < 0) {
+      var notchesDown = Math.abs(changeInVol / 0.0625);
+      var i = 0;
+      while (i < notchesDown) {
+        robot.keyTap("audio_vol_down");
+        ++i;
+      }
+    }
+    else {
+      var notchesUp = Math.abs(changeInVol / 0.0625)
+      var i = 0;
+      while (i < notchesUp) {
+        robot.keyTap("audio_vol_up");
+        ++i;
+      }
+    }
+    console.log("volume set");
+  });
+
+  socket.on('mute', function(pos) {
+    console.log("mute");
+    robot.keyTap("audio_mute");
+  });
+
 
 
   //Mouse Functionality

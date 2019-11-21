@@ -650,7 +650,14 @@ $(" #brightness ").on('input', function() {
   socket.emit('brightness', {lvl: brightnessLvl})
 });
 
+$(" #volume ").on('input', function() {
+  var newVolume = document.getElementById("volume").value;
+  socket.emit('volume', {newVol: newVolume})
+});
 
+$(" #muteButtom ").click(function() {
+  socket.emit('mute', {})
+})
 
 
 //------------------------------------------------------------
