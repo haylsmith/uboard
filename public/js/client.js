@@ -655,9 +655,10 @@ $(" #volume ").on('input', function() {
   socket.emit('volume', {newVol: newVolume})
 });
 
-$(" #muteButtom ").click(function() {
-  socket.emit('mute', {})
-})
+function muteOn() {
+  console.log('mute button pressed');
+  socket.emit('mute', {});
+}
 
 
 //------------------------------------------------------------

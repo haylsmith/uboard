@@ -253,6 +253,7 @@ io.on('connection', function(socket) {
         robot.keyTap("audio_vol_down");
         ++i;
       }
+      currentVolume = currentVolume - Math.abs(changeInVol);
     }
     else {
       var notchesUp = Math.abs(changeInVol / 0.0625)
@@ -261,12 +262,13 @@ io.on('connection', function(socket) {
         robot.keyTap("audio_vol_up");
         ++i;
       }
+      currentVolume = currentVolume + Math.abs(changeInVol);
     }
     console.log("volume set");
   });
 
-  socket.on('mute', function(pos) {
-    console.log("mute");
+  socket.on('mute', function() {
+    console.log("volume muted");
     robot.keyTap("audio_mute");
   });
 
