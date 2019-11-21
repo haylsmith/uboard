@@ -315,15 +315,17 @@ function sendKeyboards(socket) {
   content = JSON.parse(file)
   
   var keys = []
+  var img_urls = []
   var xpos = []
   var ypos = []
   
   for (var key in content) {
     keys.push(content[key][0]);
-    xpos.push(content[key][1]);
-    ypos.push(content[key][2]);
+    img_urls.push(content[key][1]);
+    xpos.push(content[key][2]);
+    ypos.push(content[key][3]);
   }
-  socket.emit('updateUrls', {k: keys, x: xpos, y: ypos});
+  socket.emit('updateUrls', {k: keys, img:img_urls, x: xpos, y: ypos});
 
 
   //Load default apps
@@ -334,14 +336,16 @@ function sendKeyboards(socket) {
   var xpos = []
   var ypos = []
   var names = []
+  var img_urls = []
   
   for (var key in content) {
     keys.push(content[key][0]);
     names.push(content[key][3]);
     xpos.push(content[key][1]);
     ypos.push(content[key][2]);
+    img_urls.push(content[key][4]);
   }
-  socket.emit('updateApps', {k: keys, x: xpos, y: ypos, n: names});
+  socket.emit('updateApps', {k: keys, img:img_urls, x: xpos, y: ypos, n: names});
 
   //Load custom keyboards
   var lineReader = require('readline').createInterface({
