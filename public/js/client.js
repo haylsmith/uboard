@@ -33,12 +33,17 @@ singleTap.requireFailure([tripleTap, doubleTap]);
 
 var customButtonCounts = {};
 
-
 var SessionID = -1;
 
 socket.on('CheckSessionID', function(pos) {
   socket.emit("SessionID", {"id": SessionID})
+  // document.getElementById('brightness').id = window.currentBrightness;
 });
+
+socket.on('defaultBrightness', function(data) {
+  console.log(data.brightness)
+  document.getElementById('brightness').value = data.brightness;
+})
 
 socket.on("UpdateSessionID", function(dict) {
   SessionID = dict.id;
