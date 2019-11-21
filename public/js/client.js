@@ -251,7 +251,7 @@ function addApp(img_url, xpos, ypos, path, name, page, id){
   app_tapper.add([singleTap_app]);
   app_tapper.on('click', openApp);
   ele.css({position:'absolute', left:xpos + '%', top:ypos + '%', minHeight: (keyboardWidth*.02).toString() + "px", width: '20%'});
-  ele.append('<button class="url-icon" id="url-icon-' + id +'"> </button>')
+  ele.append('<button class="url-icon" value="' + path + '" id="url-icon-' + id +'"> </button>')
   var urlIcon = $('#url-icon-' + id)
   urlIcon.css({position: 'absolute', left: '35%', bottom: '20%', width: '30%', height: '60%', background: 'url(' + img_url + ')', 'background-size': 'contain', 'border-radius': '0px', border:'0px', 'background-repeat': 'no-repeat'});
   //ele.css({'max-width': '20%', 'min-width': '20%', 'text-indent': '-9999px', 'text-align': 'left', 'overflow': 'hidden'});
