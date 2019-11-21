@@ -13,6 +13,9 @@ var inputModal = document.getElementById('inputText');
 var altText = document.getElementById('altText');
 var newBoardModal = document.getElementById('newBoard-modal');// New Board Naming Modal
 var newBoardModalInput = document.getElementById('inputBoardName');// New Board Naming Modal
+var keyboardWidth = document.getElementById('textfieldcontainer').offsetWidth;// Width pixel of display
+var keyboardHeight = document.getElementById('textfieldcontainer').offsetHeight;// Height pixel of
+
 
 var singleTap = new Hammer.Tap({event: 'click', pointers: 1});
 var doubleTap = new Hammer.Tap({event: 'doubleclick', pointers: 1, taps: 2});
@@ -279,24 +282,6 @@ function addApp(xpos, ypos, path, name, page, id){
   urlIcon.css({position: 'absolute', left: '35%', bottom: '20%', width: '30%', height: '60%', background: 'url(' + favicon_url + ')', 'background-size': 'contain', 'border-radius': '0px', border:'0px', 'background-repeat': 'no-repeat'});
   //ele.css({'max-width': '20%', 'min-width': '20%', 'text-indent': '-9999px', 'text-align': 'left', 'overflow': 'hidden'});
 }
-
-
-//Purpose: Receives information from the server to update the presentation of the keys on the client
-// socket.on('updateKeys', function(newVals) {
-//   console.log(newVals);
-//     for (var i = 0; i < newVals.x.length; i++){
-//       //special case 
-//       $('#keyboard').append('<button class = "draggable activestyle key-button" id="button' + (i+1).toString() + '">' + newVals.k[i] + '</button>');
-//       var ele = $('#button' + (i+1).toString())
-//       ele.text(newVals.k[i])
-//       var touchElem = document.getElementById('button' + (i+1).toString());
-//       var key_tapper = new Hammer.Manager(touchElem);
-//       key_tapper.add([singleTap_key]);
-//       key_tapper.on('click', sendKeyPress);
-//       ele.css({position:'absolute', left:newVals.x[i] + '%', top:(newVals.y[i]) + '%', minHeight: (199*.02).toString() + "px"});
-//     }
-//     $('#loading').hide();
-// });
 
 //Purpose: Receives information from the server to update the presentation of the keys on the client
 socket.on('updateUrls', function(newVals) {
