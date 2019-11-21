@@ -377,7 +377,15 @@ var emitText = function(text) {
   if (move === false){
     socket.emit('text', pos);
   }
-};
+}
+
+function emitArrow(entry) {
+  pos = {type : entry,'pw':passcode}
+  if (move === false){
+    socket.emit('functionality', pos);
+  }
+}
+
 
 function sendKeyPress (event) {
     var mymodifier = modifier
@@ -419,7 +427,7 @@ function selectPhrase (event) {
   setTimeout(function() {$(item).css("background-color", "white");}, 100);
 }
 
-function addPhrase (event) {
+function addPhrase () {
   var phraseList = document.getElementById("ss_elem_list")
   var newID = "phrase" + (phraseList.childElementCount + 1);
   var text = prompt("Please enter a new phrase.", "");
@@ -431,15 +439,9 @@ function addPhrase (event) {
   socket.emit('savePhrase', { id: newID, text: text});
 }
 
-function deletePhrase(event) {
+function deletePhrase() {
 
 }
-
-var addbutton = document.getElementById("listbox-add")
-var singleTap_add = new Hammer.Tap({event: 'click', pointers: 1});
-var add_tapper = new Hammer.Manager(addbutton);
-add_tapper.add([singleTap_add]);
-add_tapper.on('click', addPhrase);
 
 
 
