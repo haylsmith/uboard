@@ -13,8 +13,9 @@ var inputModal = document.getElementById('inputText');
 var altText = document.getElementById('altText');
 var newBoardModal = document.getElementById('newBoard-modal');// New Board Naming Modal
 var newBoardModalInput = document.getElementById('inputBoardName');// New Board Naming Modal
-var keyboardWidth = document.getElementById('keyboard').offsetWidth;// Width pixel of display
-var keyboardHeight = document.getElementById('keyboard').offsetHeight;// Height pixel of
+var keyboardWidth = document.getElementById('textfieldcontainer').offsetWidth;// Width pixel of display
+var keyboardHeight = document.getElementById('textfieldcontainer').offsetHeight;// Height pixel of
+
 
 var singleTap = new Hammer.Tap({event: 'click', pointers: 1});
 var doubleTap = new Hammer.Tap({event: 'doubleclick', pointers: 1, taps: 2});
@@ -154,7 +155,7 @@ function swipeLeft(event) {
             || page.substring(0, 3) === 'url'){
     switchDisplay(document.getElementById("s3"))
   }
-  else if (page === 'keyboard'  || page.substring(0, 6) === 'button'){
+  else if (page === 'functionals'  || page.substring(0, 6) === 'button'){
     switchDisplay(document.getElementById("s4"))
   }
 }
@@ -169,7 +170,7 @@ function swipeRight(event) {
             || page.substring(0, 3) === 'url'){
     switchDisplay(document.getElementById("s1"))
   }
-  else if (page === 'keyboard'  || page.substring(0, 6) === 'button'){
+  else if (page === 'functionals'  || page.substring(0, 6) === 'button'){
     switchDisplay(document.getElementById("s2"))
   }
   else if (page.substring(0, 6) === 'custom'){
@@ -189,8 +190,8 @@ phraseswipe.add(new Hammer.Swipe({event: 'swipe', pointers: 1, threshold: 5, dir
 phraseswipe.on('swipeleft', swipeLeft);
 phraseswipe.on('swiperight', swipeRight);
 
-var keyboardWrapper = document.getElementById('keyboard')
-var keyswipe = new Hammer.Manager(keyboardWrapper);
+var functionalsWrapper = document.getElementById('functionals')
+var keyswipe = new Hammer.Manager(functionalsWrapper);
 keyswipe.add(new Hammer.Swipe({event: 'swipe', pointers: 1, threshold: 5, direction: Hammer.DIRECTION_HORIZONTAL}));
 keyswipe.on('swipeleft', swipeLeft);keyswipe.on('swiperight', swipeRight);
 
@@ -256,24 +257,6 @@ function addApp(img_url, xpos, ypos, path, name, page, id){
   //ele.css({'max-width': '20%', 'min-width': '20%', 'text-indent': '-9999px', 'text-align': 'left', 'overflow': 'hidden'});
 }
 
-
-//Purpose: Receives information from the server to update the presentation of the keys on the client
-socket.on('updateKeys', function(newVals) {
-  console.log(newVals);
-    for (var i = 0; i < newVals.x.length; i++){
-      //special case 
-      $('#keyboard').append('<button class = "draggable activestyle key-button" id="button' + (i+1).toString() + '">' + newVals.k[i] + '</button>');
-      var ele = $('#button' + (i+1).toString())
-      ele.text(newVals.k[i])
-      var touchElem = document.getElementById('button' + (i+1).toString());
-      var key_tapper = new Hammer.Manager(touchElem);
-      key_tapper.add([singleTap_key]);
-      key_tapper.on('click', sendKeyPress);
-      ele.css({position:'absolute', left:newVals.x[i] + '%', top:(newVals.y[i]) + '%', minHeight: (keyboardWidth*.02).toString() + "px"});
-    }
-    $('#loading').hide();
-});
-
 //Purpose: Receives information from the server to update the presentation of the keys on the client
 socket.on('updateUrls', function(newVals) {
   console.log(newVals);
@@ -315,8 +298,8 @@ socket.on('updateNumPad', function(newVals) {
 socket.on('updatePhrases', function(newVals) {
   console.log(newVals);
     for (var i = 0; i < newVals.k.length; i++){
-      $('#ss_elem_list').append('<li class = "phrase", role="option", id="phrase' + (i+1).toString() + '">' + newVals.k[i] + '</li>');
-      var touchElem = document.getElementById('phrase' + (i+1).toString());
+      $('#ss_elem_list').append('<li class = "phrase", role="option", id="' + newVals.k[i] + '">' + newVals.p[i] + '</li>');
+      var touchElem = document.getElementById(newVals.k[i]);
       var phrase_tapper = new Hammer.Manager(touchElem);
       phrase_tapper.add([singleTap_phrase]);
       phrase_tapper.on('click', selectPhrase);
@@ -341,7 +324,7 @@ socket.on('updateCustom', function(newVals) {
     key_tapper.add([singleTap_key, doubleTap_key]);
     key_tapper.on('click', sendKeyPress);
     key_tapper.on('doubleclick', customDoubleTap)
-    ele.css({width:'auto', left:newVals.x[i] + '%', top:(newVals.y[i]) + '%', minHeight: (keyboardWidth*.02).toString() + "px"});
+    ele.css({width:'auto', left:newVals.x[i] + '%', top:(newVals.y[i]) + '%', minHeight: (199*.02).toString() + "px"});
     
     if(!isUrl(newVals.k[i])){
       ele.addClass('key-button')
@@ -395,12 +378,20 @@ var emitApp = function(str) {
 }
 
 var emitText = function(text) {
-  console.log("HELLO")
+  console.log(text)
   pos = {'text':text,'pw':passcode}
   if (move === false){
     socket.emit('text', pos);
   }
-};
+}
+
+function emitArrow(entry) {
+  pos = {type : entry,'pw':passcode}
+  if (move === false){
+    socket.emit('functionality', pos);
+  }
+}
+
 
 function sendKeyPress (event) {
     var mymodifier = modifier
@@ -442,6 +433,21 @@ function selectPhrase (event) {
   setTimeout(function() {$(item).css("background-color", "white");}, 100);
 }
 
+function addPhrase () {
+  var phraseList = document.getElementById("ss_elem_list")
+  var newID = "phrase" + (phraseList.childElementCount + 1);
+  var text = prompt("Please enter a new phrase.", "");
+  $("#ss_elem_list").append('<li class = "phrase", role="option", id="' + newID + '">' + text + '</li>')
+  var touchElem = document.getElementById(newID);
+  var phrase_tapper = new Hammer.Manager(touchElem);
+  phrase_tapper.add([singleTap_phrase]);
+  phrase_tapper.on('click', selectPhrase);
+  socket.emit('savePhrase', { id: newID, text: text});
+}
+
+function deletePhrase() {
+
+}
 
 $( "#textfield" ).keydown(function(event) {
   if (event.key === 'Enter') { // enter
@@ -713,6 +719,24 @@ $('#about').click(function() {
 
 
 
+// --------------FUNCTIONAL BUTTONS------------------
+// the following code controls brightness, volume, and arrow keys
+
+$(" #brightness ").on('input', function() {
+  var brightnessLvl = document.getElementById("brightness").value;
+  socket.emit('brightness', {lvl: brightnessLvl})
+});
+
+$(" #volume ").on('input', function() {
+  var newVolume = document.getElementById("volume").value;
+  socket.emit('volume', {newVol: newVolume})
+});
+
+function muteOn() {
+  console.log('mute button pressed');
+  socket.emit('mute', {});
+}
+
 
 //------------------------------------------------------------
 // Controls add, delete, and touch events for custom keyboards
@@ -720,8 +744,8 @@ $('#about').click(function() {
 
 function onendListener (event) { 
         var updateKey = event.target;
-        var newX = parseInt(updateKey.style.left) + updateKey.getAttribute('data-x')/keyboardWidth*100
-        var newY = parseInt(updateKey.style.top) + updateKey.getAttribute('data-y')/keyboardHeight*100
+        var newX = parseInt(updateKey.style.left) + updateKey.getAttribute('data-x')/199*100
+        var newY = parseInt(updateKey.style.top) + updateKey.getAttribute('data-y')/470*100
         newX = parseInt(newX)
         newY = parseInt(newY)
         newX = Math.min(Math.max(0, newX),100).toString()
@@ -739,7 +763,7 @@ function onendListener (event) {
 var draggableSettings = {
     snap: {
       targets: [
-          interact.createSnapGrid({ x: .05*keyboardWidth, y: .1*keyboardHeight })
+          interact.createSnapGrid({ x: .05*199, y: .1*470 })
         ],
       range: Infinity
     },
@@ -815,8 +839,8 @@ $('#add-key').click(function() {
   interact('#'+newButtonId).draggable(draggableSettings);
   customButtonCounts['custom-' + $('#customSelect option:selected').attr('id').slice(7)] += 1;
   ele.text('')
-  console.log((keyboardWidth*.02).toString())
-  ele.css({position:'absolute', left:'0%', top: '0%', minHeight: (keyboardWidth*.02).toString() + "px"});
+  console.log((199*.02).toString())
+  ele.css({position:'absolute', left:'0%', top: '0%', minHeight: (199*.02).toString() + "px"});
   socket.emit('saveKey', {
     index: $('#customSelect option:selected').attr('id').slice(7),
     id: newButtonId,
@@ -871,7 +895,7 @@ interact('.custom-key').draggable(draggableSettings);
 interact('.custom-key').draggable({
     snap: {
       targets: [
-          interact.createSnapGrid({ x: .05*keyboardWidth, y: .1*keyboardHeight })
+          interact.createSnapGrid({ x: .05*199, y: .1*470 })
         ],
       range: Infinity
     },
@@ -905,8 +929,8 @@ function dragMoveListener (event) {
 
 //Purpose: Updates button with textbox value
 $('#modal-save').click(function() {
-  var newX = parseInt(updateKey.style.left) + updateKey.getAttribute('data-x')/keyboardWidth*100
-  var newY = parseInt(updateKey.style.top) + updateKey.getAttribute('data-y')/keyboardHeight*100
+  var newX = parseInt(updateKey.style.left) + updateKey.getAttribute('data-x')/199*100
+  var newY = parseInt(updateKey.style.top) + updateKey.getAttribute('data-y')/470*100
   newX = parseInt(newX)
   newY = parseInt(newY)
   newX = Math.min(Math.max(0, newX),100).toString()

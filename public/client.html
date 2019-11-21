@@ -29,14 +29,27 @@
           </div>
           <div class = "listbox swiper-slide  swiper-slide-outer" id="listbox">
             <div class = "listbox-settings">
-              <button class = "listbox-button" id="listbox-add">Add</button>
-              <button class = "listbox-button" id="listbox-delete">Delete</button>
+              <button class = "listbox-button" id="listbox-add" onclick="addPhrase()">Add</button>
+              <button class = "listbox-button" id="listbox-delete" onclick="deletePhrase()">Delete</button>
             </div>
             <ul id="ss_elem_list" tabindex="0" role="listbox" aria-labelledby="ss_elem">
             </ul>
           </div>
           <div class = "hotkeys swiper-slide  swiper-slide-outer" id="hotkeys"> </div>
-          <div class = "keyboard swiper-slide swiper-slide-outer" id="keyboard"> </div>
+          <div class = "functionals swiper-slide swiper-slide-outer" id="functionals">
+            <i class="material-icons slider-icon" >brightness_medium</i>
+            <input type="range" min="0" max="1" value="0.6" step="0.0625" class="slider" id="brightness">
+            <input type="range" min="0" max="1" value="0.5" step="0.0625" class="slider" id="volume">
+            <button class="slider-icon" type="button" id="muteButton" onclick="muteOn()">Mute</button>
+          <div class = 'arrowkeys'>
+            <button class = "arrow-key" id='up-arrow' onclick="emitArrow('ArrowUp')">UP</button>
+            <button class = "arrow-key" id='left-arrow' onclick="emitArrow('ArrowLeft')">LEFT</button>
+            <button class = "arrow-key" id='right-arrow' onclick="emitArrow('ArrowRight')">RIGHT</button>
+            <button class = "arrow-key" id='down-arrow' onclick="emitArrow('ArrowDown')">DOWN</button>
+
+          </div>
+
+          </div>
           <div class="swiper-slide swiper-slide-outer", id="custom">
             <select id="customSelect">
             </select>
@@ -49,25 +62,25 @@
         <div class="loading" id="loading" style="display: none;"></div>
       <div class = "navbar" id="navbar">
         <div class = "icon-selection" id="s0">
-          <i class="material-icons">keyboard</i>
+          <i class="material-icons nav-icon">keyboard</i>
         </div>
         <div class = "icon-selection" id="s1">
-          <i class="material-icons">reorder</i>
+          <i class="material-icons nav-icon">reorder</i>
         </div>
         <div class = "icon-selection" id="s2">
-          <i class="material-icons">link</i>
+          <i class="material-icons nav-icon">link</i>
         </div>
         <div class = "icon-selection" id="s3">
-          <i class="material-icons">settings_ethernet</i>
+          <i class="material-icons nav-icon">settings_ethernet</i>
         </div>
         <div class = "icon-selection" id="s4">
-          <i class="material-icons">build</i>
+          <i class="material-icons nav-icon">build</i>
         </div>
         <div class = "icon-selection" id="swap">
-          <i class="material-icons">swap_vert</i>
+          <i class="material-icons nav-icon">swap_vert</i>
         </div>
         <div class = "icon-selection" id= "settings-select">
-          <i class="material-icons">settings</i>
+          <i class="material-icons nav-icon">settings</i>
         </div>
       </div>
 
