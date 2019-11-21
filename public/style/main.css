@@ -533,8 +533,9 @@ input[type=range]:focus::-ms-fill-upper {
 }
 
 #left-arrow {
-  position: absolute;
-  margin: 30% 0% 0% 10%;
+  margin-top: 5%;
+  margin-left: 20%;
+  margin-right: 60%;
 }
 
 /* The slider itself */
