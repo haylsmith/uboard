@@ -520,8 +520,13 @@ input[type=range]:focus::-ms-fill-upper {
   color: #fff;
 }
 
+
+.arrowkeys {
+  position: relative;
+  height: 50%;
+}
+
 #up-arrow {
-  display:inline-block;
   margin-top: 5%;
   margin-left: 40%;
   margin-right: 60%;
