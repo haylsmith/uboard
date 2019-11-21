@@ -324,8 +324,8 @@ socket.on('updateNumPad', function(newVals) {
 socket.on('updatePhrases', function(newVals) {
   console.log(newVals);
     for (var i = 0; i < newVals.k.length; i++){
-      $('#ss_elem_list').append('<li class = "phrase", role="option", id="phrase' + (i+1).toString() + '">' + newVals.k[i] + '</li>');
-      var touchElem = document.getElementById('phrase' + (i+1).toString());
+      $('#ss_elem_list').append('<li class = "phrase", role="option", id="' + newVals.k[i] + '">' + newVals.p[i] + '</li>');
+      var touchElem = document.getElementById(newVals.k[i]);
       var phrase_tapper = new Hammer.Manager(touchElem);
       phrase_tapper.add([singleTap_phrase]);
       phrase_tapper.on('click', selectPhrase);
