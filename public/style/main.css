@@ -408,7 +408,7 @@ icon {
   -webkit-overflow-scrolling: touch;
 }
 
-/* generated following code using https://www.cssportal.com/style-input-range/ */
+/* generated following code using https://www.cssportal.com/style-input-range/
 input[type=range] {
   height: 34px;
   -webkit-appearance: none;
@@ -496,7 +496,7 @@ input[type=range]:focus::-ms-fill-lower {
 }
 input[type=range]:focus::-ms-fill-upper {
   background: #74A9D8;
-}
+} */
 .listbox-settings {
   height: 17%;
   border: 1px solid #aaa;
