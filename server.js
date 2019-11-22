@@ -401,28 +401,28 @@ function sendKeyboards(socket) {
   }
   socket.emit('updateApps', {k: keys, img:img_urls, x: xpos, y: ypos, n: names});
 
-  //Load custom keyboards
-  var lineReader = require('readline').createInterface({
-    input: require('fs').createReadStream('./custom_configs/order')
-  });
+  // //Load custom keyboards
+  // var lineReader = require('readline').createInterface({
+  //   input: require('fs').createReadStream('./custom_configs/order')
+  // });
 
-  lineReader.on('line', function (line) {
-    var file = fs.readFileSync('./custom_configs/'+line)  
-    content = JSON.parse(file)
-      var keys = []
-      var xpos = []
-      var ypos = []
-      var altText = []
+  // lineReader.on('line', function (line) {
+  //   var file = fs.readFileSync('./custom_configs/'+line)  
+  //   content = JSON.parse(file)
+  //     var keys = []
+  //     var xpos = []
+  //     var ypos = []
+  //     var altText = []
 
       
-      for (var key in content) {
-        keys.push(content[key][0]);
-        xpos.push(content[key][1]);
-        ypos.push(content[key][2]);
-        altText.push(content[key][3]);
-      }
-      socket.emit('updateCustom', {fname: line.slice(6,-5), k: keys, x: xpos, y: ypos, altText:altText});
-    });
+  //     for (var key in content) {
+  //       keys.push(content[key][0]);
+  //       xpos.push(content[key][1]);
+  //       ypos.push(content[key][2]);
+  //       altText.push(content[key][3]);
+  //     }
+  //     socket.emit('updateCustom', {fname: line.slice(6,-5), k: keys, x: xpos, y: ypos, altText:altText});
+  //   });
 
 }
 

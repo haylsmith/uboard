@@ -39,13 +39,13 @@
           <div class = "functionals swiper-slide swiper-slide-outer" id="functionals">
             <i class="material-icons slider-icon" >brightness_medium</i>
             <input type="range" min="0" max="1" value="0.6" step="0.0625" class="slider" id="brightness">
+            <button type="button" id="muteButton" onclick="muteOn()">Mute</button>
             <input type="range" min="0" max="1" value="0.5" step="0.0625" class="slider" id="volume">
-            <button class="slider-icon" type="button" id="muteButton" onclick="muteOn()">Mute</button>
           <div class = 'arrowkeys'>
             <button class = "arrow-key" id='up-arrow' onclick="emitArrow('ArrowUp')">UP</button>
             <button class = "arrow-key" id='left-arrow' onclick="emitArrow('ArrowLeft')">LEFT</button>
-            <button class = "arrow-key" id='right-arrow' onclick="emitArrow('ArrowRight')">RIGHT</button>
             <button class = "arrow-key" id='down-arrow' onclick="emitArrow('ArrowDown')">DOWN</button>
+            <button class = "arrow-key" id='right-arrow' onclick="emitArrow('ArrowRight')">RIGHT</button>
 
           </div>
 
@@ -73,9 +73,9 @@
         <div class = "icon-selection" id="s3">
           <i class="material-icons nav-icon">settings_ethernet</i>
         </div>
-        <div class = "icon-selection" id="s4">
+        <!--<div class = "icon-selection" id="s4">
           <i class="material-icons nav-icon">build</i>
-        </div>
+        </div>-->
         <div class = "icon-selection" id="swap">
           <i class="material-icons nav-icon">swap_vert</i>
         </div>
