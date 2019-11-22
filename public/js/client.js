@@ -217,7 +217,7 @@ function hotkeyStylize(img_url, ele, page, id, url){
   ele.css({'max-width': '20%', 'min-width': '20%', 'text-indent': '-9999px', 'text-align': 'left', 'overflow': 'hidden'});
   ele.append('<button class="url-icon" id="url-icon-' + id +'"> </button>')
   var urlIcon = $('#url-icon-' + id)
-  urlIcon.css({position: 'absolute', left: '35%', bottom: '20%', width: '30%', height: '60%', background: 'url(' + img_url + ')', 'background-size': 'contain', 'border-radius': '0px', border:'0px', 'background-repeat': 'no-repeat'});
+  urlIcon.css({position: 'absolute', left: '30%', bottom: '18%', width: '30%', height: '60%', background: 'url(' + img_url + ')', 'background-size': 'contain', 'border-radius': '0px', border:'0px', 'background-repeat': 'no-repeat'});
 }
 
 function hotkeyDestylize(ele, page, id, url){
@@ -253,7 +253,7 @@ function addApp(img_url, xpos, ypos, path, name, page, id){
   ele.css({position:'absolute', left:xpos + '%', top:ypos + '%', minHeight: (keyboardWidth*.02).toString() + "px", width: '20%'});
   ele.append('<button class="url-icon" value="' + path + '" id="url-icon-' + id +'"> </button>')
   var urlIcon = $('#url-icon-' + id)
-  urlIcon.css({position: 'absolute', left: '35%', bottom: '20%', width: '30%', height: '60%', background: 'url(' + img_url + ')', 'background-size': 'contain', 'border-radius': '0px', border:'0px', 'background-repeat': 'no-repeat'});
+  urlIcon.css({position: 'absolute', left: '30%', bottom: '18%', width: '30%', height: '60%', background: 'url(' + img_url + ')', 'background-size': 'contain', 'border-radius': '0px', border:'0px', 'background-repeat': 'no-repeat'});
   //ele.css({'max-width': '20%', 'min-width': '20%', 'text-indent': '-9999px', 'text-align': 'left', 'overflow': 'hidden'});
 }
 
