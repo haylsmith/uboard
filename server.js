@@ -14,7 +14,7 @@ var readline = require("readline");
 var exec = require('child_process').exec, child;
 var math = require('mathjs');
 var brightness = require('brightness');
-config.passcode = ''
+config.passcode = '';
 
 //---------GLOBAL STATE VARIABLES ----// 
 var screenWidth = 1440;
@@ -23,12 +23,12 @@ var adjustment = 2;
 var mouse = null;
 var newX = null;
 var newY = null;
-var currentVolume = 0.5
+var currentVolume = 0.5;
 
-var screenSize = robot.getScreenSize()
-screenWidth = screenSize.width
-screenHeight = screenSize.height
-
+var screenSize = robot.getScreenSize();
+screenWidth = screenSize.width;
+screenHeight = screenSize.height;
+var currentBrightness = null;
 
 //-------WEB SERVER FUNCTIONALITY -------// 
 //Purpose: Sends client information when making http request to main entrypoint
@@ -67,8 +67,10 @@ io.on('connection', function(socket) {
     }
   });
 
-  brightness.set(0.6).then(() => {
-    console.log('Set default brightness to 60%');
+  brightness.get().then(level => {
+    currentBrightness = level;
+    console.log("current brightness is " + currentBrightness);
+    socket.emit("defaultBrightness", {brightness: currentBrightness});
   });
 
   socket.on('disconnect', function() {
@@ -157,7 +159,7 @@ io.on('connection', function(socket) {
   });
 
 
-  socket.on('savePhrase', function(key) {
+ socket.on('savePhrase', function(key) {
     if (key.pw || config.passcode) {
       if (config.passcode !== key.pw) { //Password Checker
         console.log(config.passcode)
@@ -166,10 +168,28 @@ io.on('connection', function(socket) {
       }
     }
 
-    console.log(key.text.toString())
+    console.log("Adding " + key.text.toString())
     var file = fs.readFileSync("phrase.json")
     var configuration = JSON.parse(file)
     configuration[key.id] = key.text;
+    fs.writeFile("phrase.json", JSON.stringify(configuration, null, 4), 'utf8', error=>{});
+  });
+
+  socket.on('deletePhrase', function(key) {
+    if (key.pw || config.passcode) {
+      if (config.passcode !== key.pw) { //Password Checker
+        console.log(config.passcode)
+        console.log(key.pw)
+        return;
+      }
+    }
+
+    console.log("Deleting " + key.text.toString())
+    var file = fs.readFileSync("phrase.json")
+    var configuration = JSON.parse(file);
+    console.log(configuration);
+    delete configuration[key.id];
+    console.log(configuration);
     fs.writeFile("phrase.json", JSON.stringify(configuration, null, 4), 'utf8', error=>{});
   });
 
@@ -236,6 +256,7 @@ io.on('connection', function(socket) {
     brightness.set(newSetLevel).then(() => {
       console.log('Changed brightness');
     });
+    currentBrightness = newSetLevel;
   });
 
   socket.on('volume', function(pos) {

@@ -35,13 +35,18 @@ doubleTap.requireFailure(tripleTap);
 singleTap.requireFailure([tripleTap, doubleTap]);
 
 var customButtonCounts = {};
-
+var deleteClicked = false;
 
 var SessionID = -1;
 
 socket.on('CheckSessionID', function(pos) {
   socket.emit("SessionID", {"id": SessionID})
 });
+
+// gets the initial brightness of the screen to set the slider to correct position
+socket.on('defaultBrightness', function(data) {
+  document.getElementById('brightness').value = data.brightness;
+})
 
 socket.on("UpdateSessionID", function(dict) {
   SessionID = dict.id;
@@ -445,8 +450,27 @@ function addPhrase () {
   socket.emit('savePhrase', { id: newID, text: text});
 }
 
-function deletePhrase() {
+function deleteActive() {
+  deleteClicked = !deleteClicked;
+  var phraseList = document.getElementById("ss_elem_list")
+  var nums = document.getElementByTagName("ul");
+  if (deleteClicked) {
+    phraseList.array.forEach(element => {
+      element.getElementById("deleteButton").style.visibility = "visible";
+    });
+  }
+  else {
+    phraseList.array.forEach(element => {
+      element.getElementById("deleteButton").style.visibility = "hidden";
+    });
+  }
+}
 
+function deletePhrase(event) {
+  var value = event.innerText;
+  phraseList.array.filter(function(){
+    return ele != value;
+  })
 }
 
 $( "#textfield" ).keydown(function(event) {
