@@ -38,16 +38,15 @@
           </div>
           <div class = "hotkeys swiper-slide  swiper-slide-outer" id="hotkeys"> </div>
           <div class = "functionals swiper-slide swiper-slide-outer" id="functionals">
-            <i class="material-icons slider-icon md-36" >brightness_medium</i>
+            <i class="material-icons slider-icon md-48" >brightness_medium</i>
             <input type="range" min="0" max="1" value="0.6" step="0.0625" class="slider" id="brightness">
-            <button type="button" id="muteButton" onclick="muteOn()"><i class="material-icons">volume_mute/i></button>
+            <button type="button" id="muteButton" onclick="muteOn()"><i class="material-icons md-48">volume_mute</i></button>
             <input type="range" min="0" max="1" value="0.5" step="0.0625" class="slider" id="volume">
-          <div class = 'arrowkeys'>
-            <button class = "arrow-key" id='up-arrow' onclick="emitArrow('ArrowUp')"><i class="material-icons">keyboard_arrow_up</i></button>
-            <button class = "arrow-key" id='left-arrow' onclick="emitArrow('ArrowLeft')"><i class="material-icons">keyboard_arrow_left</i></button>
-            <button class = "arrow-key" id='down-arrow' onclick="emitArrow('ArrowDown')"><i class="material-icons">keyboard_arrow_down</i></button>
-            <button class = "arrow-key" id='right-arrow' onclick="emitArrow('ArrowRight')"><i class="material-icons">keyboard_arrow_right</i></button>
-
+          <div class = 'arrowkeys' id='arrowkeywrapper'>
+            <button class = "arrow-key" id='up-arrow' onclick="emitArrow('ArrowUp')"><i class="material-icons md-48">keyboard_arrow_up</i></button>
+            <button class = "arrow-key" id='left-arrow' onclick="emitArrow('ArrowLeft')"><i class="material-icons md-48">keyboard_arrow_left</i></button>
+            <button class = "arrow-key" id='down-arrow' onclick="emitArrow('ArrowDown')"><i class="material-icons md-48">keyboard_arrow_down</i></button>
+            <button class = "arrow-key" id='right-arrow' onclick="emitArrow('ArrowRight')"><i class="material-icons md-48">keyboard_arrow_right</i></button>
           </div>
 
           </div>
@@ -63,25 +62,25 @@
         <div class="loading" id="loading" style="display: none;"></div>
       <div class = "navbar" id="navbar">
         <div class = "icon-selection" id="s0">
-          <i class="material-icons nav-icon">keyboard</i>
+          <i class="material-icons nav-icon md-48">keyboard</i>
         </div>
         <div class = "icon-selection" id="s1">
-          <i class="material-icons nav-icon">reorder</i>
+          <i class="material-icons nav-icon md-48">reorder</i>
         </div>
         <div class = "icon-selection" id="s2">
-          <i class="material-icons nav-icon">link</i>
+          <i class="material-icons nav-icon md-48">link</i>
         </div>
         <div class = "icon-selection" id="s3">
-          <i class="material-icons nav-icon">settings_ethernet</i>
+          <i class="material-icons nav-icon md-48">settings_ethernet</i>
         </div>
         <!--<div class = "icon-selection" id="s4">
           <i class="material-icons nav-icon">build</i>
         </div>-->
         <div class = "icon-selection" id="swap">
-          <i class="material-icons nav-icon">swap_vert</i>
+          <i class="material-icons nav-icon md-48">swap_vert</i>
         </div>
         <div class = "icon-selection" id= "settings-select">
-          <i class="material-icons nav-icon">settings</i>
+          <i class="material-icons nav-icon md-48">settings</i>
         </div>
       </div>
 

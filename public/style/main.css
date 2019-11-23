@@ -26,6 +26,7 @@ icon {
   /* margin-top: 3%; */
   border-radius: 1.5em;
   /* padding: 4%; */
+  padding-right: 2%;
   font-size: 20px;
   font-weight: 600;
 /*  width: 6%;
@@ -405,95 +406,6 @@ icon {
   -webkit-overflow-scrolling: touch;
 }
 
-/* generated following code using https://www.cssportal.com/style-input-range/
-input[type=range] {
-  height: 34px;
-  -webkit-appearance: none;
-  margin: 10px 0;
-  width: 60%;
-  position: absolute;
-  transform: translate(25%, 50%);
-}
-input[type=range]:focus {
-  outline: none;
-}
-input[type=range]::-webkit-slider-runnable-track {
-  width: 100%;
-  height: 11px;
-  cursor: pointer;
-  box-shadow: 1px 1px 1px #000000;
-  background: #74A9D8;
-  border-radius: 1px;
-  border: 0px solid #010101;
-}
-input[type=range]::-webkit-slider-thumb {
-  box-shadow: 1px 1px 1px #000031;
-  border: 1px solid #00001E;
-  height: 26px;
-  width: 26px;
-  border-radius: 15px;
-  background: #FFFFFF;
-  cursor: pointer;
-  -webkit-appearance: none;
-  margin-top: -8px;
-}
-input[type=range]:focus::-webkit-slider-runnable-track {
-  background: #74A9D8;
-}
-input[type=range]::-moz-range-track {
-  width: 100%;
-  height: 11px;
-  cursor: pointer;
-  box-shadow: 1px 1px 1px #000000;
-  background: #74A9D8;
-  border-radius: 1px;
-  border: 0px solid #010101;
-}
-input[type=range]::-moz-range-thumb {
-  box-shadow: 1px 1px 1px #000031;
-  border: 1px solid #00001E;
-  height: 26px;
-  width: 26px;
-  border-radius: 15px;
-  background: #FFFFFF;
-  cursor: pointer;
-}
-input[type=range]::-ms-track {
-  width: 100%;
-  height: 11px;
-  cursor: pointer;
-  background: transparent;
-  border-color: transparent;
-  color: transparent;
-}
-input[type=range]::-ms-fill-lower {
-  background: #74A9D8;
-  border: 0px solid #010101;
-  border-radius: 2px;
-  box-shadow: 1px 1px 1px #000000;
-}
-input[type=range]::-ms-fill-upper {
-  background: #74A9D8;
-  border: 0px solid #010101;
-  border-radius: 2px;
-  box-shadow: 1px 1px 1px #000000;
-}
-input[type=range]::-ms-thumb {
-  margin-top: 1px;
-  box-shadow: 1px 1px 1px #000031;
-  border: 1px solid #00001E;
-  height: 26px;
-  width: 26px;
-  border-radius: 15px;
-  background: #FFFFFF;
-  cursor: pointer;
-}
-input[type=range]:focus::-ms-fill-lower {
-  background: #74A9D8;
-}
-input[type=range]:focus::-ms-fill-upper {
-  background: #74A9D8;
-} */
 .listbox-settings {
   height: 17%;
   border: 1px solid #aaa;
@@ -561,27 +473,21 @@ input[type=range]::-webkit-slider-runnable-track {
   width: 100%;
   height: 8.4px;
   cursor: pointer;
-  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-  background: #3071a9;
+  background-color: grey;
   border-radius: 1.3px;
   border: 0.2px solid #010101;
 }
+
 input[type=range]::-webkit-slider-thumb {
-  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-  border: 1px solid #000000;
+  border: 1.5px solid #ffffff;
   height: 36px;
   width: 16px;
   border-radius: 3px;
-  background: #fbffff;
+  background: purple;
   cursor: pointer;
   -webkit-appearance: none;
   margin-top: -14px;
 }
-input[type=range]:focus::-webkit-slider-runnable-track {
-  background: #367ebd;
-}
-
-
 
 
 .slider-icon {
@@ -592,10 +498,10 @@ input[type=range]:focus::-webkit-slider-runnable-track {
 
 #muteButton {
   float:left;
+  padding-right: 6.5%;
   border: 1px outset blue;
-  font-size: 20px;
   height: 30px;
-  width: 20px;
+  width: 30px;
   text-align: left;
   font-weight: 600;
   margin-bottom: 1em;

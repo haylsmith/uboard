@@ -150,7 +150,7 @@ function switchDisplay(item) {
 function swipeLeft(event) {
   var page = event.target.id
   console.log("left" + page)
-  if (page === 'textfield'){
+  if (page === 'textfield' || page === "textfieldcontainer"){
     switchDisplay(document.getElementById("s1"))
   }
   else if (page === 'ss_elem_list' || page.substring(0, 6) === 'phrase'){
@@ -159,9 +159,6 @@ function swipeLeft(event) {
   else if (page === 'hotkeys' || page.substring(0, 3) === 'app'
             || page.substring(0, 3) === 'url'){
     switchDisplay(document.getElementById("s3"))
-  }
-  else if (page === 'functionals'  || page.substring(0, 6) === 'button'){
-    switchDisplay(document.getElementById("s4"))
   }
 }
 
@@ -175,11 +172,8 @@ function swipeRight(event) {
             || page.substring(0, 3) === 'url'){
     switchDisplay(document.getElementById("s1"))
   }
-  else if (page === 'functionals'  || page.substring(0, 6) === 'button'){
+  else if (page === 'functionals'  || page.substring(0, 5) === 'arrow'){
     switchDisplay(document.getElementById("s2"))
-  }
-  else if (page.substring(0, 6) === 'custom'){
-    switchDisplay(document.getElementById("s3"))
   }
 }
 
@@ -195,22 +189,17 @@ phraseswipe.add(new Hammer.Swipe({event: 'swipe', pointers: 1, threshold: 5, dir
 phraseswipe.on('swipeleft', swipeLeft);
 phraseswipe.on('swiperight', swipeRight);
 
-var functionalsWrapper = document.getElementById('functionals')
-var keyswipe = new Hammer.Manager(functionalsWrapper);
-keyswipe.add(new Hammer.Swipe({event: 'swipe', pointers: 1, threshold: 5, direction: Hammer.DIRECTION_HORIZONTAL}));
-keyswipe.on('swipeleft', swipeLeft);keyswipe.on('swiperight', swipeRight);
-
-
 var hotkeysWrapper = document.getElementById('hotkeys')
 var hotswipe = new Hammer.Manager(hotkeysWrapper);
 hotswipe.add(new Hammer.Swipe({event: 'swipe', pointers: 1, threshold: 5, direction: Hammer.DIRECTION_HORIZONTAL}));
 hotswipe.on('swipeleft', swipeLeft);
 hotswipe.on('swiperight', swipeRight);
 
-var customWrapper = document.getElementById('custom')
-var customswipe = new Hammer.Manager(customWrapper);
-customswipe.add(new Hammer.Swipe({event: 'swipe', pointers: 1, threshold: 5, direction: Hammer.DIRECTION_HORIZONTAL}));
-customswipe.on('swiperight', swipeRight);
+var functionalsWrapper = document.getElementById('functionals')
+var keyswipe = new Hammer.Manager(functionalsWrapper);
+keyswipe.add(new Hammer.Swipe({event: 'swipe', pointers: 1, threshold: 5, direction: Hammer.DIRECTION_HORIZONTAL}));
+keyswipe.on('swiperight', swipeRight);
+
 
 
 
