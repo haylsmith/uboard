@@ -1,38 +1,18 @@
 {
-    "phrase1": [
-        "How are you?"
-    ],
-    "phrase2": [
-        "My name is Brad"
-    ],
-    "phrase3": [
-        "Thank you so much!"
-    ],
-    "phrase4": [
-        "wow so many phrases"
-    ],
-    "phrase5": [
-        "another phrase"
-    ],
-    "phrase6": [
-        "phrase phrase phrase"
-    ],
-    "phrase7": [
-        "fdaskghjajgnsa"
-    ],
-    "phrase8": [
-        "Where do you want to meet?"
-    ],
-    "phrase9": [
-        "Go Blue!"
-    ],
-    "phrase10": [
-        "That would be really great, thank you!"
-    ],
-    "phrase11": [
-        "I live in Michigan"
-    ],
-    "phrase12": [
-        "Goodbye"
-    ]
+    "phrase1": "How are you?",
+    "phrase2": "My name is Brad",
+    "phrase3": "Thank you so much!",
+    "phrase4": "wow so many phrases",
+    "phrase6": "phrase phrase phrase",
+    "phrase7": "fdaskghjajgnsa",
+    "phrase8": "Where do you want to meet?",
+    "phrase9": "Go Blue!",
+    "phrase10": "That would be really great, thank you!",
+    "phrase11": "I live in Michigan",
+    "phrase12": "Goodbye",
+    "phrase13": "Welcome to my blog!",
+    "phrase14": "Nice to meet you!",
+    "phrase15": "Testing",
+    "phrase16": "This is a phrase!",
+    "phrase17": "Hi hello"
 }

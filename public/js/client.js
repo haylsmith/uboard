@@ -13,6 +13,9 @@ var inputModal = document.getElementById('inputText');
 var altText = document.getElementById('altText');
 var newBoardModal = document.getElementById('newBoard-modal');// New Board Naming Modal
 var newBoardModalInput = document.getElementById('inputBoardName');// New Board Naming Modal
+var keyboardWidth = document.getElementById('textfieldcontainer').offsetWidth;// Width pixel of display
+var keyboardHeight = document.getElementById('textfieldcontainer').offsetHeight;// Height pixel of
+
 
 var singleTap = new Hammer.Tap({event: 'click', pointers: 1});
 var doubleTap = new Hammer.Tap({event: 'doubleclick', pointers: 1, taps: 2});
@@ -147,7 +150,7 @@ function switchDisplay(item) {
 function swipeLeft(event) {
   var page = event.target.id
   console.log("left" + page)
-  if (page === 'textfield'){
+  if (page === 'textfield' || page === "textfieldcontainer"){
     switchDisplay(document.getElementById("s1"))
   }
   else if (page === 'ss_elem_list' || page.substring(0, 6) === 'phrase'){
@@ -156,9 +159,6 @@ function swipeLeft(event) {
   else if (page === 'hotkeys' || page.substring(0, 3) === 'app'
             || page.substring(0, 3) === 'url'){
     switchDisplay(document.getElementById("s3"))
-  }
-  else if (page === 'functionals'  || page.substring(0, 6) === 'button'){
-    switchDisplay(document.getElementById("s4"))
   }
 }
 
@@ -172,11 +172,8 @@ function swipeRight(event) {
             || page.substring(0, 3) === 'url'){
     switchDisplay(document.getElementById("s1"))
   }
-  else if (page === 'functionals'  || page.substring(0, 6) === 'button'){
+  else if (page === 'functionals'  || page.substring(0, 5) === 'arrow'){
     switchDisplay(document.getElementById("s2"))
-  }
-  else if (page.substring(0, 6) === 'custom'){
-    switchDisplay(document.getElementById("s3"))
   }
 }
 
@@ -192,22 +189,17 @@ phraseswipe.add(new Hammer.Swipe({event: 'swipe', pointers: 1, threshold: 5, dir
 phraseswipe.on('swipeleft', swipeLeft);
 phraseswipe.on('swiperight', swipeRight);
 
-var functionalsWrapper = document.getElementById('functionals')
-var keyswipe = new Hammer.Manager(functionalsWrapper);
-keyswipe.add(new Hammer.Swipe({event: 'swipe', pointers: 1, threshold: 5, direction: Hammer.DIRECTION_HORIZONTAL}));
-keyswipe.on('swipeleft', swipeLeft);keyswipe.on('swiperight', swipeRight);
-
-
 var hotkeysWrapper = document.getElementById('hotkeys')
 var hotswipe = new Hammer.Manager(hotkeysWrapper);
 hotswipe.add(new Hammer.Swipe({event: 'swipe', pointers: 1, threshold: 5, direction: Hammer.DIRECTION_HORIZONTAL}));
 hotswipe.on('swipeleft', swipeLeft);
 hotswipe.on('swiperight', swipeRight);
 
-var customWrapper = document.getElementById('custom')
-var customswipe = new Hammer.Manager(customWrapper);
-customswipe.add(new Hammer.Swipe({event: 'swipe', pointers: 1, threshold: 5, direction: Hammer.DIRECTION_HORIZONTAL}));
-customswipe.on('swiperight', swipeRight);
+var functionalsWrapper = document.getElementById('functionals')
+var keyswipe = new Hammer.Manager(functionalsWrapper);
+keyswipe.add(new Hammer.Swipe({event: 'swipe', pointers: 1, threshold: 5, direction: Hammer.DIRECTION_HORIZONTAL}));
+keyswipe.on('swiperight', swipeRight);
+
 
 
 
@@ -215,17 +207,11 @@ customswipe.on('swiperight', swipeRight);
 
 //-----LOADING KEYBOARDS-----//
 
-function hotkeyStylize(ele, page, id, url){
+function hotkeyStylize(img_url, ele, page, id, url){
   ele.css({'max-width': '20%', 'min-width': '20%', 'text-indent': '-9999px', 'text-align': 'left', 'overflow': 'hidden'});
   ele.append('<button class="url-icon" id="url-icon-' + id +'"> </button>')
   var urlIcon = $('#url-icon-' + id)
-  try { 
-    var favicon_url = getFavicon(url);
-  }
-  catch(err) {
-    var favicon_url = ''
-  }
-  urlIcon.css({position: 'absolute', left: '35%', bottom: '20%', width: '30%', height: '60%', background: 'url(' + favicon_url + ')', 'background-size': 'contain', 'border-radius': '0px', border:'0px', 'background-repeat': 'no-repeat'});
+  urlIcon.css({position: 'absolute', left: '30%', bottom: '18%', width: '30%', height: '60%', background: 'url(' + img_url + ')', 'background-size': 'contain', 'border-radius': '0px', border:'0px', 'background-repeat': 'no-repeat'});
 }
 
 function hotkeyDestylize(ele, page, id, url){
@@ -238,7 +224,7 @@ function altTextStylize(ele,text,id){
   ele.append('<button class="alt-button" id="url-icon-' + id +'"> ' + text + '</button>')
 }
 
-function addHotkey(xpos, ypos, url, page, id){
+function addHotkey(img_url, xpos, ypos, url, page, id){
   $('#'+page).append('<button class = "draggable activestyle url-button" id='+ id +'>' + url + '</button>');
   var ele = $('#' + id)
   ele.text(url)
@@ -246,56 +232,65 @@ function addHotkey(xpos, ypos, url, page, id){
   var url_tapper = new Hammer.Manager(touchElem);
   url_tapper.add([singleTap_url]);
   url_tapper.on('click', openURL);
-  ele.css({position:'absolute', left:xpos + '%', top:ypos + '%', minHeight: (199*.02).toString() + "px", width: '20%'});
-  hotkeyStylize(ele, page, id, url)
+  ele.css({position:'absolute', left:xpos + '%', top:ypos + '%', minHeight: (keyboardWidth*.02).toString() + "px", width: '20%'});
+  hotkeyStylize(img_url, ele, page, id, url)
 }
 
 // Adds an application shortcut to the keyboard
-function addApp(xpos, ypos, path, name, page, id){
-  $('#'+page).append('<button class = "draggable activestyle app-button" id='+ id +' value="' + path + '">' + name + '</button>');
+function addApp(img_url, xpos, ypos, path, name, page, id){
+  $('#'+page).append('<button class = "draggable activestyle app-button" id='+ id +' value="' + path + '">' + '</button>');
   var ele = $('#' + id)
   var touchElem = document.getElementById(id);
   var app_tapper = new Hammer.Manager(touchElem);
   app_tapper.add([singleTap_app]);
   app_tapper.on('click', openApp);
-  ele.css({position:'absolute', left:xpos + '%', top:ypos + '%', minHeight: (199*.02).toString() + "px", width: '20%'});
+  ele.css({position:'absolute', left:xpos + '%', top:ypos + '%', minHeight: (keyboardWidth*.02).toString() + "px", width: '20%'});
+  ele.append('<button class="url-icon" value="' + path + '" id="url-icon-' + id +'"> </button>')
+  var urlIcon = $('#url-icon-' + id)
+  urlIcon.css({position: 'absolute', left: '30%', bottom: '18%', width: '30%', height: '60%', background: 'url(' + img_url + ')', 'background-size': 'contain', 'border-radius': '0px', border:'0px', 'background-repeat': 'no-repeat'});
   //ele.css({'max-width': '20%', 'min-width': '20%', 'text-indent': '-9999px', 'text-align': 'left', 'overflow': 'hidden'});
 }
 
-
-//Purpose: Receives information from the server to update the presentation of the keys on the client
-// socket.on('updateKeys', function(newVals) {
-//   console.log(newVals);
-//     for (var i = 0; i < newVals.x.length; i++){
-//       //special case 
-//       $('#keyboard').append('<button class = "draggable activestyle key-button" id="button' + (i+1).toString() + '">' + newVals.k[i] + '</button>');
-//       var ele = $('#button' + (i+1).toString())
-//       ele.text(newVals.k[i])
-//       var touchElem = document.getElementById('button' + (i+1).toString());
-//       var key_tapper = new Hammer.Manager(touchElem);
-//       key_tapper.add([singleTap_key]);
-//       key_tapper.on('click', sendKeyPress);
-//       ele.css({position:'absolute', left:newVals.x[i] + '%', top:(newVals.y[i]) + '%', minHeight: (199*.02).toString() + "px"});
-//     }
-//     $('#loading').hide();
-// });
-
 //Purpose: Receives information from the server to update the presentation of the keys on the client
 socket.on('updateUrls', function(newVals) {
+  console.log(newVals);
     for (var i = 0; i < newVals.x.length; i++){
-      addHotkey(newVals.x[i], newVals.y[i], newVals.k[i], 'hotkeys', 'url-button' + (i+1).toString())
+      addHotkey(newVals.img[i], newVals.x[i], newVals.y[i], newVals.k[i], 'hotkeys', 'url-button' + (i+1).toString())
     }
 });
 
 //Updates app shortcuts page
 socket.on('updateApps', function(newVals) {
+  console.log(newVals);
     for (var i = 0; i < newVals.x.length; i++){
-      addApp(newVals.x[i], newVals.y[i], newVals.k[i], newVals.n[i], 'hotkeys', 'app-button' + (i+1).toString())
+      addApp(newVals.img[i], newVals.x[i], newVals.y[i], newVals.k[i], newVals.n[i], 'hotkeys', 'app-button' + (i+1).toString())
     }
 });
 
 //Purpose: Receives information from the server to update the presentation of the keys on the client
+socket.on('updateNumPad', function(newVals) {
+  console.log(newVals);
+    for (var i = 0; i < newVals.x.length; i++){
+      if (i <= 10) {
+        $('#numpad').append('<button class = "draggable activestyle key-button" value="' + newVals.a[i] + '", id="pad' + (i+1).toString() + '">' + newVals.k[i] + '</button>');
+      } else {
+        $('#numpad').append('<button class = "draggable activestyle key-button", id="pad' + (i+1).toString() + '">' + newVals.k[i] + '</button>');
+      }
+
+      var ele = $('#pad' + (i+1).toString())
+      var touchElem = document.getElementById('pad' + (i+1).toString());
+      var key_tapper = new Hammer.Manager(touchElem);
+      key_tapper.add([singleTap_key]);
+      key_tapper.on('click', sendKeyPress);
+      ele.css({position:'absolute', left:newVals.x[i] + '%', top:(newVals.y[i]) + '%', minHeight: (keyboardWidth*.02).toString() + "px"});
+
+    }
+});
+
+
+//Purpose: Receives information from the server to update the presentation of the keys on the client
 socket.on('updatePhrases', function(newVals) {
+  console.log(newVals);
     for (var i = 0; i < newVals.k.length; i++){
       $('#ss_elem_list').append('<li class = "phrase", role="option", id="' + newVals.k[i] + '">' + newVals.p[i] + '</li>');
       var touchElem = document.getElementById(newVals.k[i]);
@@ -383,7 +378,15 @@ var emitText = function(text) {
   if (move === false){
     socket.emit('text', pos);
   }
-};
+}
+
+function emitArrow(entry) {
+  pos = {type : entry,'pw':passcode}
+  if (move === false){
+    socket.emit('functionality', pos);
+  }
+}
+
 
 function sendKeyPress (event) {
     var mymodifier = modifier
@@ -425,7 +428,7 @@ function selectPhrase (event) {
   setTimeout(function() {$(item).css("background-color", "white");}, 100);
 }
 
-function addPhrase (event) {
+function addPhrase () {
   var phraseList = document.getElementById("ss_elem_list")
   var newID = "phrase" + (phraseList.childElementCount + 1);
   var text = prompt("Please enter a new phrase.", "");
@@ -458,15 +461,6 @@ function deletePhrase(event) {
   var value = event.innerText;
 }
 
-var addbutton = document.getElementById("listbox-add")
-var singleTap_add = new Hammer.Tap({event: 'click', pointers: 1});
-var add_tapper = new Hammer.Manager(addbutton);
-add_tapper.add([singleTap_add]);
-add_tapper.on('click', addPhrase);
-
-
-
-
 $( "#textfield" ).keydown(function(event) {
   if (event.key === 'Enter') { // enter
     emitText(document.getElementById('textfield').value);
@@ -488,7 +482,6 @@ $( "#textfield" ).keydown(function(event) {
     document.getElementById('textfield').value = '';    
   }
 });
-
 
 /*
 -----------MOUSE CONTROLS---------------

@@ -159,7 +159,7 @@ io.on('connection', function(socket) {
   });
 
 
-  socket.on('savePhrase', function(key) {
+ socket.on('savePhrase', function(key) {
     if (key.pw || config.passcode) {
       if (config.passcode !== key.pw) { //Password Checker
         console.log(config.passcode)
@@ -168,10 +168,28 @@ io.on('connection', function(socket) {
       }
     }
 
-    console.log(key.text.toString())
+    console.log("Adding " + key.text.toString())
     var file = fs.readFileSync("phrase.json")
     var configuration = JSON.parse(file)
     configuration[key.id] = key.text;
+    fs.writeFile("phrase.json", JSON.stringify(configuration, null, 4), 'utf8', error=>{});
+  });
+
+  socket.on('deletePhrase', function(key) {
+    if (key.pw || config.passcode) {
+      if (config.passcode !== key.pw) { //Password Checker
+        console.log(config.passcode)
+        console.log(key.pw)
+        return;
+      }
+    }
+
+    console.log("Deleting " + key.text.toString())
+    var file = fs.readFileSync("phrase.json")
+    var configuration = JSON.parse(file);
+    console.log(configuration);
+    delete configuration[key.id];
+    console.log(configuration);
     fs.writeFile("phrase.json", JSON.stringify(configuration, null, 4), 'utf8', error=>{});
   });
 
@@ -372,15 +390,17 @@ function sendKeyboards(socket) {
   content = JSON.parse(file)
   
   var keys = []
+  var img_urls = []
   var xpos = []
   var ypos = []
   
   for (var key in content) {
     keys.push(content[key][0]);
-    xpos.push(content[key][1]);
-    ypos.push(content[key][2]);
+    img_urls.push(content[key][1]);
+    xpos.push(content[key][2]);
+    ypos.push(content[key][3]);
   }
-  socket.emit('updateUrls', {k: keys, x: xpos, y: ypos});
+  socket.emit('updateUrls', {k: keys, img:img_urls, x: xpos, y: ypos});
 
 
   //Load default apps
@@ -391,37 +411,39 @@ function sendKeyboards(socket) {
   var xpos = []
   var ypos = []
   var names = []
+  var img_urls = []
   
   for (var key in content) {
     keys.push(content[key][0]);
     names.push(content[key][3]);
     xpos.push(content[key][1]);
     ypos.push(content[key][2]);
+    img_urls.push(content[key][4]);
   }
-  socket.emit('updateApps', {k: keys, x: xpos, y: ypos, n: names});
+  socket.emit('updateApps', {k: keys, img:img_urls, x: xpos, y: ypos, n: names});
 
-  //Load custom keyboards
-  var lineReader = require('readline').createInterface({
-    input: require('fs').createReadStream('./custom_configs/order')
-  });
+  // //Load custom keyboards
+  // var lineReader = require('readline').createInterface({
+  //   input: require('fs').createReadStream('./custom_configs/order')
+  // });
 
-  lineReader.on('line', function (line) {
-    var file = fs.readFileSync('./custom_configs/'+line)  
-    content = JSON.parse(file)
-      var keys = []
-      var xpos = []
-      var ypos = []
-      var altText = []
+  // lineReader.on('line', function (line) {
+  //   var file = fs.readFileSync('./custom_configs/'+line)  
+  //   content = JSON.parse(file)
+  //     var keys = []
+  //     var xpos = []
+  //     var ypos = []
+  //     var altText = []
 
       
-      for (var key in content) {
-        keys.push(content[key][0]);
-        xpos.push(content[key][1]);
-        ypos.push(content[key][2]);
-        altText.push(content[key][3]);
-      }
-      socket.emit('updateCustom', {fname: line.slice(6,-5), k: keys, x: xpos, y: ypos, altText:altText});
-    });
+  //     for (var key in content) {
+  //       keys.push(content[key][0]);
+  //       xpos.push(content[key][1]);
+  //       ypos.push(content[key][2]);
+  //       altText.push(content[key][3]);
+  //     }
+  //     socket.emit('updateCustom', {fname: line.slice(6,-5), k: keys, x: xpos, y: ypos, altText:altText});
+  //   });
 
 }
 
