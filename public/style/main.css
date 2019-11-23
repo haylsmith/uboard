@@ -422,6 +422,6 @@ icon {
 
 .delete-button {
   float: right;
-  line-height: 50px;
-  width: 50px;
+  line-height: 80%;
+  width: 5%;
 }
