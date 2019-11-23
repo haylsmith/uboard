@@ -28,7 +28,7 @@ var currentVolume = 0.5;
 var screenSize = robot.getScreenSize();
 screenWidth = screenSize.width;
 screenHeight = screenSize.height;
-var currentBrightness = 0.5;
+var currentBrightness = null;
 
 //-------WEB SERVER FUNCTIONALITY -------// 
 //Purpose: Sends client information when making http request to main entrypoint
@@ -72,10 +72,6 @@ io.on('connection', function(socket) {
     console.log("current brightness is " + currentBrightness);
     socket.emit("defaultBrightness", {brightness: currentBrightness});
   });
-
-  // brightness.set(0.6).then(() => {
-  //   console.log('Set default brightness to 60%');
-  // });
 
   socket.on('disconnect', function() {
     console.log('user disconnected');

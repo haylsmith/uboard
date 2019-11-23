@@ -32,16 +32,16 @@ doubleTap.requireFailure(tripleTap);
 singleTap.requireFailure([tripleTap, doubleTap]);
 
 var customButtonCounts = {};
+var deleteClicked = false;
 
 var SessionID = -1;
 
 socket.on('CheckSessionID', function(pos) {
   socket.emit("SessionID", {"id": SessionID})
-  // document.getElementById('brightness').id = window.currentBrightness;
 });
 
+// gets the initial brightness of the screen to set the slider to correct position
 socket.on('defaultBrightness', function(data) {
-  console.log(data.brightness)
   document.getElementById('brightness').value = data.brightness;
 })
 
@@ -436,8 +436,27 @@ function addPhrase (event) {
   socket.emit('savePhrase', { id: newID, text: text});
 }
 
-function deletePhrase(event) {
+function deleteActive() {
+  deleteClicked = !deleteClicked;
+  var phraseList = document.getElementById("ss_elem_list")
+  var nums = document.getElementByTagName("ul");
+  if (deleteClicked) {
+    phraseList.array.forEach(element => {
+      element.getElementById("deleteButton").style.visibility = "visible";
+    });
+  }
+  else {
+    phraseList.array.forEach(element => {
+      element.getElementById("deleteButton").style.visibility = "hidden";
+    });
+  }
+}
 
+function deletePhrase(event) {
+  var value = event.innerText;
+  phraseList.array.filter(function(){
+    return ele != value;
+  })
 }
 
 var addbutton = document.getElementById("listbox-add")
