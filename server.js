@@ -191,6 +191,7 @@ io.on('connection', function(socket) {
     delete configuration[key.id];
     console.log(configuration);
     fs.writeFile("phrase.json", JSON.stringify(configuration, null, 4), 'utf8', error=>{});
+
   });
 
   socket.on('newBoard', function(key) {

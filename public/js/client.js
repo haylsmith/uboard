@@ -297,7 +297,7 @@ socket.on('updatePhrases', function(newVals) {
       var phrase_tapper = new Hammer.Manager(touchElem);
       phrase_tapper.add([singleTap_phrase]);
       phrase_tapper.on('click', selectPhrase);
-      $('#' + newVals.k[i]).append('<button id="deleteButton" style="visibility: hidden" class="delete-button"> &times; </button>');
+      $('#' + newVals.k[i]).append('<button id="deleteButton" style="visibility: hidden" class="delete-button">&times; </button>');
     }
 });
 
@@ -422,7 +422,7 @@ function openApp (event) {
 function selectPhrase (event) {
   var item = document.getElementById(event.target.id)
   setTimeout(function() {$(item).css("background-color", "purple");}, 0);
-  var text = event.target.innerText;
+  var text = event.target.innerText.slice(0, -2);
     var oldvalue = document.getElementById('textfield').value
     document.getElementById('textfield').value = oldvalue + " " + text
   setTimeout(function() {$(item).css("background-color", "white");}, 100);
@@ -448,6 +448,7 @@ function deleteActive() {
   if (deleteClicked) {
     for (var i = 0; i < items.length; ++i){
       items[i].children[0].style.visibility = "visible";
+      items[i].children[0].addEventListener("click", deleteClickButton);
     }
   }
   else {
@@ -457,8 +458,15 @@ function deleteActive() {
   }
 }
 
-function deletePhrase(event) {
-  var value = event.innerText;
+function deleteClickButton(e) {
+  var phrase = e.target.parentElement.innerText;
+  var phraseid = e.target.parentElement.id; 
+  
+  socket.emit('deletePhrase', {'id': phraseid, 'text': phrase});
+
+  //delete element from list
+  var toRemove = document.getElementById(phraseid);
+  toRemove.parentNode.removeChild(toRemove);
 }
 
 $( "#textfield" ).keydown(function(event) {
