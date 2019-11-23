@@ -302,6 +302,7 @@ socket.on('updatePhrases', function(newVals) {
       var phrase_tapper = new Hammer.Manager(touchElem);
       phrase_tapper.add([singleTap_phrase]);
       phrase_tapper.on('click', selectPhrase);
+      $('#' + newVals.k[i]).append('<button id="deleteButton" style="visibility: hidden" class="delete-button"> &times; </button>');
     }
 });
 
@@ -438,25 +439,23 @@ function addPhrase (event) {
 
 function deleteActive() {
   deleteClicked = !deleteClicked;
-  var phraseList = document.getElementById("ss_elem_list")
-  var nums = document.getElementByTagName("ul");
+  var ul = document.getElementById("ss_elem_list")
+  var items = ul.getElementsByTagName("li");
+  // console.log(items);
   if (deleteClicked) {
-    phraseList.array.forEach(element => {
-      element.getElementById("deleteButton").style.visibility = "visible";
-    });
+    for (var i = 0; i < items.length; ++i){
+      items[i].children[0].style.visibility = "visible";
+    }
   }
   else {
-    phraseList.array.forEach(element => {
-      element.getElementById("deleteButton").style.visibility = "hidden";
-    });
+    for (var i = 0; i < items.length; ++i){
+      items[i].children[0].style.visibility = "hidden";
+    }
   }
 }
 
 function deletePhrase(event) {
   var value = event.innerText;
-  phraseList.array.filter(function(){
-    return ele != value;
-  })
 }
 
 var addbutton = document.getElementById("listbox-add")
