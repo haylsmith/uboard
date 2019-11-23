@@ -467,7 +467,7 @@ function deleteClickButton(e) {
   
   socket.emit('deletePhrase', {'id': phraseid, 'text': phrase});
 
-  //delete element from list
+  //delete element from HTML list
   var toRemove = document.getElementById(phraseid);
   toRemove.parentNode.removeChild(toRemove);
 }
