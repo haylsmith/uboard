@@ -297,6 +297,7 @@ socket.on('updatePhrases', function(newVals) {
       var phrase_tapper = new Hammer.Manager(touchElem);
       phrase_tapper.add([singleTap_phrase]);
       phrase_tapper.on('click', selectPhrase);
+      $('#' + newVals.k[i]).append('<button id="deleteButton" style="visibility: hidden" class="delete-button">&times; </button>');
     }
 });
 
@@ -429,9 +430,12 @@ function selectPhrase (event) {
 
 function addPhrase () {
   var phraseList = document.getElementById("ss_elem_list")
-  var newID = "phrase" + (phraseList.childElementCount + 1);
   var text = prompt("Please enter a new phrase.", "");
+  var numPhrases = phraseList.childElementCount;
+  var phraseNum = parseInt(phraseList.childNodes[numPhrases-1].id.slice(6));
+  var newID = "phrase" + (phraseNum + 1);
   $("#ss_elem_list").append('<li class = "phrase", role="option", id="' + newID + '">' + text + '</li>')
+  $('#' + newID).append('<button id="deleteButton" style="visibility: hidden" class="delete-button">&times; </button>');
   var touchElem = document.getElementById(newID);
   var phrase_tapper = new Hammer.Manager(touchElem);
   phrase_tapper.add([singleTap_phrase]);
@@ -441,25 +445,31 @@ function addPhrase () {
 
 function deleteActive() {
   deleteClicked = !deleteClicked;
-  var phraseList = document.getElementById("ss_elem_list")
-  var nums = document.getElementByTagName("ul");
+  var ul = document.getElementById("ss_elem_list")
+  var items = ul.getElementsByTagName("li");
+  // console.log(items);
   if (deleteClicked) {
-    phraseList.array.forEach(element => {
-      element.getElementById("deleteButton").style.visibility = "visible";
-    });
+    for (var i = 0; i < items.length; ++i){
+      items[i].children[0].style.visibility = "visible";
+      items[i].children[0].addEventListener("click", deleteClickButton);
+    }
   }
   else {
-    phraseList.array.forEach(element => {
-      element.getElementById("deleteButton").style.visibility = "hidden";
-    });
+    for (var i = 0; i < items.length; ++i){
+      items[i].children[0].style.visibility = "hidden";
+    }
   }
 }
 
-function deletePhrase(event) {
-  var value = event.innerText;
-  phraseList.array.filter(function(){
-    return ele != value;
-  })
+function deleteClickButton(e) {
+  var phrase = e.target.parentElement.innerText;
+  var phraseid = e.target.parentElement.id; 
+  
+  socket.emit('deletePhrase', {'id': phraseid, 'text': phrase});
+
+  //delete element from list
+  var toRemove = document.getElementById(phraseid);
+  toRemove.parentNode.removeChild(toRemove);
 }
 
 $( "#textfield" ).keydown(function(event) {
