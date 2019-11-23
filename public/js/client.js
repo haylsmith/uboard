@@ -178,7 +178,7 @@ function swipeRight(event) {
 }
 
 
-var textWrapper = document.getElementById('textfieldcontainer')
+var textWrapper = document.getElementById('textfield')
 var textswipe = new Hammer.Manager(textWrapper);
 textswipe.add(new Hammer.Swipe({event: 'swipe', pointers: 1, threshold: 5, direction: Hammer.DIRECTION_HORIZONTAL}));
 textswipe.on('swipeleft', swipeLeft);
@@ -421,7 +421,7 @@ function openApp (event) {
 function selectPhrase (event) {
   var item = document.getElementById(event.target.id)
   setTimeout(function() {$(item).css("background-color", "purple");}, 0);
-  var text = event.target.innerText;
+  var text = event.target.innerText.slice(0, -2);
     var oldvalue = document.getElementById('textfield').value
     document.getElementById('textfield').value = oldvalue + " " + text
   setTimeout(function() {$(item).css("background-color", "white");}, 100);
