@@ -167,6 +167,7 @@ io.on('connection', function(socket) {
         return;
       }
     }
+    console.log(key.text)
 
     console.log("Adding " + key.text.toString())
     var file = fs.readFileSync("phrase.json")

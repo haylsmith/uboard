@@ -294,9 +294,7 @@ socket.on('updatePhrases', function(newVals) {
     for (var i = 0; i < newVals.k.length; i++){
       $('#ss_elem_list').append('<li class = "phrase", role="option", id="' + newVals.k[i] + '">' + newVals.p[i] + '</li>');
       var touchElem = document.getElementById(newVals.k[i]);
-      var phrase_tapper = new Hammer.Manager(touchElem);
-      phrase_tapper.add([singleTap_phrase]);
-      phrase_tapper.on('click', selectPhrase);
+      touchElem.addEventListener("click", selectPhrase);
       $('#' + newVals.k[i]).append('<button id="deleteButton" style="visibility: hidden" class="delete-button">&times; </button>');
     }
 });
@@ -420,11 +418,18 @@ function openApp (event) {
 }
 
 function selectPhrase (event) {
+  console.log("HELLO")
   var item = document.getElementById(event.target.id)
+  if (item.id === "deleteButton") {
+    return;
+  }
   setTimeout(function() {$(item).css("background-color", "purple");}, 0);
-  var text = event.target.innerText.slice(0, -2);
-    var oldvalue = document.getElementById('textfield').value
-    document.getElementById('textfield').value = oldvalue + " " + text
+  var text = event.target.innerText;
+  if (deleteClicked) {
+    text = text.slice(0, -1);
+  }
+  var oldvalue = document.getElementById('textfield').value
+  document.getElementById('textfield').value = oldvalue + " " + text
   setTimeout(function() {$(item).css("background-color", "white");}, 100);
 }
 
@@ -434,12 +439,18 @@ function addPhrase () {
   var numPhrases = phraseList.childElementCount;
   var phraseNum = parseInt(phraseList.childNodes[numPhrases-1].id.slice(6));
   var newID = "phrase" + (phraseNum + 1);
+  if (text === null || text === "") {
+    return;
+  }
   $("#ss_elem_list").append('<li class = "phrase", role="option", id="' + newID + '">' + text + '</li>')
   $('#' + newID).append('<button id="deleteButton" style="visibility: hidden" class="delete-button">&times; </button>');
+  if (deleteClicked) {
+    console.log($('#' + newID))
+    $('#' + newID)[0].children[0].style.visibility = "visible";
+    $('#' + newID)[0].children[0].addEventListener("click", deleteClickButton);
+  }
   var touchElem = document.getElementById(newID);
-  var phrase_tapper = new Hammer.Manager(touchElem);
-  phrase_tapper.add([singleTap_phrase]);
-  phrase_tapper.on('click', selectPhrase);
+  touchElem.addEventListener("click", selectPhrase);
   socket.emit('savePhrase', { id: newID, text: text});
 }
 
