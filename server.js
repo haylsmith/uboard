@@ -176,6 +176,24 @@ io.on('connection', function(socket) {
     fs.writeFile("phrase.json", JSON.stringify(configuration, null, 4), 'utf8', error=>{});
   });
 
+ socket.on('editPhrase', function(key) {
+    if (key.pw || config.passcode) {
+      if (config.passcode !== key.pw) { //Password Checker
+        console.log(config.passcode)
+        console.log(key.pw)
+        return;
+      }
+    }
+    console.log(key.text)
+
+    console.log("Editing " + key.text.toString())
+    var file = fs.readFileSync("phrase.json")
+    var configuration = JSON.parse(file)
+    configuration[key.id] = key.text;
+    fs.writeFile("phrase.json", JSON.stringify(configuration, null, 4), 'utf8', error=>{});
+  });
+
+
   socket.on('deletePhrase', function(key) {
     if (key.pw || config.passcode) {
       if (config.passcode !== key.pw) { //Password Checker

@@ -36,6 +36,7 @@ singleTap.requireFailure([tripleTap, doubleTap]);
 
 var customButtonCounts = {};
 var deleteClicked = false;
+var editClicked = false;
 
 var SessionID = -1;
 
@@ -295,8 +296,7 @@ socket.on('updatePhrases', function(newVals) {
       $('#ss_elem_list').append('<li class = "phrase", role="option", id="' + newVals.k[i] + '">' + newVals.p[i] + '</li>');
       var touchElem = document.getElementById(newVals.k[i]);
       touchElem.addEventListener("click", selectPhrase);
-      $('#' + newVals.k[i]).append('<button id="deleteButton" style="visibility: hidden" class="delete-button">&times; </button>' + 
-                                   '<button id="editButton" style="visibility: hidden" class="edit-button">edit</button>');
+      $('#' + newVals.k[i]).append('<button id="deleteButton" style="visibility: hidden" class="delete-button">&times; </button>');
     }
 });
 
@@ -418,23 +418,25 @@ function openApp (event) {
     emitApp($("#" + event.target.id)[0].value);
 }
 
+
+
 function selectPhrase (event) {
   var item = document.getElementById(event.target.id)
   if (item.id === "deleteButton") {
     return;
   }
   setTimeout(function() {$(item).css("background-color", "purple");}, 0);
-  var text = event.target.innerText;
-  if (deleteClicked) {
-    text = text.slice(0, -1);
-  }
+  var text = event.target.firstChild.data;
   emitText(" " + text);
   setTimeout(function() {$(item).css("background-color", "white");}, 100);
 }
 
 function addPhrase () {
+  $("#listbox-add").css("background-image", "none")
+  $("#listbox-add").css("background-color", "purple")
   var phraseList = document.getElementById("ss_elem_list")
   var text = prompt("Please enter a new phrase.", "");
+  $("#listbox-add").css("background-image", "linear-gradient(to bottom, #0F0FFF 0%, #0000A8 100%)");
   var numPhrases = phraseList.childElementCount;
   var phraseNum = parseInt(phraseList.childNodes[numPhrases-1].id.slice(6));
   var newID = "phrase" + (phraseNum + 1);
@@ -442,26 +444,54 @@ function addPhrase () {
     return;
   }
   $("#ss_elem_list").append('<li class = "phrase", role="option", id="' + newID + '">' + text + '</li>')
-  $('#' + newID).append('<button id="deleteButton" style="visibility: hidden" class="delete-button">&times; </button>' + 
-                        '<button id="editButton" style="visibility: hidden" class="edit-button">edit  </button>');
+  $('#' + newID).append('<button id="deleteButton" style="visibility: hidden" class="delete-button">X</button>');
   if (deleteClicked) {
     console.log($('#' + newID))
+    $('#' + newID)[0].children[0].innerText = "&times; ";
     $('#' + newID)[0].children[0].style.visibility = "visible";
     $('#' + newID)[0].children[0].addEventListener("click", deleteClickButton);
   }
+  if (editClicked) {
+    console.log($('#' + newID))
+    $('#' + newID)[0].children[0].innerText = "edit";
+    $('#' + newID)[0].children[0].style.visibility = "visible";
+    $('#' + newID)[0].children[0].addEventListener("click", editClickButton);
+  }
+
   var touchElem = document.getElementById(newID);
   touchElem.addEventListener("click", selectPhrase);
   socket.emit('savePhrase', { id: newID, text: text});
 }
 
+function updateListboxStyle() {
+  if (deleteClicked) {
+    $("#listbox-delete").css("background-image", "none")
+    $("#listbox-delete").css("background-color", "purple")
+  }
+  else {
+    $("#listbox-delete").css("background-image", "linear-gradient(to bottom, #0F0FFF 0%, #0000A8 100%)");
+  }
+
+  if (editClicked) {
+    $("#listbox-edit").css("background-image", "none")
+    $("#listbox-edit").css("background-color", "purple")
+  }
+  else {
+    $("#listbox-edit").css("background-image", "linear-gradient(to bottom, #0F0FFF 0%, #0000A8 100%)");
+  }
+}
+
 function deleteActive() {
   deleteClicked = !deleteClicked;
+  editClicked = false;
   var ul = document.getElementById("ss_elem_list")
   var items = ul.getElementsByTagName("li");
   // console.log(items);
   if (deleteClicked) {
     for (var i = 0; i < items.length; ++i){
+      items[i].children[0].innerText = "X";
       items[i].children[0].style.visibility = "visible";
+      items[i].children[0].removeEventListener("click", editClickButton);
       items[i].children[0].addEventListener("click", deleteClickButton);
     }
   }
@@ -470,7 +500,46 @@ function deleteActive() {
       items[i].children[0].style.visibility = "hidden";
     }
   }
+  updateListboxStyle();
 }
+
+function editActive() {
+  editClicked = !editClicked;
+  deleteClicked = false;
+  var ul = document.getElementById("ss_elem_list")
+  var items = ul.getElementsByTagName("li");
+  // console.log(items);
+  if (editClicked) {
+    for (var i = 0; i < items.length; ++i){
+      console.log(items[i])
+      items[i].children[0].innerText = "edit";
+      items[i].children[0].style.visibility = "visible";
+      items[i].children[0].removeEventListener("click", deleteClickButton);
+      items[i].children[0].addEventListener("click", editClickButton);
+    }
+  }
+  else {
+    for (var i = 0; i < items.length; ++i){
+      items[i].children[0].style.visibility = "hidden";
+    }
+  }
+  updateListboxStyle();
+}
+
+
+
+function editClickButton(e) {
+  var phrase = e.target.parentElement.firstChild.data;
+  var phraseid = e.target.parentElement.id; 
+  var text = prompt("Please enter a new phrase.", phrase);
+  if (text === null || text === "") {
+    return;
+  }
+  console.log(text)
+  e.target.parentElement.firstChild.data = text;
+  socket.emit('editPhrase', {'id': phraseid, 'text': text});
+}
+
 
 function deleteClickButton(e) {
   var phrase = e.target.parentElement.innerText;

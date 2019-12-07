@@ -319,6 +319,7 @@ icon {
 
 [role="option"] {
   font-size: 24px;
+  overflow: scroll;
   display: block;
   padding: 0 1em 0 1em;
   position: relative;
@@ -344,11 +345,8 @@ icon {
 
 .listbox-button {
   font-size: 24px;
-  width: 50%;
-  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #0F0FFF), color-stop(1, #0000A8));
-  background-image: -webkit-linear-gradient(top, #0F0FFF 0%, #0000A8 100%);
+  width: 33%;
   background-image: linear-gradient(to bottom, #0F0FFF 0%, #0000A8 100%);
-  background-image: -webkit-linear-gradient(93deg, #0000A8 0%, #0F0FFF 100%);
   border-radius: 1.3em;
   color: #fff;
 }
