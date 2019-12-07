@@ -295,7 +295,8 @@ socket.on('updatePhrases', function(newVals) {
       $('#ss_elem_list').append('<li class = "phrase", role="option", id="' + newVals.k[i] + '">' + newVals.p[i] + '</li>');
       var touchElem = document.getElementById(newVals.k[i]);
       touchElem.addEventListener("click", selectPhrase);
-      $('#' + newVals.k[i]).append('<button id="deleteButton" style="visibility: hidden" class="delete-button">&times; </button>');
+      $('#' + newVals.k[i]).append('<button id="deleteButton" style="visibility: hidden" class="delete-button">&times; </button>' + 
+                                   '<button id="editButton" style="visibility: hidden" class="edit-button">edit</button>');
     }
 });
 
@@ -441,7 +442,8 @@ function addPhrase () {
     return;
   }
   $("#ss_elem_list").append('<li class = "phrase", role="option", id="' + newID + '">' + text + '</li>')
-  $('#' + newID).append('<button id="deleteButton" style="visibility: hidden" class="delete-button">&times; </button>');
+  $('#' + newID).append('<button id="deleteButton" style="visibility: hidden" class="delete-button">&times; </button>' + 
+                        '<button id="editButton" style="visibility: hidden" class="edit-button">edit  </button>');
   if (deleteClicked) {
     console.log($('#' + newID))
     $('#' + newID)[0].children[0].style.visibility = "visible";
