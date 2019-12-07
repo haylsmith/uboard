@@ -364,7 +364,7 @@ var emitUrl = function(str) {
 };
 
 var emitApp = function(str) {
-  pos = {'str': "open " + str,'pw':passcode}
+  pos = {'str': 'mdfind "kind:app ' + str + '"','pw':passcode}
   if (move === false){
     socket.emit('app', pos)
   }
