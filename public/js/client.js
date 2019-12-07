@@ -418,7 +418,6 @@ function openApp (event) {
 }
 
 function selectPhrase (event) {
-  console.log("HELLO")
   var item = document.getElementById(event.target.id)
   if (item.id === "deleteButton") {
     return;
@@ -428,8 +427,7 @@ function selectPhrase (event) {
   if (deleteClicked) {
     text = text.slice(0, -1);
   }
-  var oldvalue = document.getElementById('textfield').value
-  document.getElementById('textfield').value = oldvalue + " " + text
+  emitText(" " + text);
   setTimeout(function() {$(item).css("background-color", "white");}, 100);
 }
 
