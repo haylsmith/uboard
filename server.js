@@ -243,7 +243,7 @@ io.on('connection', function(socket) {
     console.log(pos.str)
     var my_cmd = sh(pos.str)
     my_cmd.then(function(result) {
-        var output = result['stdout'].slice(0, -1)
+        var output = result['stdout'].split(/[\r\n]+/)[0]
         console.log(output)
         var my_second_cmd = sh("open " + output).catch(function(error) { console.log(error)});
     }).catch(function(error) {
