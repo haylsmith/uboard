@@ -381,9 +381,10 @@ icon {
 
 .arrowkeys {
   float: left;
-  position: relative;
-  margin-top: 1em;
+  position: absolute;
+  margin-top: 3em;
   height: 70%;
+  margin-left: 35%;
 }
 
 #up-arrow {
@@ -479,4 +480,9 @@ input[type=range]::-webkit-slider-thumb {
   background-image: linear-gradient(to bottom, #0F0FFF 0%, #0000A8 100%);
   background-image: -webkit-linear-gradient(93deg, #0000A8 0%, #0F0FFF 100%);
   color: #fff;
+}
+
+@viewport {
+  width: device-width ;
+  zoom: 1.0 ;
 }
