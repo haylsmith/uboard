@@ -548,6 +548,10 @@ function editClickButton(e) {
 
 
 function deleteClickButton(e) {
+  var result = confirm("Are you sure you want to delete this phrase?");
+  if (result == false) {
+    return;
+  }
   var phrase = e.target.parentElement.innerText;
   var phraseid = e.target.parentElement.id; 
   
