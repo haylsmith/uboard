@@ -384,7 +384,7 @@ icon {
   position: absolute;
   margin-top: 3em;
   height: 70%;
-  margin-left: 35%;
+  margin-left: 37%;
 }
 
 #up-arrow {
@@ -412,13 +412,13 @@ icon {
 #brightness {
   float: left;
   position: relative;
-  left: -16%;
+  left: -12%;
 }
 
 #volume {
   float: left;
   position: relative;
-  left: -53%;
+  left: -35%;
 }
 
 input[type=range] {
@@ -452,14 +452,17 @@ input[type=range]::-webkit-slider-thumb {
   position: absolute;
   transform: scale(1.3);
   top: 0px;
-  left: 1px;
+  left: -5%;
 }
 
 .brightness-icon {
   float: left;
   transform: scale(1.3);
-  margin-top: 4.7em;
-  margin-left: 6%;
+  /* margin-top: 4.7em;
+  margin-left: 6%; */
+  left: 3%;
+  position: relative;
+  bottom: 10%;
 }
 
 .arrow-icon {
@@ -473,16 +476,18 @@ input[type=range]::-webkit-slider-thumb {
   width: 30px;
   font-weight: 600;
   transform: scale(1.5);
-  margin-top: 8em;
-  margin-left: 7%;
+  /* margin-top: 8em; */
+  margin-left: 10%;
   background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #0F0FFF), color-stop(1, #0000A8));
   background-image: -webkit-linear-gradient(top, #0F0FFF 0%, #0000A8 100%);
   background-image: linear-gradient(to bottom, #0F0FFF 0%, #0000A8 100%);
   background-image: -webkit-linear-gradient(93deg, #0000A8 0%, #0F0FFF 100%);
   color: #fff;
+  left: 7%;
+  position: relative;
+  bottom: 10%;
 }
 
-@viewport {
-  width: device-width ;
-  zoom: 1.0 ;
-}
+/* .functionals {
+  position:
+} */
