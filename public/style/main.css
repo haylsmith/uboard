@@ -353,22 +353,9 @@ icon {
 
 .delete-button {
   float: right;
-  line-height: 80%;
-  text-align: middle;
-  width: 4%;
-  height: 40px;
-  margin-top: 2%;
-  background-color: purple;
-  color: #fff;
-  border-radius: 1.3em;
-}
-
-.edit-button {
-  float: right;
-  line-height: 80%;
-  text-align: middle;
-  width: 4%;
-  height: 40px;
+  line-height: 200%;
+  text-align: center;
+  width: 15%;
   margin-top: 2%;
   background-color: purple;
   color: #fff;

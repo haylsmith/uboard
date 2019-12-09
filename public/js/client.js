@@ -447,14 +447,18 @@ function addPhrase () {
   $('#' + newID).append('<button id="deleteButton" style="visibility: hidden" class="delete-button">X</button>');
   if (deleteClicked) {
     console.log($('#' + newID))
-    $('#' + newID)[0].children[0].innerText = "&times; ";
+    $('#' + newID)[0].children[0].innerText = "X";
     $('#' + newID)[0].children[0].style.visibility = "visible";
+    $('#' + newID)[0].children[0].style.paddingRight = "10px";
+    $('#' + newID)[0].children[0].removeEventListener("click", editClickButton);
     $('#' + newID)[0].children[0].addEventListener("click", deleteClickButton);
   }
   if (editClicked) {
     console.log($('#' + newID))
     $('#' + newID)[0].children[0].innerText = "edit";
     $('#' + newID)[0].children[0].style.visibility = "visible";
+    $('#' + newID)[0].children[0].style.paddingRight = "50px";
+    $('#' + newID)[0].children[0].removeEventListener("click", deleteClickButton);
     $('#' + newID)[0].children[0].addEventListener("click", editClickButton);
   }
 
@@ -491,6 +495,7 @@ function deleteActive() {
     for (var i = 0; i < items.length; ++i){
       items[i].children[0].innerText = "X";
       items[i].children[0].style.visibility = "visible";
+      items[i].children[0].style.paddingRight = "10px";
       items[i].children[0].removeEventListener("click", editClickButton);
       items[i].children[0].addEventListener("click", deleteClickButton);
     }
@@ -514,6 +519,7 @@ function editActive() {
       console.log(items[i])
       items[i].children[0].innerText = "edit";
       items[i].children[0].style.visibility = "visible";
+      items[i].children[0].style.paddingRight = "50px";
       items[i].children[0].removeEventListener("click", deleteClickButton);
       items[i].children[0].addEventListener("click", editClickButton);
     }
