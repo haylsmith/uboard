@@ -382,7 +382,7 @@ icon {
   position: absolute;
   margin-top: 3em;
   height: 70%;
-  margin-left: 37%;
+  margin-left: 40%;
 }
 
 #up-arrow {
@@ -416,7 +416,7 @@ icon {
 #volume {
   float: left;
   position: relative;
-  left: -35%;
+  left: -38%;
 }
 
 input[type=range] {
@@ -474,13 +474,14 @@ input[type=range]::-webkit-slider-thumb {
   width: 30px;
   font-weight: 600;
   transform: scale(1.5);
+  /* margin-top: 8em; */
   margin-left: 10%;
   background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #0F0FFF), color-stop(1, #0000A8));
   background-image: -webkit-linear-gradient(top, #0F0FFF 0%, #0000A8 100%);
   background-image: linear-gradient(to bottom, #0F0FFF 0%, #0000A8 100%);
   background-image: -webkit-linear-gradient(93deg, #0000A8 0%, #0F0FFF 100%);
   color: #fff;
-  left: 7%;
+  left: 4%;
   position: relative;
   bottom: 10%;
 }
