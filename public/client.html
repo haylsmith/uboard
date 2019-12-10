@@ -1,5 +1,6 @@
 <!doctype html>
 <html>
+  <meta name="viewport" id="viewport" content="width=device-width, initial-scale=1">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
@@ -38,7 +39,7 @@
           <div class = "functionals swiper-slide swiper-slide-outer" id="functionals">        
             <input type="range" min="0" max="1" value="0.6" step="0.0625" class="slider" id="brightness">
             <input type="range" min="0" max="1" value="0.5" step="0.0625" class="slider" id="volume">
-            <i class="material-icons md-36 brightness-icon" >brightness_medium</i>
+            <i class="material-icons md-36 brightness-icon">brightness_medium</i>
             <button type="button" id="muteButton" onclick="muteOn()"><i class="material-icons md-36 mute-icon">volume_mute</i></button>
           <div class = 'arrowkeys'>
             <button class = "arrow-key" id='up-arrow' onclick="emitArrow('ArrowUp')"><i class="material-icons md-36 arrow-icon">keyboard_arrow_up</i></button>
@@ -49,14 +50,14 @@
           </div>
 
           </div>
-          <div class="swiper-slide swiper-slide-outer", id="custom">
+          <!-- <div class="swiper-slide swiper-slide-outer", id="custom">
             <select id="customSelect">
             </select>
             <div class="swiper-container-inner">
               <div class="swiper-wrapper" id="custom-container">
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
       <div class="loading" id="loading" style="display: none;"></div>
@@ -92,7 +93,7 @@
         <a class="btn btn-primary" href="/public/faq"> Help Page </a>  
          <button class="password-button" id="passcode"><i class="mdi-notification-vpn-lock"></i> PassCode</a></button>
         <br>
-        <button class="settings-button" id="new-keyboard"> New Keyboard </button>
+        <!-- <button class="settings-button" id="new-keyboard"> New Keyboard </button>
         <button class="settings-button" id="delete-keyboard"> Delete Keyboard </button>
         <button class="settings-button" id="add-key"> Add Key </button>
         <div id="edit-wrapper">
@@ -100,12 +101,12 @@
           <label id = "edit-label">
           Edit Toggle
           </label>
-        </div>
+        </div> -->
       </div>
 
     </div>
 
-      <!-- Edit Modal -->
+      <!-- Edit Modal
       <div id="edit-modal" class="modal">
 
         <div class="modal-header">
@@ -123,9 +124,9 @@
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         </div>
 
-     </div>
+     </div> -->
 
-     <!-- New Board Modal -->
+     <!-- New Board Modal
       <div id="newBoard-modal" class="modal">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -137,7 +138,7 @@
         <div class = "save" id="newBoard-save">
           <button type="button" class="btn btn-default" data-dismiss="modal">Save</button>
         </div>
-     </div>
+     </div> -->
        
 
     <script defer src="/public/vendor/jquery/dist/jquery.min.js"></script>

@@ -921,12 +921,10 @@ $('#edit-toggle').change(function(event) {
 
 $('.close').click(function() {
     settingsModal.style.display = "none";
-    newBoardModal.style.display = "none";
 });
 
 $('#modal-close').click(function() {
     editModal.style.display = "none";
-    newBoardModal.style.display = "none";
 });
 
 interact('.custom-key').draggable(draggableSettings);
