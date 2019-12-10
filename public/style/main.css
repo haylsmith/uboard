@@ -149,6 +149,10 @@ icon {
   float: left;
 }
 
+#leftClick:active {
+  background-color: blue;
+}
+
 #scrollWheel{
   width: 20%;
   height: 30%;
@@ -156,6 +160,10 @@ icon {
   position: relative;
   background-color: rgb(255, 255, 255);
   float: left;
+}
+
+#scrollWheel:active {
+  background-color: blue;
 }
 
 #rightClick{
@@ -166,6 +174,10 @@ icon {
   position: relative;
   background-color: rgb(255, 255, 255);
   float: left;
+}
+
+#rightClick:active {
+  background-color: blue;
 }
 
 #mousepad{
