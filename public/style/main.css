@@ -193,18 +193,18 @@ icon {
   float: left;
   border: 1px solid #fff;
   min-height: 100%;
-  min-width: 17.5%;
+  min-width: 17%;
   position: relative;
   transition: background-color 300ms linear;
 }
 
 #settings-select{
-  min-width: 15%;
+  min-width: 16%;
   background-color: grey
 }
 
 #swap{
-  min-width: 15%;
+  min-width: 16%;
   background-color: grey
 }
 

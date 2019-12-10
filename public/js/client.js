@@ -1027,31 +1027,6 @@ $('#modal-save').click(function() {
   console.log(updateKey)
 });
 
-//Purpose: Used for resizing and gestures
-window.dragMoveListener = dragMoveListener;
-
-
-function customDoubleTap (event) { 
-    if (move == true){
-      editModal.style.display = "block"; //Allows the modal to be displayed to User
-      updateKey = event.target
-      if(event.target.id.indexOf("url-icon") != -1){
-        inputModal.value = $("#" + event.target.id).parent().clone().children().remove().end().text().trim()
-        altText.value = updateKey.innerText;//updateKey.innerText
-        updateKey = updateKey.parentNode
-      }
-      else if(event.target.hasChildNodes()){
-        inputModal.value = $("#" + event.target.id).clone().children().remove().end().text().trim()
-        //console.log($("#" + event.target.id));
-        altText.value = $("#" + event.target.id).children()[0].innerText;//updateKey.innerText
-      }
-      else{
-        inputModal.value = updateKey.innerText
-      }
-
-    }
-}
-
 
 
 
