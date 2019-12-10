@@ -178,7 +178,7 @@ function swipeRight(event) {
 }
 
 
-var textWrapper = document.getElementById('textfield')
+var textWrapper = document.getElementById('textfieldcontainer')
 var textswipe = new Hammer.Manager(textWrapper);
 textswipe.add(new Hammer.Swipe({event: 'swipe', pointers: 1, threshold: 5, direction: Hammer.DIRECTION_HORIZONTAL}));
 textswipe.on('swipeleft', swipeLeft);
@@ -364,7 +364,7 @@ var emitUrl = function(str) {
 };
 
 var emitApp = function(str) {
-  pos = {'str': "open " + str,'pw':passcode}
+  pos = {'str': 'mdfind "kind:app ' + str + '"','pw':passcode}
   if (move === false){
     socket.emit('app', pos)
   }
@@ -418,7 +418,6 @@ function openApp (event) {
 }
 
 function selectPhrase (event) {
-  console.log("HELLO")
   var item = document.getElementById(event.target.id)
   if (item.id === "deleteButton") {
     return;
@@ -428,8 +427,7 @@ function selectPhrase (event) {
   if (deleteClicked) {
     text = text.slice(0, -1);
   }
-  var oldvalue = document.getElementById('textfield').value
-  document.getElementById('textfield').value = oldvalue + " " + text
+  emitText(" " + text);
   setTimeout(function() {$(item).css("background-color", "white");}, 100);
 }
 

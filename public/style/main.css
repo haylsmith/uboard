@@ -191,6 +191,7 @@ icon {
 
 .icon-selection{
   float: left;
+  border: 1px solid #fff;
   min-height: 100%;
   min-width: 17.5%;
   position: relative;
