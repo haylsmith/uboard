@@ -562,6 +562,18 @@ function deleteClickButton(e) {
   toRemove.parentNode.removeChild(toRemove);
 }
 
+function sortPhrases(value) {
+  var ul = document.getElementById("ss_elem_list")
+  var items = ul.getElementsByTagName("li")
+  console.log(items[0])
+
+}
+
+
+
+
+
+
 $( "#textfield" ).keydown(function(event) {
   if (event.key === 'Enter') { // enter
     emitText(document.getElementById('textfield').value);
