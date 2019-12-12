@@ -226,7 +226,21 @@ function altTextStylize(ele,text,id){
 }
 
 function addHotkey(img_url, xpos, ypos, url, page, id){
-  $('#'+page).append('<button class = "draggable activestyle url-button" id='+ id +'>' + url + '</button>');
+  if (xpos == 75 && ypos == 0) {
+    $('#'+page).append('<button class = "draggablehulu activestyle url-button" id='+ id +'>' + url + '</button>');
+  }
+  else if (xpos == 0 && ypos == 0) {
+    $('#'+page).append('<button class = "draggableblack activestyle url-button" id='+ id +'>' + url + '</button>');
+  }
+  else if (xpos == 25 && ypos == 0) {
+    $('#'+page).append('<button class = "draggableamazon activestyle url-button" id='+ id +'>' + url + '</button>');
+  }
+  else if (xpos == 0 && ypos == 60) {
+    $('#'+page).append('<button class = "draggableweebly activestyle url-button" id='+ id +'>' + url + '</button>');
+  }
+  else {
+    $('#'+page).append('<button class = "draggablewhite activestyle url-button" id='+ id +'>' + url + '</button>');
+  }
   var ele = $('#' + id)
   ele.text(url)
   var touchElem = document.getElementById(id);
