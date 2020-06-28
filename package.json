@@ -20,8 +20,18 @@
     "express": "^4.13.3",
     "mathjs": "^6.2.3",
     "opn": "^5.2.0",
-    "robotjs": "^0.4.7",
-    "socket.io": "^2.3.0"
+    "robotjs": "0.6.0",
+    "brightness": "3.0.0",
+    "socket.io": "^2.3.0",
+    "bootstrap-material-design": "^0.3.0",
+    "jquery": "3.5.1",
+    "hammerjs": "~2.0.4",
+    "l20n": "~1.0.2",
+    "bootstrap": "~4.5.0",
+    "swiper": "^4.1.6",
+    "favicons": "6.1.0",
+    "jquery-qrcode": "*",
+    "bootstrap-toggle": "^2.2.2"
   },
   "scripts": {
     "postinstall": "bower install",

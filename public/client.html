@@ -95,8 +95,13 @@
 
         <button type="button" class="close" data-dismiss="modal">&times;</button>
         <a class="btn btn-primary" href="/public/faq"> Help Page </a>  
-         <!-- <button class="password-button" id="passcode"><i class="mdi-notification-vpn-lock"></i> PassCode</a></button> -->
         <br>
+        <p>Sort Phrase List By:</p>
+         <select onchange="sortPhrases(value);">
+          <option value="alphabetical">Alphabetically</option>
+          <option value="time">Order of Addition</option>
+         </select> 
+         <!-- <button class="password-button" id="passcode"><i class="mdi-notification-vpn-lock"></i> PassCode</a></button> -->
         <!-- <button class="settings-button" id="new-keyboard"> New Keyboard </button>
         <button class="settings-button" id="delete-keyboard"> Delete Keyboard </button>
         <button class="settings-button" id="add-key"> Add Key </button>
